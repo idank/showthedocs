@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script src="/static/d3.js"></script>
+        <script src="/static/underscore.js"></script>
+        {% assets filters="scss", output="showdocs.css", "showdocs.scss" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+        {% endassets %}
+        {% for path in additionalcss %}
+        <link rel="stylesheet" href="{{ path }}">
+        {% endfor %}
+        <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="/static/showdocs.js"></script>
+        <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/master/devicon.min.css">
+        <title>showthedocs</title>
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        <div id="main">
+            <div id="affixed">
+                {% set navigation_bar = [
+                    ('/', 'query'),
+                    ('/contribute', 'contribute'),
+                    ('/testpage', 'test page')
+                ] -%}
+                {% set active_page = active_page|default('index') -%}
+                <ul class="topnav">
+                  <li><a class="logo" href="/">showthedocs.com</a></li>
+                  {% for href, caption in navigation_bar %}
+                  <li class="navitem"><a href="{{ href|e }}"{% if caption == active_page %} class="highlighted"{% endif %}>{{ caption|e }}</a></li>
+                  {% endfor %}
+                  <li><a href="https://github.com/idank"><i class="devicon-github-plain"></i></a></li>
+                  {% block additionalnav %}{% endblock %}
+                </ul>
+                {% block afternav %}{% endblock %}
+            </div>
+            <div id="container">
+                {% block container %}{% endblock %}
+            </div>
+        </div>
+    </body>
+    {% block afterbody %}{% endblock %}
+</html>

@@ -1,0 +1,373 @@
+@import url(http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic,700italic,300,300italic&subset=latin,latin-ext);
+
+$palette1: #00171F;
+$palette2: #003459;
+$palette3: #007EA7;
+$palette4: #00A8E8;
+$font: 'Libre Baskerville', Garamond, serif;
+
+//* {
+//  -webkit-box-sizing: border-box;
+//     -moz-box-sizing: border-box;
+//          box-sizing: border-box;
+//}
+
+body {
+    margin: 0;
+}
+
+.topnav, .container-center, #docs-scrollbar, #query-legend {
+    font-family: $font;
+}
+
+#main {
+    position: relative;
+}
+
+#affixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+}
+
+$topnav-height: 40px;
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: $topnav-height;
+    background-color: $palette2;
+    font-size: 12px;
+    font-family: 'Libre Baskerville', Garamond, serif;
+    font-weight: 400;
+
+    i {
+        font-size: 2em;
+    }
+}
+
+ul.topnav li {
+    position: relative;
+    float: left;
+    height: 40px;
+    padding: 0 8px;
+}
+
+ul.topnav li * {
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    color: white;
+    line-height: 40px;
+    padding: 6px 6px;
+    border-radius: 8px;
+}
+
+ul.topnav li:not(:first-child) {
+    text-transform: uppercase;
+}
+
+ul.topnav li:first-child a {
+    font-size: 20px;
+}
+
+ul.topnav li.navitem a:not(.highlighted):hover {
+    background-color: $palette3;
+}
+
+ul.topnav .lang {
+    float: right;
+}
+
+ul.topnav .highlighted {
+    background-color: $palette4;
+    border-radius: 8px;
+    cursor: default;
+}
+
+$query-height: 150px;
+
+#query-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: $query-height;
+}
+
+#query-scroller {
+    position: relative;
+    overflow: auto;
+    max-width: 400px;
+    height: $query-height;
+    margin: 0 auto;
+}
+
+#query {
+    white-space: pre;
+    line-height: 40px;
+    font-family: monospace;
+    padding-top: 3px;
+
+    // When highlighting a back decoration, the box-shadow overflows the left
+    // edge without this padding.
+    padding-left: 3px;
+}
+
+$legendscroll-right: 20px;
+$legend-width: 400px;
+
+#query-legend {
+    position: fixed;
+    right: $legendscroll-right;
+    top: $topnav-height;
+    width: $legend-width;
+    height: $query-height - 45px;
+}
+
+#query-legend div {
+    text-align: right;
+}
+
+#legend-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+$container-margin-lr: 8px;
+
+#container {
+    margin-left: $container-margin-lr;
+    margin-right: $container-margin-lr;
+}
+
+#docs {
+    margin-left: 50px;
+    margin-right: 100px;
+}
+
+#docs-scrollbar {
+    position: fixed;
+    right: $legendscroll-right;
+    width: 80px;
+}
+
+#docs-scrollbar:before {
+    z-index: -1;
+    margin: 0 0;
+    position: absolute;
+    content: 'index';
+    text-align: right;
+    width: 80px;
+    left: 0;
+    top: -25;
+}
+
+#docs-canvas {
+    z-index: -1;
+    // Becuase of the margin on #container (ancestor of this), putting 100%
+    // here adds an horizontal scrollbar. Deduct the margin to avoid that.
+    width: calc(100% - #{$container-margin-lr * 2});
+    height: 100%;
+}
+
+#docs-scrollbar-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.canvas {
+    position: absolute;
+    pointer-events: none;
+}
+
+#main-canvas {
+    width: 100%;
+    z-index: 20;
+}
+
+.showdocs-link {
+    fill: none;
+    stroke: black;
+    stroke-width: 1.5px;
+}
+.showdocs-link-back {
+    fill: none;
+    stroke: white;
+    stroke-width: 10px;
+}
+
+.showdocs-decorate-back, .clickable {
+	cursor: pointer;
+}
+
+.showdocs-decorate-back-outline {
+    fill: none;
+    stroke: black;
+    stroke-linejoin: round;
+}
+
+@keyframes outline {
+    0% {
+        stroke-width: 0px;
+    }
+    90% {
+        stroke-width: 3px;
+    }
+    100% {
+        stroke-width: 3px;
+    }
+}
+
+#query-canvas {
+    width: 100%;
+}
+
+#query-canvas g * {
+    pointer-events: auto;
+}
+
+#docs-scrollbar-canvas g * {
+    pointer-events: auto;
+}
+
+#docs .showdocs-decorate-back,
+#query .showdocs-decorate-back {
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.scrollbar-eyes {
+  opacity: 0.2;
+  fill: $palette4;
+}
+
+.container-center {
+    padding-top: 20px;
+    margin: 0 auto;
+    width: 700px;
+}
+
+/* specific to index */
+
+.row {
+    padding: 20 0;
+}
+
+.row-desc {
+    float: left;
+    width: 170;
+}
+
+.row-desc h4 {
+    margin-top: 0;
+    text-transform: uppercase;
+}
+
+.row-desc div {
+    color: rgba(46,48,58,0.96);
+}
+
+.row-content {
+    margin-left: 200;
+}
+
+.lang-select-icon {
+    display: inline-block;
+    width: 130;
+    padding: 8 2;
+    text-align: center;
+	cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    color: #003459;
+    opacity: 0.7;
+    border-radius: 8px;
+
+    i {
+        font-size: 64px;
+    }
+}
+
+.lang-select-icon:hover {
+    transition-duration: 0.2s;
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.lang-select-icon.highlight {
+    opacity: 1;
+    background-color: rgba(0, 126, 167, 0.3);
+}
+
+.submit {
+    background-color: $palette3;
+    border-color: $palette3;
+    display: inline-block;
+    padding: 6px 20px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.lang-select-name {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.lang-select-icon svg {
+    width: 64;
+    height: 64;
+}
+
+.showdocs-decorate-symbol {
+    fill: none;
+    stroke: none;
+}
+
+.showdocs-decorate-block-lettersymbol-outline {
+    text-anchor: middle;
+    alignment-baseline: hanging;
+    font-size: 30px;
+}
+
+.showdocs-decorate-block-lettersymbol-outline {
+    text:first-child,.showdocs-decorate-symbol:first-child {
+        stroke: white;
+        stroke-width: 6px;
+    }
+}
+
+.showdocs-decorate-symbol-pulse path {
+    transform: scale(1);
+}
+
+.showdocs-decorate-symbol-pulse-animate {
+    animation: pulse 1.5s ease-out 75ms infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    90% {
+        transform: scale(3);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% set active_page = "query" %}
+
+{% block head %}
+<style>
+#affixed {
+    box-shadow: 0 0 15px 10px #ffffff;
+}
+#container {
+    padding-top: 190px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+        <svg id="main-canvas" class="canvas"></svg>
+{% endblock %}
+
+{% block additionalnav %}
+{% if lang == "postgresql" %}
+<li class="lang"><i class="devicon-postgresql-plain"></i></li>
+{% endif %}
+<li class="lang"><span style="padding: 0 0; text-transform: none">{{ lang|e }}</span></li>
+{% endblock %}
+
+{% block afternav %}
+                <div id="query-container">
+                    <svg id="query-canvas" class="canvas"><g id="translate-on-scroll"></g></svg>
+                    <div id="query-scroller">
+                        <svg id="query-canvas-inner" class="canvas"></svg>
+                        <div id="query" class="{{ lang }}">
+                            {{- query -}}
+                        </div>
+                    </div>
+                    <div id="query-legend"><div>legend</div><svg id="legend-canvas"></svg></div>
+                </div>
+{% endblock %}
+{% block container %}
+                <svg id="docs-canvas" class="canvas"></svg>
+                <div id="docs">
+                    {% for path, contents in docs %}
+                        {{- contents -}}
+                    {% endfor %}
+                </div>
+                <div id="docs-scrollbar">
+                    <svg id="docs-scrollbar-canvas" class="canvas"></svg>
+                </div>
+{% endblock %}
+{% block afterbody %}
+<script>
+$(document).ready(function() {
+    const affixedheight = rnd($("#affixed").height());
+    $('#docs-scrollbar').css('top', affixedheight);
+    $("#docs-scrollbar").height(window.innerHeight - affixedheight);
+
+    var body = document.body,
+        html = document.documentElement;
+
+    var height = Math.max(body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight);
+    $("#main-canvas").height(height);
+
+    initialize();
+    scrolltohash();
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+#container {
+    padding-top: 40px;
+}
+</style>
+{% endblock %}
+{% block container %}
+<div class="container-center">
+    <h3 style="">showthedocs brings code and documentation together by adding annotations that connect the two.</h3>
+    <form action="/query" method="get">
+        <div class="row">
+            <div class="row-desc">
+                <h4>query</h4>
+                <div>code goes here, alternatively upload a file</div>
+            </div>
+            <div class="row-content">
+                <textarea name="q" style="width: 100%; height: 100"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="row-desc">
+                <h4>docs</h4>
+                <div>choose the language / flavor of docs to show. By default, try to guess from the input.</div>
+            </div>
+            <div class="row-content">
+                <div class="lang-select-icon">
+                    <i class="devicon-postgresql-plain colored"></i>
+                    <div class="lang-select-name">postgresql</div>
+                </div>
+                <div class="lang-select-icon">
+                    <i class="devicon-mysql-plain colored"></i>
+                    <div class="lang-select-name">mysql</div>
+                </div>
+                <div class="lang-select-icon">
+                    <i class="devicon-nginx-original colored"></i>
+                    <div class="lang-select-name">nginx</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div style="float: right"><input type="submit" class="submit"></div>
+        </div>
+        <input type="hidden" name="lang" id="lang">
+    </form>
+</div>
+{% endblock %}
+{% block afterbody %}
+<script>
+$(".lang-select-icon").click(function() {
+    var that = this;
+    // Apply .highlight on the clicked element only.
+    $(".lang-select-icon").filter(function() { return this != that; }).removeClass("highlight");
+    $(this).toggleClass("highlight");
+
+    // Set the language on the hidden field.
+    $("#lang").val($(this).find(".lang-select-name").text());
+});
+</script>
+{% endblock %}

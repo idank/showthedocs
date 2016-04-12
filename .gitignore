@@ -1,0 +1,7 @@
+*.pyc
+*.err
+env/
+.sass-cache/
+.vagrant/
+.webassets-cache/
+externaltmp/
