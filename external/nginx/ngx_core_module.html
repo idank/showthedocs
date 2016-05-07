@@ -1,0 +1,1087 @@
+<div id="content"><h2>Core functionality</h2><table width="100%"><tr><td align="left"><a href="#example">Example Configuration</a><br/><a href="#directives">Directives</a><br/>     <a href="#accept_mutex">accept_mutex</a><br/>     <a href="#accept_mutex_delay">accept_mutex_delay</a><br/>     <a href="#daemon">daemon</a><br/>     <a href="#debug_connection">debug_connection</a><br/>     <a href="#debug_points">debug_points</a><br/>     <a href="#error_log">error_log</a><br/>     <a href="#env">env</a><br/>     <a href="#events">events</a><br/>     <a href="#include">include</a><br/>     <a href="#load_module">load_module</a><br/>     <a href="#lock_file">lock_file</a><br/>     <a href="#master_process">master_process</a><br/>     <a href="#multi_accept">multi_accept</a><br/>     <a href="#pcre_jit">pcre_jit</a><br/>     <a href="#pid">pid</a><br/>     <a href="#ssl_engine">ssl_engine</a><br/>     <a href="#thread_pool">thread_pool</a><br/>     <a href="#timer_resolution">timer_resolution</a><br/>     <a href="#use">use</a><br/>     <a href="#user">user</a><br/>     <a href="#worker_aio_requests">worker_aio_requests</a><br/>     <a href="#worker_connections">worker_connections</a><br/>     <a href="#worker_cpu_affinity">worker_cpu_affinity</a><br/>     <a href="#worker_priority">worker_priority</a><br/>     <a href="#worker_processes">worker_processes</a><br/>     <a href="#worker_rlimit_core">worker_rlimit_core</a><br/>     <a href="#worker_rlimit_nofile">worker_rlimit_nofile</a><br/>     <a href="#working_directory">working_directory</a><br/></td></tr></table>
+<a name="example"></a><center><h4>Example Configuration</h4></center><p>
+</p> <blockquote class="example"><pre>
+user www www;
+worker_processes 2;
+
+error_log /var/log/nginx-error.log info;
+
+events {
+    use kqueue;
+    worker_connections 2048;
+}
+
+...
+</pre></blockquote><p>
+</p>
+<a name="directives"></a><center><h4>Directives</h4></center><a name="accept_mutex"></a><div class="showdocs-decorate-block" data-showdocs="accept_mutex"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>accept_mutex</strong> <code>on</code> | <code>off</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>accept_mutex on;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>events</code><br/>
+</td>
+</tr>
+</table></div><p>
+If <code>accept_mutex</code> is enabled,
+worker processes will accept new connections by turn.
+Otherwise, all worker processes will be notified about new connections,
+and if volume of new connections is low, some of the worker processes
+may just waste system resources.
+</p></div><a name="accept_mutex_delay"></a><div class="showdocs-decorate-block" data-showdocs="accept_mutex_delay"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>accept_mutex_delay</strong> <code><i>time</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>accept_mutex_delay 500ms;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>events</code><br/>
+</td>
+</tr>
+</table></div><p>
+If <a href="#accept_mutex">accept_mutex</a> is enabled, specifies the maximum time
+during which a worker process will try to restart accepting new
+connections if another worker process is currently accepting
+new connections.
+</p></div><a name="daemon"></a><div class="showdocs-decorate-block" data-showdocs="daemon"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>daemon</strong> <code>on</code> | <code>off</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>daemon on;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Determines whether nginx should become a daemon.
+Mainly used during development.
+</p></div><a name="debug_connection"></a><div class="showdocs-decorate-block" data-showdocs="debug_connection"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>debug_connection</strong>
+<code><i>address</i></code> |
+    <code><i>CIDR</i></code> |
+    <code>unix:</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>events</code><br/>
+</td>
+</tr>
+</table></div><p>
+Enables debugging log for selected client connections.
+Other connections will use logging level set by the
+<a href="#error_log">error_log</a> directive.
+Debugged connections are specified by IPv4 or IPv6 (1.3.0, 1.2.1)
+address or network.
+A connection may also be specified using a hostname.
+For connections using UNIX-domain sockets (1.3.0, 1.2.1),
+debugging log is enabled by the “<code>unix:</code>” parameter.
+</p> <blockquote class="example"><pre>
+events {
+    debug_connection 127.0.0.1;
+    debug_connection localhost;
+    debug_connection 192.0.2.0/24;
+    debug_connection ::1;
+    debug_connection 2001:0db8::/32;
+    debug_connection unix:;
+    ...
+}
+</pre></blockquote><p>
+</p> <blockquote class="note">
+For this directive to work, nginx needs to
+be built with <code>--with-debug</code>,
+see “<a href="debugging_log.html">A debugging log</a>”.
+</blockquote><p>
+</p></div><a name="debug_points"></a><div class="showdocs-decorate-block" data-showdocs="debug_points"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>debug_points</strong> <code>abort</code> | <code>stop</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+This directive is used for debugging.
+</p><p>
+When internal error is detected, e.g. the leak of sockets on
+restart of working processes, enabling <code>debug_points</code>
+leads to a core file creation (<code>abort</code>)
+or to stopping of a process (<code>stop</code>) for further
+analysis using a system debugger.
+</p></div><a name="error_log"></a><div class="showdocs-decorate-block" data-showdocs="error_log"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>error_log</strong>
+<code><i>file</i></code> | <code>stderr</code> |
+<code>syslog:</code><code>server</code>=<code><i>address</i></code>[,<code><i>parameter</i></code>=<code><i>value</i></code>] |
+<code>memory:</code><code><i>size</i></code>
+[<code><i>level</i></code>];</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>error_log logs/error.log error;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code>, <code>http</code>, <code>mail</code>, <code>stream</code>, <code>server</code>, <code>location</code><br/>
+</td>
+</tr>
+</table></div><p>
+Configures logging.
+Several logs can be specified on the same level (1.5.2).
+</p><p>
+The first parameter defines a file that will store the log.
+
+The special value <code>stderr</code> selects the standard error file.
+Logging to <a href="syslog.html">syslog</a> can be configured by specifying
+the “<code>syslog:</code>” prefix.
+Logging to a
+<a href="debugging_log.html#memory">cyclic memory buffer</a>
+can be configured by specifying the “<code>memory:</code>” prefix and
+buffer <code><i>size</i></code>, and is generally used for debugging (1.7.11).
+</p><p>
+The second parameter determines the <code><i>level</i></code> of logging,
+and can be one of the following:
+<code>debug</code>, <code>info</code>, <code>notice</code>,
+<code>warn</code>, <code>error</code>, <code>crit</code>,
+<code>alert</code>, or <code>emerg</code>.
+Log levels above are listed in the order of increasing severity.
+Setting a certain log level will cause all messages of
+the specified and more severe log levels to be logged.
+For example, the default level <code>error</code> will
+cause <code>error</code>, <code>crit</code>,
+<code>alert</code>, and <code>emerg</code> messages
+to be logged.
+If this parameter is omitted then <code>error</code> is used.
+</p> <blockquote class="note">
+For <code>debug</code> logging to work, nginx needs to
+be built with <code>--with-debug</code>,
+see “<a href="debugging_log.html">A debugging log</a>”.
+</blockquote><p>
+</p> <blockquote class="note">
+The directive can be specified on the
+<code>stream</code> level
+starting from version 1.7.11.
+</blockquote><p>
+</p> <blockquote class="note">
+The directive can be specified on the
+<code>mail</code> level
+starting from version 1.9.0.
+</blockquote><p>
+</p></div><a name="env"></a><div class="showdocs-decorate-block" data-showdocs="env"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>env</strong> <code><i>variable</i></code>[=<code><i>value</i></code>];</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>env TZ;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+By default, nginx removes all environment variables inherited
+from its parent process except the TZ variable.
+This directive allows preserving some of the inherited variables,
+changing their values, or creating new environment variables.
+These variables are then:
+</p> <ul class="compact">
+<li>
+inherited during a <a href="control.html#upgrade">live upgrade</a>
+of an executable file;
+</li>
+<li>
+used by the
+<a href="http/ngx_http_perl_module.html">ngx_http_perl_module</a> module;
+</li>
+<li>
+used by worker processes.
+One should bear in mind that controlling system libraries in this way
+is not always possible as it is common for libraries to check
+variables only during initialization, well before they can be set
+using this directive.
+An exception from this is an above mentioned
+<a href="control.html#upgrade">live upgrade</a>
+of an executable file.
+</li>
+</ul><p>
+</p><p>
+The TZ variable is always inherited and available to the
+<a href="http/ngx_http_perl_module.html">ngx_http_perl_module</a>
+module, unless it is configured explicitly.
+</p><p>
+Usage example:
+</p> <blockquote class="example"><pre>
+env MALLOC_OPTIONS;
+env PERL5LIB=/data/site/modules;
+env OPENSSL_ALLOW_PROXY_CERTS=1;
+</pre></blockquote><p>
+</p><p>
+</p> <blockquote class="note">
+The NGINX environment variable is used internally by nginx
+and should not be set directly by the user.
+</blockquote><p>
+</p></div><a name="events"></a><div class="showdocs-decorate-block" data-showdocs="events"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>events</strong> { ... }</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Provides the configuration file context in which the directives that
+affect connection processing are specified.
+</p></div><a name="include"></a><div class="showdocs-decorate-block" data-showdocs="include"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>include</strong> <code><i>file</i></code> | <code><i>mask</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>any</code><br/>
+</td>
+</tr>
+</table></div><p>
+Includes another <code><i>file</i></code>, or files matching the
+specified <code><i>mask</i></code>, into configuration.
+Included files should consist of
+syntactically correct directives and blocks.
+</p><p>
+Usage example:
+</p> <blockquote class="example"><pre>
+include mime.types;
+include vhosts/*.conf;
+</pre></blockquote><p>
+</p></div><a name="load_module"></a><div class="showdocs-decorate-block" data-showdocs="load_module"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>load_module</strong> <code><i>file</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table><p>This directive appeared in version 1.9.11.
+            </p></div><p>
+Loads a dynamic module.
+</p><p>
+Example:
+</p> <blockquote class="example"><pre>
+load_module modules/ngx_mail_module.so;
+</pre></blockquote><p>
+</p></div><a name="lock_file"></a><div class="showdocs-decorate-block" data-showdocs="lock_file"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>lock_file</strong> <code><i>file</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>lock_file logs/nginx.lock;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+nginx uses the locking mechanism to implement <a href="#accept_mutex">accept_mutex</a>
+and serialize access to shared memory.
+On most systems the locks are implemented using atomic operations,
+and this directive is ignored.
+On other systems the “lock file” mechanism is used.
+This directive specifies a prefix for the names of lock files.
+</p></div><a name="master_process"></a><div class="showdocs-decorate-block" data-showdocs="master_process"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>master_process</strong> <code>on</code> | <code>off</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>master_process on;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Determines whether worker processes are started.
+This directive is intended for nginx developers.
+</p></div><a name="multi_accept"></a><div class="showdocs-decorate-block" data-showdocs="multi_accept"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>multi_accept</strong> <code>on</code> | <code>off</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>multi_accept off;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>events</code><br/>
+</td>
+</tr>
+</table></div><p>
+If <code>multi_accept</code> is disabled, a worker process
+will accept one new connection at a time.
+Otherwise, a worker process
+will accept all new connections at a time.
+</p> <blockquote class="note">
+The directive is ignored if <a href="events.html#kqueue">kqueue</a>
+connection processing method is used, because it reports
+the number of new connections waiting to be accepted.
+</blockquote><p>
+</p></div><a name="pcre_jit"></a><div class="showdocs-decorate-block" data-showdocs="pcre_jit"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>pcre_jit</strong> <code>on</code> | <code>off</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>pcre_jit off;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table><p>This directive appeared in version 1.1.12.
+            </p></div><p>
+Enables or disables the use of “just-in-time compilation” (PCRE JIT)
+for the regular expressions known by the time of configuration parsing.
+</p><p>
+PCRE JIT can speed up processing of regular expressions significantly.
+</p> <blockquote class="note">
+The JIT is available in PCRE libraries starting from version 8.20
+built with the <code>--enable-jit</code> configuration parameter.
+When the PCRE library is built with nginx (<code>--with-pcre=</code>),
+the JIT support is enabled via the
+<code>--with-pcre-jit</code> configuration parameter.
+</blockquote><p>
+</p></div><a name="pid"></a><div class="showdocs-decorate-block" data-showdocs="pid"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>pid</strong> <code><i>file</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>pid nginx.pid;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Defines a <code><i>file</i></code> that will store the process ID of the main process.
+</p></div><a name="ssl_engine"></a><div class="showdocs-decorate-block" data-showdocs="ssl_engine"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>ssl_engine</strong> <code><i>device</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Defines the name of the hardware SSL accelerator.
+</p></div><a name="thread_pool"></a><div class="showdocs-decorate-block" data-showdocs="thread_pool"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>thread_pool</strong>
+<code><i>name</i></code>
+<code>threads</code>=<code><i>number</i></code>
+    [<code>max_queue</code>=<code><i>number</i></code>];</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>thread_pool default threads=32 max_queue=65536;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table><p>This directive appeared in version 1.7.11.
+            </p></div><p>
+Defines named thread pools
+used for multi-threaded reading and sending of files
+<a href="http/ngx_http_core_module.html#aio">without blocking</a>
+worker processes.
+</p><p>
+The <code>threads</code> parameter
+defines the number of threads in the pool.
+</p><p>
+In the event that all threads in the pool are busy,
+a new task will wait in the queue.
+The <code>max_queue</code> parameter limits the number
+of tasks allowed to be waiting in the queue.
+By default, up to 65536 tasks can wait in the queue.
+When the queue overflows, the task is completed with an error.
+</p></div><a name="timer_resolution"></a><div class="showdocs-decorate-block" data-showdocs="timer_resolution"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>timer_resolution</strong> <code><i>interval</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Reduces timer resolution in worker processes, thus reducing the
+number of <code>gettimeofday()</code> system calls made.
+By default, <code>gettimeofday()</code> is called each time
+a kernel event is received.
+With reduced resolution, <code>gettimeofday()</code> is only
+called once per specified <code><i>interval</i></code>.
+</p><p>
+Example:
+</p> <blockquote class="example"><pre>
+timer_resolution 100ms;
+</pre></blockquote><p>
+</p><p>
+Internal implementation of the interval depends on the method used:
+</p> <ul class="compact">
+<li>
+the <code>EVFILT_TIMER</code> filter if <code>kqueue</code> is used;
+</li>
+<li>
+<code>timer_create()</code> if <code>eventport</code> is used;
+</li>
+<li>
+<code>setitimer()</code> otherwise.
+</li>
+</ul><p>
+</p></div><a name="use"></a><div class="showdocs-decorate-block" data-showdocs="use"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>use</strong> <code><i>method</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>events</code><br/>
+</td>
+</tr>
+</table></div><p>
+Specifies the <a href="events.html">connection processing</a>
+<code><i>method</i></code> to use.
+There is normally no need to specify it explicitly, because nginx will
+by default use the most efficient method.
+</p></div><a name="user"></a><div class="showdocs-decorate-block" data-showdocs="user"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>user</strong> <code><i>user</i></code> [<code><i>group</i></code>];</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>user nobody nobody;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Defines <code><i>user</i></code> and <code><i>group</i></code>
+credentials used by worker processes.
+If <code><i>group</i></code> is omitted, a group whose name equals
+that of <code><i>user</i></code> is used.
+</p></div><a name="worker_aio_requests"></a><div class="showdocs-decorate-block" data-showdocs="worker_aio_requests"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>worker_aio_requests</strong> <code><i>number</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>worker_aio_requests 32;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>events</code><br/>
+</td>
+</tr>
+</table>
+<p>
+                    This directive appeared in versions 1.1.4 and 1.0.7.
+                    
+                        </p>
+</div><p>
+When using <a href="http/ngx_http_core_module.html#aio">aio</a>
+with the <a href="../docs/events.html#epoll">epoll</a>
+connection processing method, sets the maximum <code><i>number</i></code> of
+outstanding asynchronous I/O operations
+for a single worker process.
+</p></div><a name="worker_connections"></a><div class="showdocs-decorate-block" data-showdocs="worker_connections"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>worker_connections</strong> <code><i>number</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>worker_connections 512;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>events</code><br/>
+</td>
+</tr>
+</table></div><p>
+Sets the maximum number of simultaneous connections that
+can be opened by a worker process.
+</p><p>
+It should be kept in mind that this number includes all connections
+(e.g. connections with proxied servers, among others),
+not only connections with clients.
+Another consideration is that the actual number of simultaneous
+connections cannot exceed the current limit on
+the maximum number of open files, which can be changed by
+<a href="#worker_rlimit_nofile">worker_rlimit_nofile</a>.
+</p></div><a name="worker_cpu_affinity"></a><div class="showdocs-decorate-block" data-showdocs="worker_cpu_affinity"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>worker_cpu_affinity</strong> <code><i>cpumask</i></code> ...;</code><br/><code><strong>worker_cpu_affinity</strong> <code>auto</code> [<code><i>cpumask</i></code>];</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Binds worker processes to the sets of CPUs.
+Each CPU set is represented by a bitmask of allowed CPUs.
+There should be a separate set defined for each of the worker processes.
+By default, worker processes are not bound to any specific CPUs.
+</p><p>
+For example,
+</p> <blockquote class="example"><pre>
+worker_processes    4;
+worker_cpu_affinity 0001 0010 0100 1000;
+</pre></blockquote><p> 
+binds each worker process to a separate CPU, while
+</p> <blockquote class="example"><pre>
+worker_processes    2;
+worker_cpu_affinity 0101 1010;
+</pre></blockquote><p> 
+binds the first worker process to CPU0/CPU2,
+and the second worker process to CPU1/CPU3.
+The second example is suitable for hyper-threading.
+</p><p>
+The special value <code>auto</code> (1.9.10) allows
+binding worker processes automatically to available CPUs:
+</p> <blockquote class="example"><pre>
+worker_processes auto;
+worker_cpu_affinity auto;
+</pre></blockquote><p> 
+The optional mask parameter can be used to limit the CPUs
+available for automatic binding:
+</p> <blockquote class="example"><pre>
+worker_cpu_affinity auto 01010101;
+</pre></blockquote><p>
+</p><p>
+</p> <blockquote class="note">
+The directive is only available on FreeBSD and Linux.
+</blockquote><p>
+</p></div><a name="worker_priority"></a><div class="showdocs-decorate-block" data-showdocs="worker_priority"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>worker_priority</strong> <code><i>number</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>worker_priority 0;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Defines the scheduling priority for worker processes like it is
+done by the <code>nice</code> command: a negative
+<code><i>number</i></code>
+means higher priority.
+Allowed range normally varies from -20 to 20.
+</p><p>
+Example:
+</p> <blockquote class="example"><pre>
+worker_priority -10;
+</pre></blockquote><p>
+</p></div><a name="worker_processes"></a><div class="showdocs-decorate-block" data-showdocs="worker_processes"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>worker_processes</strong> <code><i>number</i></code> | <code>auto</code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+<pre>worker_processes 1;</pre>
+</td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Defines the number of worker processes.
+</p><p>
+The optimal value depends on many factors including (but not
+limited to) the number of CPU cores, the number of hard disk
+drives that store data, and load pattern.
+When one is in doubt, setting it to the number of available CPU cores
+would be a good start (the value “<code>auto</code>”
+will try to autodetect it).
+</p> <blockquote class="note">
+The <code>auto</code> parameter is supported starting from
+versions 1.3.8 and 1.2.5.
+</blockquote><p>
+</p></div><a name="worker_rlimit_core"></a><div class="showdocs-decorate-block" data-showdocs="worker_rlimit_core"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>worker_rlimit_core</strong> <code><i>size</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Changes the limit on the largest size of a core file
+(<code>RLIMIT_CORE</code>) for worker processes.
+Used to increase the limit without restarting the main process.
+</p></div><a name="worker_rlimit_nofile"></a><div class="showdocs-decorate-block" data-showdocs="worker_rlimit_nofile"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>worker_rlimit_nofile</strong> <code><i>number</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Changes the limit on the maximum number of open files
+(<code>RLIMIT_NOFILE</code>) for worker processes.
+Used to increase the limit without restarting the main process.
+</p></div><a name="working_directory"></a><div class="showdocs-decorate-block" data-showdocs="working_directory"><div class="directive"><table cellspacing="0">
+<tr>
+<th>
+            Syntax:
+                </th>
+<td>
+<code><strong>working_directory</strong> <code><i>directory</i></code>;</code><br/>
+</td>
+</tr>
+<tr>
+<th>
+            Default:
+                </th>
+<td>
+            
+            —
+        
+                </td>
+</tr>
+<tr>
+<th>
+            Context:
+                </th>
+<td>
+<code>main</code><br/>
+</td>
+</tr>
+</table></div><p>
+Defines the current working directory for a worker process.
+It is primarily used when writing a core-file, in which case
+a worker process should have write permission for the
+specified directory.
+</p></div>
+</div>

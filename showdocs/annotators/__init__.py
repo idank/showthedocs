@@ -1,8 +1,8 @@
 from showdocs import errors
 
-import sql
+import sql, nginx
 
-_all = [sql.SqlAnnotator]
+_all = [sql.SqlAnnotator, nginx.NginxAnnotator]
 _annotators = {}
 
 for a in _all:
