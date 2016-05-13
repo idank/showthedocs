@@ -350,31 +350,37 @@ ul.topnav .highlighted {
   height: 64;
 }
 
-/* line 334 */
+/* specific to error */
+/* line 337 */
+.error h2 {
+  color: red;
+}
+
+/* line 342 */
 .showdocs-decorate-symbol {
   fill: none;
   stroke: none;
 }
 
-/* line 339 */
+/* line 347 */
 .showdocs-decorate-block-lettersymbol-outline {
   text-anchor: middle;
   alignment-baseline: hanging;
   font-size: 30px;
 }
 
-/* line 346 */
+/* line 354 */
 .showdocs-decorate-block-lettersymbol-outline text:first-child, .showdocs-decorate-block-lettersymbol-outline .showdocs-decorate-symbol:first-child {
   stroke: white;
   stroke-width: 6px;
 }
 
-/* line 352 */
+/* line 360 */
 .showdocs-decorate-symbol-pulse path {
   transform: scale(1);
 }
 
-/* line 356 */
+/* line 364 */
 .showdocs-decorate-symbol-pulse-animate {
   animation: pulse 1.5s ease-out 75ms infinite;
 }
@@ -392,9 +398,4 @@ ul.topnav .highlighted {
     transform: scale(3);
     opacity: 0;
   }
-}
-/* language specific css */
-/* line 376 */
-#query.nginx {
-  line-height: 25px;
 }

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+#container {
+    padding-top: 40px;
+}
+</style>
+{% endblock %}
+{% block container %}
+<div class="container-center error">
+    <h2>{{ title }}</h3>
+    <p>{{ message }}</p>
+</div>
+{% endblock %}

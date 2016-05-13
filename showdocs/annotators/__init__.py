@@ -15,6 +15,6 @@ for a in _all:
 def get(lang):
     acls = _annotators.get(lang, None)
     if not acls:
-        raise errors.NoAnnotatorFound("lang %r isn't supported" % lang)
+        raise errors.NoAnnotatorFound(lang)
 
     return acls()

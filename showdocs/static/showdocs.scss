@@ -331,6 +331,14 @@ $container-margin-lr: 8px;
     height: 64;
 }
 
+/* specific to error */
+
+.error {
+    h2 {
+        color: red;
+    }
+}
+
 .showdocs-decorate-symbol {
     fill: none;
     stroke: none;

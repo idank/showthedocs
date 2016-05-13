@@ -2,7 +2,7 @@ import logging, itertools, urllib, codecs
 import markupsafe
 
 from flask import render_template, request, redirect
-from showdocs import app, html, annotate, structs, docs
+from showdocs import app, html, annotate, structs, docs, errors
 
 from showdocs.structs import Annotation
 
@@ -25,20 +25,35 @@ def index():
 
 @app.route('/query')
 def query():
-    q = request.args.get('q', '')
-    if not q:
-        return redirect('/')
+    try:
+        q = request.args.get('q', '')
+        if not q:
+            return redirect('/')
 
-    lang = request.args.get('lang', 'guess')
-    formatquery = bool(request.args.get('format', True))
+        lang = request.args.get('lang', 'guess')
+        formatquery = bool(request.args.get('format', True))
 
-    annotated, docs = annotate.annotate(q, lang, formatquery)
+        annotated, docs = annotate.annotate(q, lang, formatquery)
 
-    return render_template('query.html',
-                           lang=lang,
-                           query=markupsafe.Markup(annotated),
-                           docs=_safedocs(docs),
-                           additionalcss=_csspaths(docs))
+        return render_template('query.html',
+                               lang=lang,
+                               query=markupsafe.Markup(annotated),
+                               docs=_safedocs(docs),
+                               additionalcss=_csspaths(docs))
+    except errors.NoAnnotatorFound, e:
+        message = "lang '%s' isn't supported"
+        return render_template('error.html',
+                               title='oops',
+                               message=message % e.args[0])
+    except:
+        logger.error('uncaught exception: lang=%r formatquery=%r query=%r',
+                     lang,
+                     formatquery,
+                     q,
+                     exc_info=True)
+        message = 'something went wrong... this was logged and will be checked'
+        return render_template('error.html', title='oops', message=message)
+
 
 @app.route('/testpage')
 def testpage():
