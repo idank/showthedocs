@@ -26,8 +26,8 @@
                 {% set active_page = active_page|default('index') -%}
                 <ul class="topnav">
                   <li><a class="logo" href="/">showthedocs.com</a></li>
-                  {% for href, caption in navigation_bar %}
-                  <li class="navitem"><a href="{{ href|e }}"{% if caption == active_page %} class="highlighted"{% endif %}>{{ caption|e }}</a></li>
+                  {% for href, caption in navigation_bar if config.TEST or (not config.TEST and 'test' not in caption) %}
+                      <li class="navitem"><a href="{{ href|e }}"{% if caption == active_page %} class="highlighted"{% endif %}>{{ caption|e }}</a></li>
                   {% endfor %}
                   <li><a href="https://github.com/idank"><i class="devicon-github-plain"></i></a></li>
                   {% block additionalnav %}{% endblock %}

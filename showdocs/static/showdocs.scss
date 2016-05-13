@@ -16,7 +16,7 @@ body {
     margin: 0;
 }
 
-.topnav, .container-center, #docs-scrollbar, #query-legend {
+.topnav, .container-center, #docs-scrollbar, #query-legend,.submit {
     font-family: $font;
 }
 
@@ -41,51 +41,54 @@ ul.topnav {
     height: $topnav-height;
     background-color: $palette2;
     font-size: 12px;
-    font-family: 'Libre Baskerville', Garamond, serif;
     font-weight: 400;
 
     i {
         font-size: 2em;
     }
-}
 
-ul.topnav li {
-    position: relative;
-    float: left;
-    height: 40px;
-    padding: 0 8px;
-}
+    i:hover {
+        color: $palette3;
+    }
 
-ul.topnav li * {
-    text-align: center;
-    text-decoration: none;
-    transition: background-color 0.3s;
-    color: white;
-    line-height: 40px;
-    padding: 6px 6px;
-    border-radius: 8px;
-}
+    li {
+        position: relative;
+        float: left;
+        height: $topnav-height;
+        padding: 0 8px;
 
-ul.topnav li:not(:first-child) {
-    text-transform: uppercase;
-}
+        * {
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+            color: white;
+            line-height: $topnav-height;
+            padding: 6px 6px;
+            border-radius: 8px;
+        }
+    }
 
-ul.topnav li:first-child a {
-    font-size: 20px;
-}
+    li:not(:first-child) {
+        text-transform: uppercase;
+    }
 
-ul.topnav li.navitem a:not(.highlighted):hover {
-    background-color: $palette3;
-}
+    li:first-child a {
+        font-size: 20px;
+    }
 
-ul.topnav .lang {
-    float: right;
-}
+    li.navitem a:not(.highlighted):hover {
+        background-color: $palette3;
+    }
 
-ul.topnav .highlighted {
-    background-color: $palette4;
-    border-radius: 8px;
-    cursor: default;
+    .lang {
+        float: right;
+    }
+
+    .highlighted {
+        background-color: $palette4;
+        border-radius: 8px;
+        cursor: default;
+    }
 }
 
 $query-height: 150px;
@@ -303,19 +306,9 @@ $container-margin-lr: 8px;
 
 .submit {
     background-color: $palette3;
-    border-color: $palette3;
-    display: inline-block;
-    padding: 6px 20px;
-    margin-bottom: 0;
+    padding: 8px 20px;
     font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
+    font-weight: bold;
     border: 1px solid transparent;
     border-radius: 4px;
     cursor: pointer;

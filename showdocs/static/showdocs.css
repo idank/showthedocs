@@ -5,7 +5,7 @@ body {
 }
 
 /* line 19 */
-.topnav, .container-center, #docs-scrollbar, #query-legend {
+.topnav, .container-center, #docs-scrollbar, #query-legend, .submit {
   font-family: "Libre Baskerville", Garamond, serif;
 }
 
@@ -31,61 +31,57 @@ ul.topnav {
   height: 40px;
   background-color: #003459;
   font-size: 12px;
-  font-family: 'Libre Baskerville', Garamond, serif;
   font-weight: 400;
 }
-/* line 47 */
+/* line 46 */
 ul.topnav i {
   font-size: 2em;
 }
-
-/* line 52 */
+/* line 50 */
+ul.topnav i:hover {
+  color: #007EA7;
+}
+/* line 54 */
 ul.topnav li {
   position: relative;
   float: left;
   height: 40px;
   padding: 0 8px;
 }
-
-/* line 59 */
+/* line 60 */
 ul.topnav li * {
   text-align: center;
   text-decoration: none;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
   color: white;
   line-height: 40px;
   padding: 6px 6px;
   border-radius: 8px;
 }
-
-/* line 69 */
+/* line 71 */
 ul.topnav li:not(:first-child) {
   text-transform: uppercase;
 }
-
-/* line 73 */
+/* line 75 */
 ul.topnav li:first-child a {
   font-size: 20px;
 }
-
-/* line 77 */
+/* line 79 */
 ul.topnav li.navitem a:not(.highlighted):hover {
   background-color: #007EA7;
 }
-
-/* line 81 */
+/* line 83 */
 ul.topnav .lang {
   float: right;
 }
-
-/* line 85 */
+/* line 87 */
 ul.topnav .highlighted {
   background-color: #00A8E8;
   border-radius: 8px;
   cursor: default;
 }
 
-/* line 93 */
+/* line 96 */
 #query-container {
   position: relative;
   overflow: hidden;
@@ -93,7 +89,7 @@ ul.topnav .highlighted {
   height: 150px;
 }
 
-/* line 100 */
+/* line 103 */
 #query-scroller {
   position: relative;
   overflow: auto;
@@ -102,7 +98,7 @@ ul.topnav .highlighted {
   margin: 0 auto;
 }
 
-/* line 108 */
+/* line 111 */
 #query {
   white-space: pre;
   line-height: 40px;
@@ -111,7 +107,7 @@ ul.topnav .highlighted {
   padding-left: 3px;
 }
 
-/* line 122 */
+/* line 125 */
 #query-legend {
   position: fixed;
   right: 20px;
@@ -120,37 +116,37 @@ ul.topnav .highlighted {
   height: 105px;
 }
 
-/* line 130 */
+/* line 133 */
 #query-legend div {
   text-align: right;
 }
 
-/* line 134 */
+/* line 137 */
 #legend-canvas {
   width: 100%;
   height: 100%;
 }
 
-/* line 141 */
+/* line 144 */
 #container {
   margin-left: 8px;
   margin-right: 8px;
 }
 
-/* line 146 */
+/* line 149 */
 #docs {
   margin-left: 50px;
   margin-right: 100px;
 }
 
-/* line 151 */
+/* line 154 */
 #docs-scrollbar {
   position: fixed;
   right: 20px;
   width: 80px;
 }
 
-/* line 157 */
+/* line 160 */
 #docs-scrollbar:before {
   z-index: -1;
   margin: 0 0;
@@ -162,51 +158,51 @@ ul.topnav .highlighted {
   top: -25;
 }
 
-/* line 168 */
+/* line 171 */
 #docs-canvas {
   z-index: -1;
   width: calc(100% - 16px);
   height: 100%;
 }
 
-/* line 176 */
+/* line 179 */
 #docs-scrollbar-canvas {
   width: 100%;
   height: 100%;
 }
 
-/* line 181 */
+/* line 184 */
 .canvas {
   position: absolute;
   pointer-events: none;
 }
 
-/* line 186 */
+/* line 189 */
 #main-canvas {
   width: 100%;
   z-index: 20;
 }
 
-/* line 191 */
+/* line 194 */
 .showdocs-link {
   fill: none;
   stroke: black;
   stroke-width: 1.5px;
 }
 
-/* line 196 */
+/* line 199 */
 .showdocs-link-back {
   fill: none;
   stroke: white;
   stroke-width: 10px;
 }
 
-/* line 202 */
+/* line 205 */
 .showdocs-decorate-back, .clickable {
   cursor: pointer;
 }
 
-/* line 206 */
+/* line 209 */
 .showdocs-decorate-back-outline {
   fill: none;
   stroke: black;
@@ -224,35 +220,35 @@ ul.topnav .highlighted {
     stroke-width: 3px;
   }
 }
-/* line 224 */
+/* line 227 */
 #query-canvas {
   width: 100%;
 }
 
-/* line 228 */
+/* line 231 */
 #query-canvas g * {
   pointer-events: auto;
 }
 
-/* line 232 */
+/* line 235 */
 #docs-scrollbar-canvas g * {
   pointer-events: auto;
 }
 
-/* line 236 */
+/* line 239 */
 #docs .showdocs-decorate-back,
 #query .showdocs-decorate-back {
   padding: 2px 4px;
   border-radius: 3px;
 }
 
-/* line 242 */
+/* line 245 */
 .scrollbar-eyes {
   opacity: 0.2;
   fill: #00A8E8;
 }
 
-/* line 247 */
+/* line 250 */
 .container-center {
   padding-top: 20px;
   margin: 0 auto;
@@ -260,34 +256,34 @@ ul.topnav .highlighted {
 }
 
 /* specific to index */
-/* line 255 */
+/* line 258 */
 .row {
   padding: 20 0;
 }
 
-/* line 259 */
+/* line 262 */
 .row-desc {
   float: left;
   width: 170;
 }
 
-/* line 264 */
+/* line 267 */
 .row-desc h4 {
   margin-top: 0;
   text-transform: uppercase;
 }
 
-/* line 269 */
+/* line 272 */
 .row-desc div {
   color: rgba(46, 48, 58, 0.96);
 }
 
-/* line 273 */
+/* line 276 */
 .row-content {
   margin-left: 200;
 }
 
-/* line 277 */
+/* line 280 */
 .lang-select-icon {
   display: inline-block;
   width: 130;
@@ -299,88 +295,78 @@ ul.topnav .highlighted {
   opacity: 0.7;
   border-radius: 8px;
 }
-/* line 288 */
+/* line 291 */
 .lang-select-icon i {
   font-size: 64px;
 }
 
-/* line 293 */
+/* line 296 */
 .lang-select-icon:hover {
   transition-duration: 0.2s;
   transform: scale(1.2);
   opacity: 1;
 }
 
-/* line 299 */
+/* line 302 */
 .lang-select-icon.highlight {
   opacity: 1;
   background-color: rgba(0, 126, 167, 0.3);
 }
 
-/* line 304 */
+/* line 307 */
 .submit {
   background-color: #007EA7;
-  border-color: #007EA7;
-  display: inline-block;
-  padding: 6px 20px;
-  margin-bottom: 0;
+  padding: 8px 20px;
   font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857143;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
+  font-weight: bold;
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
 }
 
-/* line 324 */
+/* line 317 */
 .lang-select-name {
   font-size: 1.3em;
   font-weight: bold;
 }
 
-/* line 329 */
+/* line 322 */
 .lang-select-icon svg {
   width: 64;
   height: 64;
 }
 
 /* specific to error */
-/* line 337 */
+/* line 330 */
 .error h2 {
   color: red;
 }
 
-/* line 342 */
+/* line 335 */
 .showdocs-decorate-symbol {
   fill: none;
   stroke: none;
 }
 
-/* line 347 */
+/* line 340 */
 .showdocs-decorate-block-lettersymbol-outline {
   text-anchor: middle;
   alignment-baseline: hanging;
   font-size: 30px;
 }
 
-/* line 354 */
+/* line 347 */
 .showdocs-decorate-block-lettersymbol-outline text:first-child, .showdocs-decorate-block-lettersymbol-outline .showdocs-decorate-symbol:first-child {
   stroke: white;
   stroke-width: 6px;
 }
 
-/* line 360 */
+/* line 353 */
 .showdocs-decorate-symbol-pulse path {
   transform: scale(1);
 }
 
-/* line 364 */
+/* line 357 */
 .showdocs-decorate-symbol-pulse-animate {
   animation: pulse 1.5s ease-out 75ms infinite;
 }
