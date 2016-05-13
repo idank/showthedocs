@@ -707,7 +707,7 @@ function clickgroup(e) {
     // Wrap around to the start.
     index = index % samegroup.length;
     var scrollto = samegroup[index];
-    window.location.hash = urlhashprefix + g + "-" + index;
+    history.replaceState(null, null, urlhashprefix + g + "-" + index);
 
     window.scrollTo(0, yforscroll(scrollto));
 
@@ -921,7 +921,7 @@ function initscrollbar() {
             .classed('clickable', true)
             .on('click', function() {
                 var index = d3.selectAll("#docs [data-showdocs=" + g + "]")[0].indexOf(that);
-                window.location.hash = urlhashprefix + g + "-" + index;
+                history.replaceState(null, null, urlhashprefix + g + "-" + index);
                 window.scrollTo(0, yforscroll(that));
             })
             .on('mouseenter', function() {
