@@ -1,3 +1,5 @@
+import markupsafe
+
 class Annotation(object):
     def __init__(self, start, end, group, classes, lineno=0):
         if end <= start:
@@ -13,7 +15,7 @@ class Annotation(object):
 
     def format(self):
         return '<span data-showdocs="%s" class="%s">' % (
-            self.group, ' '.join(self.classes))
+            markupsafe.escape(self.group), ' '.join(self.classes))
 
     def decoration(self):
         for c in self.classes:
