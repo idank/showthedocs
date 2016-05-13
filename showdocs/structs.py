@@ -28,7 +28,7 @@ class Annotation(object):
         return Annotation(self.start, self.end, self.group, classes)
 
     def __repr__(self):
-        return 'Annotation({start}, {end}, {group}, {classes}, {lineno})'.format(
+        return 'Annotation({start}, {end}, {group!r}, {classes}, {lineno})'.format(
             **self.__dict__)
 
     def __eq__(self, other):
