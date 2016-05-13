@@ -2,7 +2,7 @@ import logging
 import markupsafe
 
 from flask import render_template, request, redirect
-from showdocs import app, html, annotate, structs, docs, errors
+from showdocs import app, html, annotate, structs, docs, errors, config
 
 from showdocs.structs import Annotation
 
@@ -46,6 +46,8 @@ def query():
                                title='oops',
                                message=message % e.args[0])
     except:
+        if config.TEST:
+            raise
         logger.error('uncaught exception: lang=%r formatquery=%r query=%r',
                      lang,
                      formatquery,
