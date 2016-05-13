@@ -710,6 +710,10 @@ function clickgroup(e) {
     window.location.hash = urlhashprefix + g + "-" + index;
 
     window.scrollTo(0, yforscroll(scrollto));
+
+    // Clear the links.
+    d3.selectAll("#main-canvas *")
+        .remove();
 }
 
 function highlightgroup(selection) {
@@ -723,7 +727,7 @@ function highlightgroup(selection) {
     var c = d3.rgb(groupstate[g].color);
 
     selection
-        .filter(function() { return d3.select(this).classed('showdocs-decorate-back') && inView(this); })
+        .filter(function() { return d3.select(this).classed('showdocs-decorate-back'); })
         .transition()
         .duration(750)
         .styleTween('box-shadow', function() {
@@ -761,7 +765,7 @@ function unhighlightgroup(selection) {
     var c = d3.rgb(groupstate[g].color);
 
     selection
-        .filter(function() { return d3.select(this).classed('showdocs-decorate-back') && inView(this); })
+        .filter(function() { return d3.select(this).classed('showdocs-decorate-back'); })
         .transition()
         .styleTween('box-shadow', function() {
             var i = d3.interpolate('3px', '0px');
