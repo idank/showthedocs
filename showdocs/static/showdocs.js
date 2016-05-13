@@ -383,21 +383,21 @@ function initialize() {
             groupstate[g].letter = String.fromCharCode("A".charCodeAt(0) + seen.size());
             seen.add(g);
         });
-    seen = d3.set();
+    var allocatedsymbols = 0;
     d3.selectAll("#query [data-showdocs]:not(.showdocs-decorate-block)")
         .each(function() {
             var g = this.getAttribute("data-showdocs");
             if (seen.has(g))
                 return;
-            var fill = seen.size() < d3.svg.symbolTypes.length;
-            console.log(fill);
+            var fill = allocatedsymbols < d3.svg.symbolTypes.length;
             groupstate[g].symbol = {
                 fill: fill,
                 stroke: !fill,
-                type: d3.svg.symbolTypes[seen.size() % d3.svg.symbolTypes.length],
+                type: d3.svg.symbolTypes[allocatedsymbols % d3.svg.symbolTypes.length],
             };
 
             seen.add(g);
+            allocatedsymbols += 1;
         });
 
     initlegend();
