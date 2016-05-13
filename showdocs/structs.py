@@ -17,7 +17,7 @@ class Annotation(object):
 
     def decoration(self):
         for c in self.classes:
-            if c.startswith(decorateprefix) and 'index' not in c:
+            if c.startswith(decorateprefix):
                 return c
 
     def addclass(self, c):

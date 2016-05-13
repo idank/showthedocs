@@ -102,6 +102,7 @@ class SqlAnnotator(base.Annotator):
         self.docs.add('sql/pg/select.html')
 
         tokens = statement.tokens
+
         inprogressend = self.pos[tokens[-1]][1]
         inprogress = [self.pos[tokens[0]][0], self.groups.select, [structs.decorate.BLOCK]]
 
@@ -127,14 +128,13 @@ class SqlAnnotator(base.Annotator):
 
 
         frompart = list(_extractfrompart(statement))
-        for t in frompart:
-            for token in t.flatten():
-                if token.ttype is Keyword and token.normalized == 'AS':
-                    p = self.pos[token]
-                    self._append(p[0], p[1], 'as', [structs.decorate.BACK])
         for tablename in _extracttableidentifiers(frompart):
             p = self.pos[tablename]
             self._append(p[0], p[1], 'table_name', [structs.decorate.BACK])
+
+    def _visitkeyword(self, token):
+        p = self.pos[token]
+        self._append(p[0], p[1], token.value.lower(), [structs.decorate.BACK])
 
     def annotate(self, text, dumptree=False):
         parsed = sqlparse.parse(text)[0]
@@ -144,6 +144,10 @@ class SqlAnnotator(base.Annotator):
         self.pos, _ = _calcpositions(parsed)
 
         if isinstance(parsed, Statement):
+            for token in parsed.flatten():
+                if token.is_keyword:
+                    self._visitkeyword(token)
+
             t = parsed.get_type()
             if t == 'CREATE':
                 self._visitcreatetable(parsed)

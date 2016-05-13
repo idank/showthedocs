@@ -282,8 +282,13 @@ ul.topnav .highlighted {
 .row-content {
   margin-left: 200;
 }
+/* line 279 */
+.row-content textarea {
+  width: 100%;
+  height: 100px;
+}
 
-/* line 280 */
+/* line 285 */
 .lang-select-icon {
   display: inline-block;
   width: 130;
@@ -295,25 +300,25 @@ ul.topnav .highlighted {
   opacity: 0.7;
   border-radius: 8px;
 }
-/* line 291 */
+/* line 296 */
 .lang-select-icon i {
   font-size: 64px;
 }
 
-/* line 296 */
+/* line 301 */
 .lang-select-icon:hover {
   transition-duration: 0.2s;
   transform: scale(1.2);
   opacity: 1;
 }
 
-/* line 302 */
+/* line 307 */
 .lang-select-icon.highlight {
   opacity: 1;
   background-color: rgba(0, 126, 167, 0.3);
 }
 
-/* line 307 */
+/* line 312 */
 .submit {
   background-color: #007EA7;
   padding: 8px 20px;
@@ -324,49 +329,49 @@ ul.topnav .highlighted {
   cursor: pointer;
 }
 
-/* line 317 */
+/* line 322 */
 .lang-select-name {
   font-size: 1.3em;
   font-weight: bold;
 }
 
-/* line 322 */
+/* line 327 */
 .lang-select-icon svg {
   width: 64;
   height: 64;
 }
 
 /* specific to error */
-/* line 330 */
+/* line 335 */
 .error h2 {
   color: red;
 }
 
-/* line 335 */
+/* line 340 */
 .showdocs-decorate-symbol {
   fill: none;
   stroke: none;
 }
 
-/* line 340 */
+/* line 345 */
 .showdocs-decorate-block-lettersymbol-outline {
   text-anchor: middle;
   alignment-baseline: hanging;
   font-size: 30px;
 }
 
-/* line 347 */
+/* line 352 */
 .showdocs-decorate-block-lettersymbol-outline text:first-child, .showdocs-decorate-block-lettersymbol-outline .showdocs-decorate-symbol:first-child {
   stroke: white;
   stroke-width: 6px;
 }
 
-/* line 353 */
+/* line 358 */
 .showdocs-decorate-symbol-pulse path {
   transform: scale(1);
 }
 
-/* line 357 */
+/* line 362 */
 .showdocs-decorate-symbol-pulse-animate {
   animation: pulse 1.5s ease-out 75ms infinite;
 }
