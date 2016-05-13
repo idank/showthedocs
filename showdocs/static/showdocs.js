@@ -452,6 +452,7 @@ function initialize() {
                 height: h + (pxBetweenLines / 4) * 2
             });
             let fontsize = Math.max(rnd(pxBetweenLines*1.8), rnd(h / 2));
+            fontsize = Math.min(100, fontsize);
             let linewidth = sizes.block.linewidth + fontsize / 1.3;
             blockshapes.lines.push({
                 x1: x - sizes.block.linegap,
