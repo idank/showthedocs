@@ -60,7 +60,7 @@ def _extracttableidentifiers(tokens):
 
 
 class SqlAnnotator(base.Annotator):
-    alias = ['sql', 'postgresql']
+    alias = ['sql', 'postgresql', 'mysql']
     knownkeywords = ['select', 'from', 'where']
     groups = base.makegroups('createtable',
                              'table_name',
@@ -99,7 +99,10 @@ class SqlAnnotator(base.Annotator):
             self._append(p[0], p[1], 'table_name', [structs.decorate.BACK])
 
     def _visitselect(self, statement):
-        self.docs.add('sql/pg/select.html')
+        if self.lang == 'postgresql':
+            self.docs.add('sql/pg/select.html')
+        elif self.lang == 'mysql':
+            self.docs.add('sql/mysql/select.html')
 
         tokens = statement.tokens
 
