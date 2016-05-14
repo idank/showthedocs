@@ -58,12 +58,8 @@ $(document).ready(function() {
     $('#docs-scrollbar').css('top', affixedheight);
     $("#docs-scrollbar").height(window.innerHeight - affixedheight);
 
-    var body = document.body,
-        html = document.documentElement;
-
-    var height = Math.max(body.scrollHeight, body.offsetHeight,
-            html.clientHeight, html.scrollHeight, html.offsetHeight);
-    $("#main-canvas").height(height);
+    $("#main-canvas").height(offset('#main').height);
+    $("#docs-canvas").height(offset('#main').height - affixedheight);
 
     initialize();
     scrolltohash();

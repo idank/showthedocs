@@ -173,7 +173,6 @@ $container-margin-lr: 8px;
     // Becuase of the margin on #container (ancestor of this), putting 100%
     // here adds an horizontal scrollbar. Deduct the margin to avoid that.
     width: calc(100% - #{$container-margin-lr * 2});
-    height: 100%;
 }
 
 #docs-scrollbar-canvas {
