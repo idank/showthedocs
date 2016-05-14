@@ -10,7 +10,8 @@ def makegroups(*args):
     return c
 
 class Annotator(object):
-    def __init__(self):
+    def __init__(self, lang):
+        self.lang = lang
         self.docs = docs.Collection()
         self.annotations = []
 

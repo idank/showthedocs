@@ -3,6 +3,10 @@
 SHELL=bash -e
 STATIC_DIR=showdocs/static
 
+tests:
+	nosetests tests/
+	cram tests/
+
 externalcss:
 	[ -d $(STATIC_DIR) ]
 	wrap () { \
@@ -23,4 +27,4 @@ externalcss:
 clean:
 	rm -r externaltmp/
 
-.PHONY: clean externalcss
+.PHONY: clean externalcss tests

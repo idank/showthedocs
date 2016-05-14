@@ -69,8 +69,8 @@ class SqlAnnotator(base.Annotator):
                              'from',
                              'where', )
 
-    def __init__(self):
-        super(SqlAnnotator, self).__init__()
+    def __init__(self, lang):
+        super(SqlAnnotator, self).__init__(lang)
         self.pos = 0
 
     def format(self, text, opts):

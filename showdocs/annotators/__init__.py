@@ -17,4 +17,4 @@ def get(lang):
     if not acls:
         raise errors.NoAnnotatorFound(lang)
 
-    return acls()
+    return acls(lang)
