@@ -16,8 +16,6 @@ def validate(path, contents):
         if not decorations:
             errors.append("has no showdocs-decorate-* class, found %r" %
                           classes)
-        if not t.get('id'):
-            errors.append('missing attribute id')
         for e in errors:
             print trepr, e
 
