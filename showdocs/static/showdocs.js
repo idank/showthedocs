@@ -11,6 +11,11 @@ var sizes = {
         lettersize: 20,
     },
     linkmargin: 5,
+    scrollbar: {
+        fontsize: '40px',
+        fontsizezoom: '60px',
+        symbolr: 10,
+    },
 };
 
 
@@ -758,7 +763,7 @@ function highlightgroup(selection) {
         .selectAll("text")
         .transition()
         .duration(750)
-        .attr('font-size', '60px');
+        .attr('font-size', sizes.scrollbar.fontsizezoom);
 }
 
 function unhighlightgroup(selection) {
@@ -915,10 +920,9 @@ function initscrollbar() {
         p.top -= affixtop;
         p.bottom -= affixtop;
 
-        const r = 10;
         var x = 10+scrollxscale(p.left);
         // This is the center of the shape, account for the radius.
-        var y = scrollyscale(p.top) + r/2;
+        var y = scrollyscale(p.top) + sizes.scrollbar.symbolr/2;
 
         var that = this;
         var group = d3.select("#docs-scrollbar-canvas")
@@ -950,7 +954,7 @@ function initscrollbar() {
               fill: groupstate[g].symbol.fill,
               stroke: groupstate[g].symbol.stroke,
               type: groupstate[g].symbol.type,
-              radius: r,
+              radius: sizes.scrollbar.symbolr,
               x: 0, y: 0,
             });
 
@@ -960,7 +964,7 @@ function initscrollbar() {
               fill: false,
               stroke: true,
               type: groupstate[g].symbol.type,
-              radius: r,
+              radius: sizes.scrollbar.symbolr,
               x: 0, y: 0,
             });
 
@@ -972,7 +976,7 @@ function initscrollbar() {
             shapes.text.push({
                 text: groupstate[g].letter,
                 x: x, y: y,
-                size: '40px',
+                size: sizes.scrollbar.fontsize,
                 font: 'monospace',
                 anchor: 'middle',
                 alignment: 'middle',
