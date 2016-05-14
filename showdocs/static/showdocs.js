@@ -400,6 +400,10 @@ function initialize() {
             allocatedsymbols += 1;
         });
 
+    docsfunctions.forEach(function(fn) {
+        fn();
+    });
+
     initlegend();
 
     // Key shapes by the group that created them so we can nest them all in the
@@ -531,7 +535,7 @@ function initialize() {
                 ry: 2});
         }
         else {
-            console.log('unknown decoration for ', this);
+            console.log('unknown or misssing decoration for ', this);
         }
     });
 
@@ -645,6 +649,9 @@ function initialize() {
         else if ($this.hasClass("showdocs-decorate-back")) {
             $this.css('background-color', groupstate[g].color);
             addhoverlinks(this);
+        }
+        else {
+            console.log('unknown or missing decoration for ', this);
         }
     });
 
