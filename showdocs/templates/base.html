@@ -8,10 +8,18 @@
         {% for path in additionalcss %}
         <link rel="stylesheet" href="{{ path }}">
         {% endfor %}
+        {% if config.TEST %}
+        <script src="/static/jquery-2.2.0.min.js"></script>
+        {% else %}
         <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+        {% endif %}
         <script src="/static/showdocs.js"></script>
         <script src="/static/docutils.js"></script>
+        {% if config.TEST %}
+        <link rel="stylesheet" href="/static/devicon.min.css">
+        {% else %}
         <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/master/devicon.min.css">
+        {% endif %}
         <title>showthedocs</title>
         {% block head %}{% endblock %}
     </head>
