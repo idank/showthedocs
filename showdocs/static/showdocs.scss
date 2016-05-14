@@ -6,14 +6,16 @@ $palette3: #007EA7;
 $palette4: #00A8E8;
 $font: 'Libre Baskerville', Garamond, serif;
 
-//* {
-//  -webkit-box-sizing: border-box;
-//     -moz-box-sizing: border-box;
-//          box-sizing: border-box;
-//}
-
 body {
     margin: 0;
+}
+
+a {
+    color: $palette4;
+}
+
+a:visited {
+    color: $palette3;
 }
 
 .topnav, .container-center, #docs-scrollbar, #query-legend,.submit {

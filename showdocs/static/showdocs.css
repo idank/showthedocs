@@ -1,20 +1,30 @@
 @import url(http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic,700italic,300,300italic&subset=latin,latin-ext);
-/* line 15 */
+/* line 9 */
 body {
   margin: 0;
 }
 
-/* line 19 */
+/* line 13 */
+a {
+  color: #00A8E8;
+}
+
+/* line 17 */
+a:visited {
+  color: #007EA7;
+}
+
+/* line 21 */
 .topnav, .container-center, #docs-scrollbar, #query-legend, .submit {
   font-family: "Libre Baskerville", Garamond, serif;
 }
 
-/* line 23 */
+/* line 25 */
 #main {
   position: relative;
 }
 
-/* line 27 */
+/* line 29 */
 #affixed {
   position: fixed;
   top: 0;
@@ -23,7 +33,7 @@ body {
   background-color: white;
 }
 
-/* line 37 */
+/* line 39 */
 ul.topnav {
   list-style-type: none;
   margin: 0;
@@ -33,22 +43,22 @@ ul.topnav {
   font-size: 12px;
   font-weight: 400;
 }
-/* line 46 */
+/* line 48 */
 ul.topnav i {
   font-size: 2em;
 }
-/* line 50 */
+/* line 52 */
 ul.topnav i:hover {
   color: #007EA7;
 }
-/* line 54 */
+/* line 56 */
 ul.topnav li {
   position: relative;
   float: left;
   height: 40px;
   padding: 0 8px;
 }
-/* line 60 */
+/* line 62 */
 ul.topnav li * {
   text-align: center;
   text-decoration: none;
@@ -58,30 +68,30 @@ ul.topnav li * {
   padding: 6px 6px;
   border-radius: 8px;
 }
-/* line 71 */
+/* line 73 */
 ul.topnav li:not(:first-child) {
   text-transform: uppercase;
 }
-/* line 75 */
+/* line 77 */
 ul.topnav li:first-child a {
   font-size: 20px;
 }
-/* line 79 */
+/* line 81 */
 ul.topnav li.navitem a:not(.highlighted):hover {
   background-color: #007EA7;
 }
-/* line 83 */
+/* line 85 */
 ul.topnav .lang {
   float: right;
 }
-/* line 87 */
+/* line 89 */
 ul.topnav .highlighted {
   background-color: #00A8E8;
   border-radius: 8px;
   cursor: default;
 }
 
-/* line 96 */
+/* line 98 */
 #query-container {
   position: relative;
   overflow: hidden;
@@ -89,7 +99,7 @@ ul.topnav .highlighted {
   height: 150px;
 }
 
-/* line 103 */
+/* line 105 */
 #query-scroller {
   position: relative;
   overflow: auto;
@@ -98,7 +108,7 @@ ul.topnav .highlighted {
   margin: 0 auto;
 }
 
-/* line 111 */
+/* line 113 */
 #query {
   white-space: pre;
   line-height: 40px;
@@ -107,7 +117,7 @@ ul.topnav .highlighted {
   padding-left: 3px;
 }
 
-/* line 125 */
+/* line 127 */
 #query-legend {
   position: fixed;
   right: 20px;
@@ -116,37 +126,37 @@ ul.topnav .highlighted {
   height: 105px;
 }
 
-/* line 133 */
+/* line 135 */
 #query-legend div {
   text-align: right;
 }
 
-/* line 137 */
+/* line 139 */
 #legend-canvas {
   width: 100%;
   height: 100%;
 }
 
-/* line 144 */
+/* line 146 */
 #container {
   margin-left: 8px;
   margin-right: 8px;
 }
 
-/* line 149 */
+/* line 151 */
 #docs {
   margin-left: 50px;
   margin-right: 100px;
 }
 
-/* line 154 */
+/* line 156 */
 #docs-scrollbar {
   position: fixed;
   right: 20px;
   width: 80px;
 }
 
-/* line 160 */
+/* line 162 */
 #docs-scrollbar:before {
   z-index: -1;
   margin: 0 0;
@@ -158,50 +168,50 @@ ul.topnav .highlighted {
   top: -25;
 }
 
-/* line 171 */
+/* line 173 */
 #docs-canvas {
   z-index: -1;
   width: calc(100% - 16px);
 }
 
-/* line 178 */
+/* line 180 */
 #docs-scrollbar-canvas {
   width: 100%;
   height: 100%;
 }
 
-/* line 183 */
+/* line 185 */
 .canvas {
   position: absolute;
   pointer-events: none;
 }
 
-/* line 188 */
+/* line 190 */
 #main-canvas {
   width: 100%;
   z-index: 20;
 }
 
-/* line 193 */
+/* line 195 */
 .showdocs-link {
   fill: none;
   stroke: black;
   stroke-width: 1.5px;
 }
 
-/* line 198 */
+/* line 200 */
 .showdocs-link-back {
   fill: none;
   stroke: white;
   stroke-width: 10px;
 }
 
-/* line 204 */
+/* line 206 */
 .showdocs-decorate-back, .clickable {
   cursor: pointer;
 }
 
-/* line 208 */
+/* line 210 */
 .showdocs-decorate-back-outline {
   fill: none;
   stroke: black;
@@ -219,35 +229,35 @@ ul.topnav .highlighted {
     stroke-width: 3px;
   }
 }
-/* line 226 */
+/* line 228 */
 #query-canvas {
   width: 100%;
 }
 
-/* line 230 */
+/* line 232 */
 #query-canvas g * {
   pointer-events: auto;
 }
 
-/* line 234 */
+/* line 236 */
 #docs-scrollbar-canvas g * {
   pointer-events: auto;
 }
 
-/* line 238 */
+/* line 240 */
 #docs .showdocs-decorate-back,
 #query .showdocs-decorate-back {
   padding: 2px 4px;
   border-radius: 3px;
 }
 
-/* line 244 */
+/* line 246 */
 .scrollbar-eyes {
   opacity: 0.2;
   fill: #00A8E8;
 }
 
-/* line 249 */
+/* line 251 */
 .container-center {
   padding-top: 20px;
   margin: 0 auto;
@@ -255,39 +265,39 @@ ul.topnav .highlighted {
 }
 
 /* specific to index */
-/* line 257 */
+/* line 259 */
 .row {
   padding: 20 0;
 }
 
-/* line 261 */
+/* line 263 */
 .row-desc {
   float: left;
   width: 170;
 }
 
-/* line 266 */
+/* line 268 */
 .row-desc h4 {
   margin-top: 0;
   text-transform: uppercase;
 }
 
-/* line 271 */
+/* line 273 */
 .row-desc div {
   color: rgba(46, 48, 58, 0.96);
 }
 
-/* line 275 */
+/* line 277 */
 .row-content {
   margin-left: 200;
 }
-/* line 278 */
+/* line 280 */
 .row-content textarea {
   width: 100%;
   height: 100px;
 }
 
-/* line 284 */
+/* line 286 */
 .lang-select-icon {
   display: inline-block;
   width: 130;
@@ -299,25 +309,25 @@ ul.topnav .highlighted {
   opacity: 0.7;
   border-radius: 8px;
 }
-/* line 295 */
+/* line 297 */
 .lang-select-icon i {
   font-size: 64px;
 }
 
-/* line 300 */
+/* line 302 */
 .lang-select-icon:hover {
   transition-duration: 0.2s;
   transform: scale(1.2);
   opacity: 1;
 }
 
-/* line 306 */
+/* line 308 */
 .lang-select-icon.highlight {
   opacity: 1;
   background-color: rgba(0, 126, 167, 0.3);
 }
 
-/* line 311 */
+/* line 313 */
 .submit {
   background-color: #007EA7;
   padding: 8px 20px;
@@ -328,49 +338,49 @@ ul.topnav .highlighted {
   cursor: pointer;
 }
 
-/* line 321 */
+/* line 323 */
 .lang-select-name {
   font-size: 1.3em;
   font-weight: bold;
 }
 
-/* line 326 */
+/* line 328 */
 .lang-select-icon svg {
   width: 64;
   height: 64;
 }
 
 /* specific to error */
-/* line 334 */
+/* line 336 */
 .error h2 {
   color: red;
 }
 
-/* line 339 */
+/* line 341 */
 .showdocs-decorate-symbol {
   fill: none;
   stroke: none;
 }
 
-/* line 344 */
+/* line 346 */
 .showdocs-decorate-block-lettersymbol-outline {
   text-anchor: middle;
   alignment-baseline: hanging;
   font-size: 30px;
 }
 
-/* line 351 */
+/* line 353 */
 .showdocs-decorate-block-lettersymbol-outline text:first-child, .showdocs-decorate-block-lettersymbol-outline .showdocs-decorate-symbol:first-child {
   stroke: white;
   stroke-width: 6px;
 }
 
-/* line 357 */
+/* line 359 */
 .showdocs-decorate-symbol-pulse path {
   transform: scale(1);
 }
 
-/* line 361 */
+/* line 363 */
 .showdocs-decorate-symbol-pulse-animate {
   animation: pulse 1.5s ease-out 75ms infinite;
 }
@@ -388,4 +398,9 @@ ul.topnav .highlighted {
     transform: scale(3);
     opacity: 0;
   }
+}
+/* language specific css */
+/* line 383 */
+#query.nginx {
+  line-height: 25px;
 }
