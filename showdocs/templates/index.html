@@ -48,6 +48,14 @@
 {% endblock %}
 {% block afterbody %}
 <script>
+if (history.state != null && 'lang' in history.state) {
+    $(".lang-select-icon div").each(function() {
+        if ($(this).text() == history.state.lang) {
+            $(this).parent().toggleClass('highlight');
+        }
+    });
+}
+
 $(".lang-select-icon").click(function() {
     var that = this;
     // Apply .highlight on the clicked element only.
@@ -55,7 +63,9 @@ $(".lang-select-icon").click(function() {
     $(this).toggleClass("highlight");
 
     // Set the language on the hidden field.
-    $("#lang").val($(this).find(".lang-select-name").text());
+    var lang = $(this).find(".lang-select-name").text();
+    $("#lang").val(lang);
+    history.replaceState({lang: lang}, null);
 });
 </script>
 {% endblock %}
