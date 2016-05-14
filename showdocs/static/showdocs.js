@@ -30,7 +30,7 @@ function elementfromhash() {
     if (m != null) {
         var g = m[1];
         var index = parseInt(m[2]);
-        var samegroup = d3.selectAll("#docs [data-showdocs=" + g + "]")[0];
+        var samegroup = d3.selectAll("#docs " + selectorshowdocs(g))[0];
         if (index < samegroup.length) {
             return samegroup[index];
         }
@@ -143,7 +143,7 @@ function addhoverlinks(e) {
                 .sortKeys(function(a, b) { return d3.ascending(parseInt(a), parseInt(b)); })
                 // Connect everything with data-showdocs that isn't a <g> and
                 // is on the screen.
-                .entries(d3.selectAll("[data-showdocs=" + g + "].showdocs-decorate-back:not(g)")
+                .entries(d3.selectAll(selectorshowdocs(g) + ".showdocs-decorate-back:not(g)")
                     .filter(function() {
                         return inView(this) ? this : null;
                     })[0]);
@@ -223,7 +223,7 @@ function addhoverlinks(e) {
                 highlightgroup(d3.select(this.__scrollbarg__));
             }
             else {
-                highlightgroup(d3.selectAll("#docs-scrollbar-canvas [data-showdocs=" + g + "]"));
+                highlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
             }
         })
         .on('mouseleave.links', function() {
@@ -239,7 +239,7 @@ function addhoverlinks(e) {
             }
             else {
                 var g = findparentgroup(this);
-                unhighlightgroup(d3.selectAll("#docs-scrollbar-canvas [data-showdocs=" + g + "]"));
+                unhighlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
             }
         });
 }
@@ -318,11 +318,11 @@ function initlegend() {
         });
         gg.on('mouseenter', function() {
             var g = findparentgroup(this);
-            highlightgroup(d3.selectAll("[data-showdocs="+g+"]"));
+            highlightgroup(d3.selectAll(selectorshowdocs(g)));
         });
         gg.on('mouseleave', function() {
             var g = findparentgroup(this);
-            unhighlightgroup(d3.selectAll("[data-showdocs="+g+"]"));
+            unhighlightgroup(d3.selectAll(selectorshowdocs(g)));
         });
         appendshapes(gg, group, shapes);
     });
@@ -553,10 +553,10 @@ function initialize() {
                 .attr('data-showdocs', g)
                 .classed('clickable', true)
                 .on('mouseenter', function() {
-                    highlightgroup(d3.selectAll("#docs-scrollbar-canvas [data-showdocs=" + g + "]"));
+                    highlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
                 })
                 .on('mouseleave', function() {
-                    unhighlightgroup(d3.selectAll("#docs-scrollbar-canvas [data-showdocs=" + g + "]"));
+                    unhighlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
                 })
                 .on('click', function() { clickgroup(this); });
             appendshapes(gg, g, shapes[g]);
@@ -689,7 +689,7 @@ function clickgroup(e) {
     console.log('clickgroup', g);
     // Clicking on an item in #docs scrolls to the next tag and updates
     // the url hash.
-    var samegroup = d3.selectAll("#docs [data-showdocs=" + g + "]")[0];
+    var samegroup = d3.selectAll("#docs " + selectorshowdocs(g))[0];
     if (samegroup.length == 0)
         return;
 
@@ -893,7 +893,6 @@ function initscrollbar() {
     var selection = d3.selectAll("#docs [data-showdocs]")
         .filter(groupsinquery);
 
-    const m = d3.max(selection[0].map(function(x) { return pos(x).top; }));
     const affixtop = rnd($("#affixed").height());
     var scrollyscale = d3.scale.linear()
         .domain([
@@ -927,7 +926,7 @@ function initscrollbar() {
             .attr('data-showdocs', g)
             .classed('clickable', true)
             .on('click', function() {
-                var index = d3.selectAll("#docs [data-showdocs=" + g + "]")[0].indexOf(that);
+                var index = d3.selectAll("#docs " + selectorshowdocs(g))[0].indexOf(that);
                 history.replaceState(null, null, urlhashprefix + g + "-" + index);
                 window.scrollTo(0, yforscroll(that));
             })
@@ -1197,4 +1196,8 @@ function arrangeintervals(arr, intervalfn, reverse) {
 
 function groupsinquery() {
     return this.getAttribute('data-showdocs') in groupstate;
+}
+
+function selectorshowdocs(g) {
+    return '[data-showdocs="' + g + '"]';
 }
