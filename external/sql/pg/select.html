@@ -1790,24 +1790,5 @@ FROM manufacturers m LEFT JOIN LATERAL get_product_names(m.id) pname ON true;
 </div>
 
 <script>
-docsfunctions.push(
-function() {
-    var i = 0;
-    var j = 0;
-    $('.pg-select .LITERAL')
-        .filter(function() { return !this.hasAttribute('data-showdocs'); })
-        .each(function() {
-            $(this).attr('data-showdocs', $(this).text().toLowerCase());
-            i++;
-        });
-
-    $('.pg-select .LITERAL')
-        .filter(groupsinquery)
-        .each(function() {
-            $(this).addClass('showdocs-decorate-back');
-            j++;
-        });
-
-    console.log('added', i, 'groups to existing elements and decorated', j);
-});
+docsfunctions.push(function() { autoannotate('.pg-select .LITERAL'); });
 </script>
