@@ -135,7 +135,21 @@ class SqlAnnotator(base.Annotator):
             p = self.pos[tablename]
             self._append(p[0], p[1], 'table_name', [structs.decorate.BACK])
 
-    def _visitkeyword(self, token):
+    def _visitkeyword(self, flat, i, token):
+        # We get two tokens for a GROUP BY, merge them to one annotation.
+        groupby = flat[i:i+1]
+        if token.value.lower() == 'group':
+            j = i+1
+            while j < len(flat) and flat[j].is_whitespace():
+                j += 1
+            if j < len(flat) and flat[j].value.lower() == 'by':
+                p1 = self.pos[token]
+                p2 = self.pos[flat[j]]
+                self._append(p1[0], p2[1], 'group by', [structs.decorate.BACK])
+                return
+        elif token.value.lower() == 'by':
+            return
+
         p = self.pos[token]
         self._append(p[0], p[1], token.value.lower(), [structs.decorate.BACK])
 
@@ -147,9 +161,10 @@ class SqlAnnotator(base.Annotator):
         self.pos, _ = _calcpositions(parsed)
 
         if isinstance(parsed, Statement):
-            for token in parsed.flatten():
+            flat = list(parsed.flatten())
+            for i, token in enumerate(flat):
                 if token.is_keyword:
-                    self._visitkeyword(token)
+                    self._visitkeyword(flat, i, token)
 
             t = parsed.get_type()
             if t == 'CREATE':
