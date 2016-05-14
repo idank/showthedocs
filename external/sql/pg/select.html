@@ -1,4 +1,4 @@
-<div id="docContent">
+<div class="pg-select" id="docContent">
 
 <h1><a name="SQL-SELECT" id="SQL-SELECT"></a>SELECT</h1>
 
@@ -16,8 +16,8 @@
   <pre class="SYNOPSIS">[ WITH [ RECURSIVE ] <tt class="REPLACEABLE c2">with_query</tt> [, ...] ]
 <span data-showdocs="select" class="showdocs-decorate-back">SELECT</span> [ ALL | DISTINCT [ ON ( <tt class="REPLACEABLE c2">expression</tt> [, ...] ) ] ]
     [ * | <tt class="REPLACEABLE c2">expression</tt> [ [ AS ] <tt class="REPLACEABLE c2">output_name</tt> ] [, ...] ]
-    [ FROM <tt class="REPLACEABLE c2">from_item</tt> [, ...] ]
-    [ WHERE <tt class="REPLACEABLE c2">condition</tt> ]
+    [ <span data-showdocs="from" class="showdocs-decorate-back">FROM</span> <tt class="REPLACEABLE c2">from_item</tt> [, ...] ]
+    [ <span data-showdocs="where" class="showdocs-decorate-back">WHERE</span> <tt class="REPLACEABLE c2">condition</tt> ]
     [ GROUP BY <tt class="REPLACEABLE c2">grouping_element</tt> [, ...] ]
     [ HAVING <tt class="REPLACEABLE c2">condition</tt> [, ...] ]
     [ WINDOW <tt class="REPLACEABLE c2">window_name</tt> AS ( <tt class="REPLACEABLE c2">window_definition</tt> ) [, ...] ]
@@ -240,7 +240,7 @@ TABLE [ ONLY ] <tt class="REPLACEABLE c2">table_name</tt> [ * ]
     additional information.</p>
   </div>
 
-  <div class="REFSECT2 showdocs-decorate-block" data-showdocs="from" id="from">
+  <div class="REFSECT2 showdocs-decorate-block" data-showdocs="from">
     <a name="SQL-FROM" id="SQL-FROM"></a>
 
     <h3><tt class="LITERAL">FROM</tt> Clause</h3>
@@ -1788,3 +1788,26 @@ FROM manufacturers m LEFT JOIN LATERAL get_product_names(m.id) pname ON true;
 </div>
 
 </div>
+
+<script>
+docsfunctions.push(
+function() {
+    var i = 0;
+    var j = 0;
+    $('.pg-select .LITERAL')
+        .filter(function() { return !this.hasAttribute('data-showdocs'); })
+        .each(function() {
+            $(this).attr('data-showdocs', $(this).text().toLowerCase());
+            i++;
+        });
+
+    $('.pg-select .LITERAL')
+        .filter(groupsinquery)
+        .each(function() {
+            $(this).addClass('showdocs-decorate-back');
+            j++;
+        });
+
+    console.log('added', i, 'groups to existing elements and decorated', j);
+});
+</script>
