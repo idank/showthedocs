@@ -12,9 +12,12 @@ var sizes = {
     },
     linkmargin: 5,
     scrollbar: {
-        fontsize: '40px',
-        fontsizezoom: '60px',
+        fontsize: 20,
         symbolr: 10,
+        // Used to determine when items should be merged in the scrollbar. If
+        // their y coordinate is on the same multiple of the closeness and
+        // they're of the same group.
+        closenessthreshold: 30,
     },
 };
 
@@ -544,7 +547,6 @@ function initialize() {
         }
     });
 
-    console.log(queryblockshapes);
     [[queryshapes, "#query-canvas-inner"], [queryblockshapes, "#translate-on-scroll"]].forEach(function(pair) {
         var shapes = pair[0];
         var selection = d3.select(pair[1]);
@@ -763,7 +765,7 @@ function highlightgroup(selection) {
         .selectAll("text")
         .transition()
         .duration(750)
-        .attr('font-size', sizes.scrollbar.fontsizezoom);
+        .attr('font-size', function(d) { return parseInt(d.size.split("px")[0])*1.5 + "px"; });
 }
 
 function unhighlightgroup(selection) {
@@ -799,7 +801,7 @@ function unhighlightgroup(selection) {
         .filter(function() { return d3.select(this).classed('showdocs-decorate-letter-zoom'); })
         .selectAll("text")
         .transition()
-        .attr('font-size', '40px');
+        .attr('font-size', function(d) { return d.size; });
 }
 
 function appendshapes(selection, group, shapes) {
@@ -910,10 +912,8 @@ function initscrollbar() {
         .domain([0, rnd($("#docs").width())])
         .range([10, $("#docs-scrollbar").width()-10]);
 
-    selection.each(function() {
-        var $this = $(this);
-        var g = this.getAttribute("data-showdocs");
-        var p = pos(this);
+    function scrollbarposition(e) {
+        var p = pos(e);
         // We want items at the top of #docs to be at the top of the
         // scrollbar. But the position here is relative to the document,
         // so we need to subtract the space occupied by stuff preceding #docs.
@@ -924,68 +924,106 @@ function initscrollbar() {
         // This is the center of the shape, account for the radius.
         var y = scrollyscale(p.top) + sizes.scrollbar.symbolr/2;
 
-        var that = this;
-        var group = d3.select("#docs-scrollbar-canvas")
-            .append('g')
-            .attr('data-showdocs', g)
-            .classed('clickable', true)
-            .on('click', function() {
-                var index = d3.selectAll("#docs " + selectorshowdocs(g))[0].indexOf(that);
-                history.replaceState(null, null, urlhashprefix + g + "-" + index);
-                window.scrollTo(0, yforscroll(that));
-            })
-            .on('mouseenter', function() {
-                highlightgroup(d3.select(that));
-                highlightgroup(d3.select(this));
-            })
-            .on('mouseleave', function() {
-                unhighlightgroup(d3.select(that));
-                unhighlightgroup(d3.select(this));
+        return {x: x, y: y};
+    }
+
+    function keyfromposition(e) {
+        var x = (Math.floor(scrollbarposition(e).y / sizes.scrollbar.closenessthreshold)).toString();
+        return x;
+    };
+
+    // Consolidate items of the same group that will be rendered close to each
+    // other in the scrollbar. This removes clusters and makes the scrollbar
+    // usable when there are a lot of related items.
+    var bins = d3.nest()
+        // First key by the y coordinate.
+        .key(keyfromposition)
+        // Then by the group.
+        .key(function(e) { return findparentgroup(e); })
+        .sortKeys(function(a, b) { return d3.ascending(parseInt(a), parseInt(b)); })
+        .entries(selection[0]);
+
+    bins.forEach(function(groupedy) {
+        groupedy.values.forEach(function(groupeddata) {
+            var items = groupeddata.values;
+            var item = items[0];
+            var p = scrollbarposition(item);
+            var g = item.getAttribute("data-showdocs");
+
+            var group = d3.select("#docs-scrollbar-canvas")
+                .append('g')
+                .attr('data-showdocs', g)
+                .classed('clickable', true)
+                .on('click', function() {
+                    // For now, clicking always goes to the first item of
+                    // a cluster.
+                    var index = d3.selectAll("#docs " + selectorshowdocs(g))[0].indexOf(item);
+                    history.replaceState(null, null, urlhashprefix + g + "-" + index);
+                    window.scrollTo(0, yforscroll(item));
+                })
+                .on('mouseenter', function() {
+                    items.forEach(function(item) {
+                        highlightgroup(d3.select(item));
+                    });
+
+                    highlightgroup(d3.select(this));
+                })
+                .on('mouseleave', function() {
+                    items.forEach(function(item) {
+                        unhighlightgroup(d3.select(item));
+                    });
+
+                    unhighlightgroup(d3.select(this));
+                });
+
+            // Associate the items we're handing with the g we've created in the
+            // scrollbar. It will be used when an item is hovered.
+            items.forEach(function(item) {
+                item.__scrollbarg__ = group.node();
             });
 
-        // Associate the item we're handing with the g we've created in the
-        // scrollbar. It will be used when the item is hovered.
-        this.__scrollbarg__ = group.node();
+            var shapes = ShapesContainer();
 
-        var shapes = ShapesContainer();
+            // More items = bigger symbol/letter.
+            var relativesymbolr = Math.min(sizes.scrollbar.symbolr*2, items.length + sizes.scrollbar.symbolr);
+            var relativefontsize = Math.min(sizes.scrollbar.fontsize*1.5, items.length + sizes.scrollbar.fontsize);
 
-        if (groupstate[g].hasOwnProperty('symbol')) {
-            shapes.symbols.push({
-              fill: groupstate[g].symbol.fill,
-              stroke: groupstate[g].symbol.stroke,
-              type: groupstate[g].symbol.type,
-              radius: sizes.scrollbar.symbolr,
-              x: 0, y: 0,
-            });
+            if (groupstate[g].hasOwnProperty('symbol')) {
+                shapes.symbols.push({
+                  fill: groupstate[g].symbol.fill,
+                  stroke: groupstate[g].symbol.stroke,
+                  type: groupstate[g].symbol.type,
+                  radius: relativesymbolr,
+                  x: 0, y: 0,
+                });
 
-            var scaledsymbols = ShapesContainer();
-            shapes.g.push({class: 'showdocs-decorate-symbol-pulse', shapes: scaledsymbols});
-            scaledsymbols.symbols.push({
-              fill: false,
-              stroke: true,
-              type: groupstate[g].symbol.type,
-              radius: sizes.scrollbar.symbolr,
-              x: 0, y: 0,
-            });
+                var scaledsymbols = ShapesContainer();
+                shapes.g.push({class: 'showdocs-decorate-symbol-pulse', shapes: scaledsymbols});
+                scaledsymbols.symbols.push({
+                  fill: false,
+                  stroke: true,
+                  type: groupstate[g].symbol.type,
+                  radius: relativesymbolr,
+                  x: 0, y: 0,
+                });
 
+                group.attr('transform', 'translate(' + [p.x, p.y] + ')');
+            }
+            else {
+                shapes.text.push({
+                    text: groupstate[g].letter,
+                    x: p.x, y: p.y,
+                    size: relativefontsize + 'px',
+                    font: 'monospace',
+                    anchor: 'middle',
+                    alignment: 'middle',
+                });
+                group.classed('showdocs-decorate-letter-zoom', true);
+                appendshapes(group, g, shapes);
+            }
 
-            var that = this;
-            group.attr('transform', 'translate(' + [x, y] + ')');
-        }
-        else {
-            shapes.text.push({
-                text: groupstate[g].letter,
-                x: x, y: y,
-                size: sizes.scrollbar.fontsize,
-                font: 'monospace',
-                anchor: 'middle',
-                alignment: 'middle',
-            });
-            group.classed('showdocs-decorate-letter-zoom', true);
             appendshapes(group, g, shapes);
-        }
-
-        appendshapes(group, g, shapes);
+        });
     });
 
     var scrollery = d3.scale.linear()
