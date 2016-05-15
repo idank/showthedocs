@@ -10,7 +10,9 @@ var sizes = {
         padoverlap: -8 - 5,
         lettersize: 20,
     },
-    linkmargin: 5,
+    back: {
+        boxshadow: 3,
+    },
     scrollbar: {
         fontsize: 20,
         symbolr: 10,
@@ -18,6 +20,11 @@ var sizes = {
         // their y coordinate is on the same multiple of the closeness and
         // they're of the same group.
         closenessthreshold: 30,
+    },
+    links: {
+        margin: 5,
+        thresholdx: 10,
+        thresholdy: 10,
     },
 };
 
@@ -161,6 +168,12 @@ function addhoverlinks(e) {
                 return d.key == thiskey;
             });
             var osource = offset(this);
+            // This guy is mouse hovered and has a box-shadow applied to it.
+            // Adjust its coordinates so the link doesn't go on top of it.
+            osource.left -= sizes.back.boxshadow;
+            osource.right += sizes.back.boxshadow;
+            osource.top -= sizes.back.boxshadow;
+            osource.bottom += sizes.back.boxshadow;
 
             var computelinks = function(osource, range) {
                 var stages = [];
@@ -168,19 +181,48 @@ function addhoverlinks(e) {
                     var links = [];
                     bins[i].values.forEach(function(current) {
                         var otarget = offset(current);
-                        var link = {
-                            source: {x: osource.left + osource.width/2},
-                            target: {x: otarget.left+otarget.width/2},
-                        };
+                        var link = {source: {}, target: {}};
 
-                        // source is below target
-                        if (osource.top > otarget.top) {
-                            link.source.y = osource.top - sizes.linkmargin;
-                            link.target.y = otarget.bottom + sizes.linkmargin;
+                        // Determine at which points to start and end the links
+                        // at the source and target.
+
+                        // If source and target are sufficiently close on y,
+                        // draw the links from the left and right of each box.
+                        // Otherwise, do it top and bottom.
+                        var closenessy = Math.min(
+                                Math.abs(osource.top - otarget.bottom),
+                                Math.abs(osource.bottom - otarget.top));
+
+                        // But only if they're not too close on the x too.
+                        var closenessx = Math.min(Math.abs(osource.left - otarget.left));
+
+                        if (closenessy < sizes.links.thresholdy && closenessx > sizes.links.thresholdx) {
+                            link.source.y = osource.top + osource.height/2;
+                            link.target.y = otarget.top + otarget.height/2;
+
+                            // source is to the left of target
+                            if (osource.left > otarget.left) {
+                                link.source.x = osource.left - sizes.links.margin;
+                                link.target.x = otarget.right + sizes.links.margin;
+                            }
+                            else {
+                                link.source.x = osource.right + sizes.links.margin;
+                                link.target.x = otarget.left - sizes.links.margin;
+                            }
                         }
                         else {
-                            link.source.y = osource.bottom + sizes.linkmargin;
-                            link.target.y = otarget.top - sizes.linkmargin;
+                            link.source.x = osource.left + osource.width/2;
+                            link.target.x = otarget.left + otarget.width/2;
+
+                            // source is below target
+                            if (osource.top > otarget.top) {
+                                link.source.y = osource.top - sizes.links.margin;
+                                link.target.y = otarget.bottom + sizes.links.margin;
+                            }
+                            else {
+                                link.source.y = osource.bottom + sizes.links.margin;
+                                link.target.y = otarget.top - sizes.links.margin;
+                            }
                         }
 
                         links.push(link);
@@ -745,7 +787,7 @@ function highlightgroup(selection) {
         .transition()
         .duration(750)
         .styleTween('box-shadow', function() {
-            var i = d3.interpolate('0px', '3px');
+            var i = d3.interpolate('0px', sizes.back.boxshadow + 'px');
             return function(t) {
                 var s = '0px 0px 0px ' + i(t) + ' black';
                 return s;
@@ -782,7 +824,7 @@ function unhighlightgroup(selection) {
         .filter(function() { return d3.select(this).classed('showdocs-decorate-back'); })
         .transition()
         .styleTween('box-shadow', function() {
-            var i = d3.interpolate('3px', '0px');
+            var i = d3.interpolate(sizes.back.boxshadow + 'px', '0px');
             return function(t) {
                 return '0px 0px 0px ' + i(t) + ' black';
             };
