@@ -1,6 +1,14 @@
   $ . $TESTDIR/setup.t.bash
   $ export TESTLANG=nginx
 
+check error handling:
+
+  $ annotator <<EOF
+  > this is clearly not a query!
+  > EOF
+  Traceback (most recent call last):
+  ParsingError: parser gave no additional information (position 28)
+
   $ annotator -f <<EOF
   > user  www www; # comments are omitted from the output
   > worker_processes           5;

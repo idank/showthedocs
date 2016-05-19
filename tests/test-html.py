@@ -1,6 +1,6 @@
 import unittest
 
-from showdocs import structs, annotate, html
+from showdocs import structs, annotate, html, errors
 
 Ann = structs.Annotation
 
@@ -15,6 +15,24 @@ class TestHtml(unittest.TestCase):
         self.check(
             html.wrap(s, [a]),
             '{a}012345</span>'.format(a=a.format()))
+
+    def test_formaterror(self):
+        self.assertRaises(ValueError, errors.ParsingError, '', 'a', 1)
+
+        a = Ann(0, 1, 'error', [structs.decorate.BACK])
+        q = '012345'
+        e = errors.ParsingError('foo', q, 0)
+        wrappedq, wrappede = html.formaterror(q, e)
+        self.assertEquals(wrappedq, '{a}0</span>12345'.format(a=a.format()))
+        self.assertEquals(wrappede,
+                          'at position {a}0</span>: foo.'.format(a=a.format()))
+
+        e = errors.ParsingError('foo <bar>', q, len(q)-1)
+        wrappedq, wrappede = html.formaterror(q, e)
+        self.assertEquals(wrappedq, '01234{a}5</span>'.format(a=a.format()))
+        self.assertEquals(
+            wrappede,
+            'at position {a}5</span>: foo &lt;bar&gt;.'.format(a=a.format()))
 
     def test_wrap_newline(self):
         #    01 2345

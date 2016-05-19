@@ -1,9 +1,17 @@
 import logging
+import pyparsing
 
-from showdocs import structs
+from showdocs import structs, errors
 from showdocs.annotators import base, nginxparse
 
 logger = logging.getLogger(__name__)
+
+def _reraiseparseexception(e, text):
+    # pyparsing usually sets the location to the end of the string,
+    # which isn't entirely useful for error messages...
+    if e.loc == len(text):
+        e.loc -= 1
+    raise errors.ParsingError(None, text, e.loc)
 
 class NginxAnnotator(base.Annotator):
     alias = ['nginx']
@@ -12,7 +20,10 @@ class NginxAnnotator(base.Annotator):
         super(NginxAnnotator, self).__init__(lang)
 
     def format(self, text, opts):
-        return nginxparse.dumps(nginxparse.loads(text))
+        try:
+            return nginxparse.dumps(nginxparse.loads(text))
+        except pyparsing.ParseException, e:
+            _reraiseparseexception(e, text)
 
     def visit(self, node):
         if node.kind == 'directive':
@@ -35,7 +46,11 @@ class NginxAnnotator(base.Annotator):
     def annotate(self, text, dumptree=False):
         self.docs.add('nginx/ngx_core_module.html')
 
-        parsed = nginxparse.loads(text)
+        try:
+            parsed = nginxparse.loads(text)
+        except pyparsing.ParseException, e:
+            _reraiseparseexception(e, text)
+
         assert parsed.kind == 'main'
 
         if dumptree:

@@ -42,3 +42,11 @@
   Annotation(234, 240, u'minute', ['showdocs-decorate-back'], 0) u'minute'
   Annotation(0, 243, 'createtable', ['showdocs-decorate-block'], 0) u'CREAT'..u'te\n);'
   Annotation(13, 18, 'table_name', ['showdocs-decorate-back'], 0) u'films'
+
+sqlparse is pretty lenient:
+
+  $ annotator <<EOF
+  > this is clearly not a query!
+  > EOF
+  Annotation(5, 7, u'is', ['showdocs-decorate-back'], 0) u'is'
+  Annotation(16, 19, u'not', ['showdocs-decorate-back'], 0) u'not'

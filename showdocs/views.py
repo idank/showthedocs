@@ -49,6 +49,12 @@ def query():
         return render_template('error.html',
                                title='oops',
                                message=message % e.args[0])
+    except errors.ParsingError, e:
+        formattederror = html.formaterror(q, e)
+        return render_template('queryerror.html',
+                               lang=lang,
+                               query=markupsafe.Markup(formattederror[0]),
+                               message=markupsafe.Markup(formattederror[1]))
     except:
         if config.TEST:
             raise

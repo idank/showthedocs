@@ -102,10 +102,12 @@ $query-height: 150px;
     height: $query-height;
 }
 
+$query-width: 400px;
+
 #query-scroller {
     position: relative;
     overflow: auto;
-    max-width: 400px;
+    max-width: $query-width;
     height: $query-height;
     margin: 0 auto;
 }
@@ -333,7 +335,9 @@ $container-margin-lr: 8px;
 /* specific to error */
 
 .error {
-    h2 {
+    span:first-child {
+        font-weight: bold;
+        text-transform: uppercase;
         color: red;
     }
 }

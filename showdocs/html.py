@@ -1,6 +1,7 @@
-from showdocs import structs
-
 import collections
+import markupsafe
+
+from showdocs import structs
 
 
 def _splitnewline(s, a):
@@ -84,3 +85,18 @@ def wrap(s, annotations):
         shifted += len(contents)
 
     return ''.join(l)
+
+def formaterror(query, error):
+    '''Formats the given query and ParsingError, decorating the query at the
+    position the error happened.'''
+    pos = error.position
+    wrappedquery = wrap(query, [structs.Annotation(pos, pos + 1, 'error',
+                                                   [structs.decorate.BACK])])
+
+    wrappederrorstring = 'at position %d' % error.position
+    epos = (len('at position '), len(wrappederrorstring))
+    wrappederrorstring += ': %s.' % markupsafe.escape(error.message)
+    wrappederrorstring = wrap(wrappederrorstring, [structs.Annotation(
+        epos[0], epos[1], 'error', [structs.decorate.BACK])])
+
+    return wrappedquery, wrappederrorstring

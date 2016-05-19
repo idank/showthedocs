@@ -1,0 +1,11 @@
+{% extends "query.html" %}
+
+{% block container %}
+                <svg jd="docs-canvas" class="canvas"></svg>
+                <div id="docs" class="error">
+                    <p><span>parsing error</span> {{ message }}</p>
+                </div>
+                <div id="docs-scrollbar">
+                    <svg id="docs-scrollbar-canvas" class="canvas"></svg>
+                </div>
+{% endblock %}

@@ -99,7 +99,7 @@ ul.topnav .highlighted {
   height: 150px;
 }
 
-/* line 105 */
+/* line 107 */
 #query-scroller {
   position: relative;
   overflow: auto;
@@ -108,7 +108,7 @@ ul.topnav .highlighted {
   margin: 0 auto;
 }
 
-/* line 113 */
+/* line 115 */
 #query {
   white-space: pre;
   line-height: 40px;
@@ -117,7 +117,7 @@ ul.topnav .highlighted {
   padding-left: 3px;
 }
 
-/* line 127 */
+/* line 129 */
 #query-legend {
   position: fixed;
   right: 20px;
@@ -126,37 +126,37 @@ ul.topnav .highlighted {
   height: 105px;
 }
 
-/* line 135 */
+/* line 137 */
 #query-legend div {
   text-align: right;
 }
 
-/* line 139 */
+/* line 141 */
 #legend-canvas {
   width: 100%;
   height: 100%;
 }
 
-/* line 146 */
+/* line 148 */
 #container {
   margin-left: 8px;
   margin-right: 8px;
 }
 
-/* line 151 */
+/* line 153 */
 #docs {
   margin-left: 50px;
   margin-right: 100px;
 }
 
-/* line 156 */
+/* line 158 */
 #docs-scrollbar {
   position: fixed;
   right: 20px;
   width: 80px;
 }
 
-/* line 162 */
+/* line 164 */
 #docs-scrollbar:before {
   z-index: -1;
   margin: 0 0;
@@ -168,50 +168,50 @@ ul.topnav .highlighted {
   top: -25;
 }
 
-/* line 173 */
+/* line 175 */
 #docs-canvas {
   z-index: -1;
   width: calc(100% - 16px);
 }
 
-/* line 180 */
+/* line 182 */
 #docs-scrollbar-canvas {
   width: 100%;
   height: 100%;
 }
 
-/* line 185 */
+/* line 187 */
 .canvas {
   position: absolute;
   pointer-events: none;
 }
 
-/* line 190 */
+/* line 192 */
 #main-canvas {
   width: 100%;
   z-index: 20;
 }
 
-/* line 195 */
+/* line 197 */
 .showdocs-link {
   fill: none;
   stroke: black;
   stroke-width: 1.5px;
 }
 
-/* line 200 */
+/* line 202 */
 .showdocs-link-back {
   fill: none;
   stroke: white;
   stroke-width: 10px;
 }
 
-/* line 206 */
+/* line 208 */
 .showdocs-decorate-back, .clickable {
   cursor: pointer;
 }
 
-/* line 210 */
+/* line 212 */
 .showdocs-decorate-back-outline {
   fill: none;
   stroke: black;
@@ -229,35 +229,35 @@ ul.topnav .highlighted {
     stroke-width: 3px;
   }
 }
-/* line 228 */
+/* line 230 */
 #query-canvas {
   width: 100%;
 }
 
-/* line 232 */
+/* line 234 */
 #query-canvas g * {
   pointer-events: auto;
 }
 
-/* line 236 */
+/* line 238 */
 #docs-scrollbar-canvas g * {
   pointer-events: auto;
 }
 
-/* line 240 */
+/* line 242 */
 #docs .showdocs-decorate-back,
 #query .showdocs-decorate-back {
   padding: 2px 4px;
   border-radius: 3px;
 }
 
-/* line 246 */
+/* line 248 */
 .scrollbar-eyes {
   opacity: 0.2;
   fill: #00A8E8;
 }
 
-/* line 251 */
+/* line 253 */
 .container-center {
   padding-top: 20px;
   margin: 0 auto;
@@ -265,39 +265,39 @@ ul.topnav .highlighted {
 }
 
 /* specific to index */
-/* line 259 */
+/* line 261 */
 .row {
   padding: 20 0;
 }
 
-/* line 263 */
+/* line 265 */
 .row-desc {
   float: left;
   width: 170;
 }
 
-/* line 268 */
+/* line 270 */
 .row-desc h4 {
   margin-top: 0;
   text-transform: uppercase;
 }
 
-/* line 273 */
+/* line 275 */
 .row-desc div {
   color: rgba(46, 48, 58, 0.96);
 }
 
-/* line 277 */
+/* line 279 */
 .row-content {
   margin-left: 200;
 }
-/* line 280 */
+/* line 282 */
 .row-content textarea {
   width: 100%;
   height: 100px;
 }
 
-/* line 286 */
+/* line 288 */
 .lang-select-icon {
   display: inline-block;
   width: 130;
@@ -309,25 +309,25 @@ ul.topnav .highlighted {
   opacity: 0.7;
   border-radius: 8px;
 }
-/* line 297 */
+/* line 299 */
 .lang-select-icon i {
   font-size: 64px;
 }
 
-/* line 302 */
+/* line 304 */
 .lang-select-icon:hover {
   transition-duration: 0.2s;
   transform: scale(1.2);
   opacity: 1;
 }
 
-/* line 308 */
+/* line 310 */
 .lang-select-icon.highlight {
   opacity: 1;
   background-color: rgba(0, 126, 167, 0.3);
 }
 
-/* line 313 */
+/* line 315 */
 .submit {
   background-color: #007EA7;
   padding: 8px 20px;
@@ -338,49 +338,51 @@ ul.topnav .highlighted {
   cursor: pointer;
 }
 
-/* line 323 */
+/* line 325 */
 .lang-select-name {
   font-size: 1.3em;
   font-weight: bold;
 }
 
-/* line 328 */
+/* line 330 */
 .lang-select-icon svg {
   width: 64;
   height: 64;
 }
 
 /* specific to error */
-/* line 336 */
-.error h2 {
+/* line 338 */
+.error span:first-child {
+  font-weight: bold;
+  text-transform: uppercase;
   color: red;
 }
 
-/* line 341 */
+/* line 345 */
 .showdocs-decorate-symbol {
   fill: none;
   stroke: none;
 }
 
-/* line 346 */
+/* line 350 */
 .showdocs-decorate-block-lettersymbol-outline {
   text-anchor: middle;
   alignment-baseline: hanging;
   font-size: 30px;
 }
 
-/* line 353 */
+/* line 357 */
 .showdocs-decorate-block-lettersymbol-outline text:first-child, .showdocs-decorate-block-lettersymbol-outline .showdocs-decorate-symbol:first-child {
   stroke: white;
   stroke-width: 6px;
 }
 
-/* line 359 */
+/* line 363 */
 .showdocs-decorate-symbol-pulse path {
   transform: scale(1);
 }
 
-/* line 363 */
+/* line 367 */
 .showdocs-decorate-symbol-pulse-animate {
   animation: pulse 1.5s ease-out 75ms infinite;
 }
@@ -400,7 +402,7 @@ ul.topnav .highlighted {
   }
 }
 /* language specific css */
-/* line 383 */
+/* line 387 */
 #query.nginx {
   line-height: 25px;
 }
