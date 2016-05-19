@@ -11,7 +11,7 @@ EXTERNALTMP="$ROOT/externaltmp"
 
 mkdir -p "$EXTERNALTMP"
 
-REPO="~/dev/nginx.org"
+REPO="https://idank@bitbucket.org/idank/nginx.org"
 
 if ! [[ -d "$EXTERNALTMP/nginx" ]]; then
     hg clone "$REPO" "$EXTERNALTMP/nginx"
