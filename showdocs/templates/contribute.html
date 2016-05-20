@@ -1,23 +1,9 @@
-{% extends "base.html" %}
+{% extends "plain.html" %}
 {% set active_page = "contribute" %}
 {% set title = "how to contribute" %}
 {% block head %}
-<style>
-#container {
-    padding-top: 40px;
-}
-</style>
+{{ super() }}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/default.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-{% endblock %}
-{% block container %}
-<div class="container-center contribute">
-    {{ contents }}
-</div>
-<script>
-$('.contribute h1,h2,h3,h4').each(function() {
-    $(this).attr('id', $(this).text().replace(/ /g, '-'));
-});
-</script>
 {% endblock %}

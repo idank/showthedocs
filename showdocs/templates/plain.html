@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+#container {
+    padding-top: 40px;
+}
+</style>
+{% endblock %}
+{% block container %}
+<div class="container-center plain {{ active_page }}">
+    {% block contents %}{{ contents }}{% endblock %}
+</div>
+<script>
+$('h1,h2,h3,h4').each(function() {
+    var id = $(this).text().replace(/ /g, '-');
+    $(this).attr('id', id);
+    $(this).prepend('<a href="#' + id + '">{</a>');
+});
+</script>
+{% endblock %}
