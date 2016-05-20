@@ -27,6 +27,8 @@ a:visited {
 }
 
 #affixed {
+    z-index: 3;
+
     position: fixed;
     top: 0;
     left: 0;
@@ -146,6 +148,8 @@ $legend-width: 400px;
 $container-margin-lr: 8px;
 
 #container {
+    z-index: 2;
+
     margin-left: $container-margin-lr;
     margin-right: $container-margin-lr;
 }
@@ -156,6 +160,8 @@ $container-margin-lr: 8px;
 }
 
 #docs-scrollbar {
+    z-index: 3;
+
     position: fixed;
     right: $legendscroll-right;
     width: 80px;
