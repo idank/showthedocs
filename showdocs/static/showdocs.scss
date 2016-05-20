@@ -342,6 +342,32 @@ $container-margin-lr: 8px;
     }
 }
 
+/* specific to contribute */
+
+.contribute {
+    line-height: 1.5em;
+
+    h1,h2,h3,h4 {
+        position: relative;
+    }
+
+    h1:after,h2:after,h3:after {
+        position: absolute;
+        left: -15px;
+        content: '{';
+        color: $palette4;
+    }
+
+    // https://css-tricks.com/hash-tag-links-padding/
+    h1:before,h2:before,h3:before {
+      display: block;
+      content: " ";
+      margin-top: -$topnav-height;
+      height: $topnav-height;
+      visibility: hidden;
+    }
+}
+
 .showdocs-decorate-symbol {
     fill: none;
     stroke: none;

@@ -1,5 +1,6 @@
+import os
 import logging
-import markupsafe
+import markupsafe, markdown
 
 from flask import render_template, request, redirect
 from showdocs import app, html, annotate, structs, docs, errors, config
@@ -26,6 +27,12 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/contribute')
+def contribute():
+    contents = markupsafe.Markup(markdown.markdown(open(os.path.join(
+        config.ROOT, 'contributing.md')).read()))
+    return render_template('contribute.html', contents=contents)
 
 @app.route('/query')
 def query():

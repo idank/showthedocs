@@ -20,7 +20,7 @@
         {% else %}
         <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/master/devicon.min.css">
         {% endif %}
-        <title>showthedocs</title>
+        <title>showthedocs{%- if title %} - {{ title }}{%- endif -%}</title>
         {% block head %}{% endblock %}
     </head>
     <body>
@@ -30,6 +30,7 @@
                 {% set navigation_bar = [
                     ('/', 'query'),
                     ('/about', 'about'),
+                    ('/contribute', 'contribute'),
                     ('/testpage', 'test page')
                 ] -%}
                 {% set active_page = active_page|default('index') -%}

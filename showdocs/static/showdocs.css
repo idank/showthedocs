@@ -358,31 +358,61 @@ ul.topnav .highlighted {
   color: red;
 }
 
-/* line 345 */
+/* specific to contribute */
+/* line 347 */
+.contribute {
+  line-height: 1.5em;
+}
+/* line 350 */
+.contribute h1, .contribute h2, .contribute h3, .contribute h4 {
+  position: relative;
+}
+/* line 353 */
+.contribute h1 span, .contribute h2 span, .contribute h3 span, .contribute h4 span {
+  position: absolute;
+  left: -20px;
+}
+/* line 359 */
+.contribute h1:after, .contribute h2:after, .contribute h3:after {
+  position: absolute;
+  left: -15px;
+  content: '{';
+  color: #00A8E8;
+}
+/* line 366 */
+.contribute h1:before, .contribute h2:before, .contribute h3:before {
+  display: block;
+  content: " ";
+  margin-top: -40px;
+  height: 40px;
+  visibility: hidden;
+}
+
+/* line 375 */
 .showdocs-decorate-symbol {
   fill: none;
   stroke: none;
 }
 
-/* line 350 */
+/* line 380 */
 .showdocs-decorate-block-lettersymbol-outline {
   text-anchor: middle;
   alignment-baseline: hanging;
   font-size: 30px;
 }
 
-/* line 357 */
+/* line 387 */
 .showdocs-decorate-block-lettersymbol-outline text:first-child, .showdocs-decorate-block-lettersymbol-outline .showdocs-decorate-symbol:first-child {
   stroke: white;
   stroke-width: 6px;
 }
 
-/* line 363 */
+/* line 393 */
 .showdocs-decorate-symbol-pulse path {
   transform: scale(1);
 }
 
-/* line 367 */
+/* line 397 */
 .showdocs-decorate-symbol-pulse-animate {
   animation: pulse 1.5s ease-out 75ms infinite;
 }
@@ -402,7 +432,7 @@ ul.topnav .highlighted {
   }
 }
 /* language specific css */
-/* line 387 */
+/* line 417 */
 #query.nginx {
   line-height: 25px;
 }
