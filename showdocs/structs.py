@@ -1,6 +1,21 @@
 import markupsafe
 
 class Annotation(object):
+    '''An annotation selects a range in the input, assigns it a group and
+    a list of arbitrary class names. Annotations translate to HTML by
+    wrapping the range in a <span> tag. The group appears as the value of
+    a data-showdocs attribute, likewise for the class names.
+
+    A group is an arbitrary string that identifies the selected range. A group
+    is visualized in a special manner in the user interface, depending on the
+    decoration applied to it. A group exists to connect a piece of the input to
+    its documentation, which will somewhere have a tag with the same
+    data-showdocs attribute.
+
+    The list of class names is currently only used to apply decorations.
+    A decoration controls the display of the annotation in the UI. The most
+    common one is a back decoration, which changes the background color and
+    supports things like connecting links when hovering the annotation.'''
     def __init__(self, start, end, group, classes, lineno=0):
         if end <= start:
             raise ValueError('end smaller than start')

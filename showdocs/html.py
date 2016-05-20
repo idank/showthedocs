@@ -5,7 +5,13 @@ from showdocs import structs
 
 
 def _splitnewline(s, a):
+    '''Split the given annotation, a, if it crosses a new line.
+
+    Some decorations don't work well when they span more than one line. It's
+    somewhat easier to handle that here than in the UI.'''
     lineno = 0
+
+    # A list of (startpos, endpos, line number).
     indices = []
     start = end = a.start
     while end < a.end:
@@ -20,6 +26,8 @@ def _splitnewline(s, a):
         indices.append((start, end, lineno))
     assert a.end == indices[-1][1]
 
+    # For each item in indices, strip it from both ends so it doesn't start on
+    # a whitespace.
     stripped = []
     for x, y, lineno in indices:
         sub = s[x:y]
@@ -35,6 +43,12 @@ def _splitnewline(s, a):
             for x, y, lineno in stripped]
 
 def wrap(s, annotations):
+    '''wrap takes an input string and a list of annotations for that string,
+    and produces HTML where each selection of an annotation is wrapped in
+    a <span> with the specificed attributes for that annotation.
+
+    It handles annotations crossing newlines and intersecting with one
+    another.'''
     nonewlines = []
     for a in annotations:
         if a.decoration() == structs.decorate.UNDER:
@@ -44,7 +58,9 @@ def wrap(s, annotations):
 
     nooverlaps = []
 
-    # TODO: only do this for UNDER
+    # If two annotations intersect such that one isn't fully contained in the
+    # other, we need to split it so the closing tag of the first won't close
+    # the opening tag of the second.
     fromend = sorted(nonewlines, key=lambda a: a.end, reverse=True)
     while fromend:
         a = fromend.pop(0)
@@ -53,7 +69,8 @@ def wrap(s, annotations):
             # a    |-------|        |----|    a
             #                            |--| a
             if aa.start < a.start < aa.end and a.end > aa.end:
-                fromend.append(structs.Annotation(a.start, aa.end, a.group, a.classes))
+                fromend.append(structs.Annotation(a.start, aa.end, a.group,
+                                                  a.classes))
                 fromend.append(structs.Annotation(aa.end, a.end, a.group,
                                                   a.classes))
                 break
