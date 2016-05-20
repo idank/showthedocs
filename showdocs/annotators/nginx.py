@@ -2,7 +2,8 @@ import logging
 import pyparsing
 
 from showdocs import structs, errors
-from showdocs.annotators import base, nginxparse
+from showdocs.parsers import nginx
+from showdocs.annotators import base
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ class NginxAnnotator(base.Annotator):
 
     def format(self, text, opts):
         try:
-            return nginxparse.dumps(nginxparse.loads(text))
+            return nginx.dumps(nginx.loads(text))
         except pyparsing.ParseException, e:
             _reraiseparseexception(e, text)
 
@@ -47,7 +48,7 @@ class NginxAnnotator(base.Annotator):
         self.docs.add('nginx/ngx_core_module.html')
 
         try:
-            parsed = nginxparse.loads(text)
+            parsed = nginx.loads(text)
         except pyparsing.ParseException, e:
             _reraiseparseexception(e, text)
 

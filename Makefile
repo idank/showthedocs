@@ -25,6 +25,7 @@ externalcss:
 	done
 
 clean:
-	rm -r externaltmp/
+	rm -r externaltmp/ || true
+	find showdocs tests external -name '*.py[cdo]' -exec rm -f '{}' ';'
 
 .PHONY: clean externalcss tests
