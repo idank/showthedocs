@@ -24,11 +24,11 @@ def _csspaths(docs):
 def index():
     return render_template('index.html')
 
-@app.route('/about')
+@app.route('/about/')
 def about():
     return render_template('about.html')
 
-@app.route('/contribute')
+@app.route('/contribute/')
 def contribute():
     contents = markupsafe.Markup(markdown.markdown(open(os.path.join(
         config.ROOT, 'contributing.md')).read()))
