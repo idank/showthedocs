@@ -3,26 +3,14 @@ import logging
 from showdocs import structs
 from showdocs.annotators import base
 
+from showdocs import parsers
+from showdocs.parsers import sql
+
 import sqlparse
 from sqlparse.sql import *
 from sqlparse.tokens import *
 
 logger = logging.getLogger(__name__)
-
-def _calcpositions(root, index=0):
-    positions = {}
-
-    if root.is_group():
-        startindex = index
-        for token in root.tokens:
-            nestedpos, index = _calcpositions(token, index)
-            positions.update(nestedpos)
-        positions[root] = (startindex, index)
-    else:
-        positions[root] = (index, index+len(root.value))
-        index += len(root.value)
-
-    return positions, index
 
 def _issubselect(token):
     if not token.is_group():
@@ -154,11 +142,11 @@ class SqlAnnotator(base.Annotator):
         self._append(p[0], p[1], token.value.lower(), [structs.decorate.BACK])
 
     def annotate(self, text, dumptree=False):
-        parsed = sqlparse.parse(text)[0]
+        parsed = parsers.sql.parse(text)
         if dumptree:
             print parsed._pprint_tree()
 
-        self.pos, _ = _calcpositions(parsed)
+        self.pos, _ = parsers.sql.calcpositions(parsed)
 
         if isinstance(parsed, Statement):
             flat = list(parsed.flatten())
