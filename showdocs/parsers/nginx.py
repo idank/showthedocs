@@ -2,7 +2,7 @@ import string, pprint
 
 from pyparsing import (Literal, White, Word, alphanums, CharsNotIn, Forward,
                        Group, SkipTo, LineEnd, Optional, OneOrMore, ZeroOrMore,
-                       pythonStyleComment)
+                       pythonStyleComment, quotedString, Or)
 
 class Node(object):
     def __init__(self, **kwargs):
@@ -76,7 +76,7 @@ def _nodeifyset(s, l, t):
     return Node(pos=(l, t[-1].pos[1]), kind='set', parts=t[:-1])
 
 def _nodeifydirective(s, l, t):
-    assert len(t) == 3
+    assert len(t) >= 3
     return Node(pos=(l, t[-1].pos[1]), kind='directive', parts=t[:-1])
 
 def _nodeifyif(s, l, t):
@@ -119,8 +119,9 @@ class NginxParser(object):
     semicolon = Literal(";").setParseAction(_nodeify('punctuation'))
     space = White().suppress()
     key = Word(alphanums + "_/").setParseAction(_nodeify('key'))
-    value = CharsNotIn("{};,").setParseAction(_nodeify('value'))
+    value = CharsNotIn("{};, ").setParseAction(_nodeify('value'))
     value2 = CharsNotIn(";" + string.whitespace).setParseAction(_nodeify('value'))
+    quotedstring = quotedString.setParseAction(_nodeify('value'))
     location = CharsNotIn("{};," + string.whitespace).setParseAction(_nodeify('location'))
     ifword = Literal("if").setParseAction(_nodeify('keyword'))
     setword = Literal("set").setParseAction(_nodeify('keyword'))
@@ -130,8 +131,8 @@ class NginxParser(object):
                 Literal("^~")).setParseAction(_nodeify('modifier'))
 
     # rules
-    directive = (key + Optional(space + value) +
-                  semicolon).setParseAction(_nodeifydirective)
+    directive = (key + ZeroOrMore(space + Or([value, quotedstring])) +
+                 semicolon).setParseAction(_nodeifydirective)
     setblock = (setword + OneOrMore(space + value2) + semicolon).setParseAction(_nodeifyset)
     block = Forward()
     ifblock = Forward()

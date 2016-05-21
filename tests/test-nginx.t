@@ -79,3 +79,12 @@ check error handling:
   Annotation(175, 181, 'listen', ['showdocs-decorate-back'], 0) 'listen'
   Annotation(195, 265, 'location', ['showdocs-decorate-block'], 0) 'locat'..'    }'
   Annotation(227, 239, 'fastcgi_pass', ['showdocs-decorate-back'], 0) 'fastc'..'_pass'
+
+check directives with more than one value:
+
+  $ annotator <<EOF
+  > add_header Pragma public;
+  > add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+  > EOF
+  Annotation(0, 10, 'add_header', ['showdocs-decorate-back'], 0) 'add_header'
+  Annotation(26, 36, 'add_header', ['showdocs-decorate-back'], 0) 'add_header'

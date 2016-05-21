@@ -28,8 +28,8 @@ class NginxAnnotator(base.Annotator):
 
     def visit(self, node):
         if node.kind == 'directive':
-            assert len(node.parts) == 2
-            key, value = node.parts
+            assert len(node.parts) >= 2
+            key = node.parts[0]
             self._append(key.pos[0], key.pos[1], key.value,
                          [structs.decorate.BACK])
         elif node.kind == 'main':
