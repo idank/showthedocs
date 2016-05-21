@@ -9,6 +9,14 @@ from showdocs.structs import Annotation
 
 logger = logging.getLogger(__name__)
 
+def _initplain():
+    d = {}
+    for name in ['about', 'contributing']:
+        md = open(os.path.join(config.ROOT, name + '.md')).read()
+        d[name] = markupsafe.Markup(markdown.markdown(md))
+    return d
+_plain = _initplain()
+
 def _safedocs(docs):
     for path, externaldoc in docs.withcontents():
         yield path, markupsafe.Markup(externaldoc.contents)
@@ -26,13 +34,14 @@ def index():
 
 @app.route('/about/')
 def about():
-    return render_template('about.html')
+    return render_template('plain.html',
+                           title='about',
+                           active_page='about',
+                           contents=_plain['about'])
 
 @app.route('/contribute/')
 def contribute():
-    contents = markupsafe.Markup(markdown.markdown(open(os.path.join(
-        config.ROOT, 'contributing.md')).read()))
-    return render_template('contribute.html', contents=contents)
+    return render_template('contribute.html', contents=_plain['contributing'])
 
 @app.route('/query')
 def query():
