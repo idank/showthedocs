@@ -1,5 +1,6 @@
 *.pyc
 *.err
+showdocs/static/showdocs.css
 env/
 .sass-cache/
 .vagrant/
