@@ -50,10 +50,11 @@ def query():
         if not q:
             return redirect('/')
 
-        lang = request.args.get('lang', 'guess')
-        formatquery = bool(request.args.get('format', True))
+        lang = request.args.get('lang', '')
+        if not lang:
+            return redirect('/')
 
-        annotated, docs = annotate.annotate(q, lang, formatquery)
+        annotated, docs = annotate.annotate(q, lang, True)
 
         return render_template('query.html',
                                lang=lang,

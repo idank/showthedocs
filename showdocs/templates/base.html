@@ -39,7 +39,7 @@
                   {% for href, caption in navigation_bar if config.TEST or (not config.TEST and 'test' not in caption) %}
                       <li class="navitem"><a href="{{ href|e }}"{% if caption == active_page %} class="highlighted"{% endif %}>{{ caption|e }}</a></li>
                   {% endfor %}
-                  <li><a href="https://github.com/idank"><i class="devicon-github-plain"></i></a></li>
+                  <li><a href="https://github.com/idank/showthedocs"><i class="devicon-github-plain"></i></a></li>
                   {% block additionalnav %}{% endblock %}
                 </ul>
                 {% block afternav %}{% endblock %}
