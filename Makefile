@@ -5,7 +5,7 @@ STATIC_DIR=showdocs/static
 
 tests:
 	nosetests tests/
-	cram tests/
+	cram --shell /bin/bash tests/
 
 externalcss:
 	[ -d $(STATIC_DIR) ]
