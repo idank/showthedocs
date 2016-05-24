@@ -1,0 +1,6 @@
+flask
+flask-assets
+markdown
+
+sqlparse
+pyparsing
