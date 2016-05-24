@@ -21,7 +21,7 @@ class Node(object):
         return '%sNode(%s)' % (kind.title(), ' '.join(chunks))
 
     def __eq__(self, other):
-        if not isinstance(other, node):
+        if not isinstance(other, Node):
             return False
         return self.__dict__ == other.__dict__
 

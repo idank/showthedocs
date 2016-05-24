@@ -56,7 +56,11 @@ def initfilecache(root=''):
 
 
 class Collection(collections.MutableSet):
+    '''A collection represents documentation that was requested by an
+    annotator. It is eventually passed to the UI, which returns the HTML in the
+    response to a query.'''
     def __init__(self):
+        # Use a list so order is preserved.
         self._paths = []
 
         self._filecache = initfilecache()

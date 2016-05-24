@@ -1,18 +1,18 @@
 import sys, argparse
+import lxml.html
+import lxml.etree
 
 from showdocs import docs
 
-from bs4 import BeautifulSoup
-
 def validate(path, contents):
     print 'validating %r' % path
-    soup = BeautifulSoup(contents, 'html.parser')
-    for t in soup.select('[data-showdocs]'):
+    root = lxml.html.fromstring(contents)
+    for t in root.cssselect('[data-showdocs]'):
         errors = []
-        g = t['data-showdocs']
-        trepr = "tag '%s', group '%s'" % (repr(t)[:20], g)
-        classes = t.get('class', [])
-        decorations = [c for c in classes if c.startswith('showdocs')]
+        g = t.get('data-showdocs')
+        trepr = "tag '%s', group '%s'" % (lxml.html.tostring(t)[:20], g)
+        classes = t.get('class')
+        decorations = [c for c in classes.split() if c.startswith('showdocs')]
         if not decorations:
             errors.append("has no showdocs-decorate-* class, found %r" %
                           classes)

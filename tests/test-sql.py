@@ -1,17 +1,12 @@
 import unittest
-import sqlparse
 
-from showdocs import structs
-
-from showdocs.annotators import sql
-
-Ann = structs.Annotation
+from showdocs.parsers import sql
 
 class TestSqlAnnotator(unittest.TestCase):
     def test_calcpositions(self):
         s = 'select * from a where b = c'
-        statement = sqlparse.parse(s)[0]
-        positions, _ = sql._calcpositions(statement)
+        parsed = sql.parse(s)
+        positions, _ = sql.calcpositions(parsed)
 
         def traverse(node):
             p = positions[node]
@@ -27,4 +22,4 @@ class TestSqlAnnotator(unittest.TestCase):
             for token in node.tokens:
                 traverse(token)
 
-        traverse(statement)
+        traverse(parsed)
