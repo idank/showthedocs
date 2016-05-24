@@ -478,8 +478,7 @@ function initialize() {
     var queryblockindices = arrangeintervals(
         d3.selectAll("#query .showdocs-decorate-block[data-showdocs]")[0]
             .map(function(v) { return {e: v, interval: {s: rnd(pos(v).top), e: rnd(pos(v).bottom)}}; }),
-        function(d) { return d.interval; },
-        true);
+        function(d) { return d.interval; });
 
     queryData.each(function() {
         var $this = $(this);
@@ -618,8 +617,7 @@ function initialize() {
         d3.selectAll("#docs .showdocs-decorate-block[data-showdocs]")
             .filter(groupsinquery)[0]
             .map(function(v) { return {e: v, interval: {s: rnd(pos(v).top), e: rnd(pos(v).bottom)}}; }),
-        function(d) { return d.interval; },
-        false);
+        function(d) { return d.interval; });
 
     d3.selectAll("#docs [data-showdocs]")
     .filter(groupsinquery)
@@ -1212,7 +1210,13 @@ function circleunder() {
     });
 }
 
-function arrangeintervals(arr, intervalfn, reverse) {
+// arrangeintervals takes an array of intervals and assigns each an index. The
+// index is allocated such that such that any two whose interval's overlap, are
+// have a different index. Intuitively, it orders the intervals so if they're
+// put on an X axis and the index is their Y coordinate, none will touch each
+// other.
+function arrangeintervals(arr, intervalfn) {
+    // Determine if two intervals overlap, inclusive.
     function overlap(i1, i2) {
         if (i1.s >= i2.s && i1.s <= i2.e)
             return true;
@@ -1221,6 +1225,8 @@ function arrangeintervals(arr, intervalfn, reverse) {
         return false;
     }
 
+    // Look for an index, starting at 0, that isn't used by anything in the
+    // given array.
     function allocateindex(arr) {
         var index = 0;
         for (var i = 0; i <= arr.length; i++) {
@@ -1235,6 +1241,8 @@ function arrangeintervals(arr, intervalfn, reverse) {
         }
     }
 
+    // First, put the intervals into disjoint bins. All items in a bin overlap
+    // with at least one item in the same bin. No overlap between bins.
     var disjoint = [];
     arr.forEach(function(v1) {
         var i1 = intervalfn(v1);
@@ -1247,7 +1255,9 @@ function arrangeintervals(arr, intervalfn, reverse) {
         disjoint.push([v1]);
     });
 
+    // We can handle each bin separately since they're disjoint.
     disjoint.forEach(function(overlapping) {
+        // Sort by the starting coordinate.
         overlapping = _.sortBy(overlapping, function(v) {
             var i = intervalfn(v);
             return i.s;
@@ -1255,24 +1265,19 @@ function arrangeintervals(arr, intervalfn, reverse) {
 
         overlapping.forEach(function(v1, i) {
             var i1 = intervalfn(v1);
+            // Who overlaps i and also starts before it? Since we go left to
+            // right, we don't care about those that overlap it but are after
+            // it.
             var handledoverlaps = [];
             for (var j = 0; j < i; j++) {
                 if (overlap(i1, intervalfn(overlapping[j]))) {
                     handledoverlaps.push(overlapping[j]);
                 }
             }
+            // From those that overlap it, allocate the next available index.
             var index = allocateindex(handledoverlaps);
             v1.index = index;
         });
-
-        if (reverse) {
-            for (let i = 0; i < Math.floor(overlapping.length / 2); i++) {
-                let j = overlapping.length - 1 - i;
-                let a = overlapping[i].index;
-                overlapping[i].index = overlapping[j].index;
-                overlapping[j].index = a;
-            }
-        }
     });
 
     return arr;
