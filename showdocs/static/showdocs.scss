@@ -159,6 +159,24 @@ $container-margin-lr: 8px;
     margin-right: 100px;
 }
 
+._attribution {
+    clear: both;
+    margin: 2rem 0 1.5rem;
+    font-family: $font;
+    font-size: .75rem;
+    color: #666;
+    text-align: center;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+._attribution-p {
+    display: inline-block;
+    margin: 0;
+    padding: .25rem .75rem;
+    background: #f4f4f4;
+    border-radius: 3px;
+}
+
 #docs-scrollbar {
     z-index: 3;
 
@@ -175,7 +193,7 @@ $container-margin-lr: 8px;
     text-align: right;
     width: 80px;
     left: 0;
-    top: -25;
+    top: -25px;
 }
 
 #docs-canvas {
@@ -265,12 +283,12 @@ $container-margin-lr: 8px;
     padding-top: 20px;
 
     .row {
-        padding: 20 0;
+        padding: 20px 0px;
     }
 
     .row-desc {
         float: left;
-        width: 170;
+        width: 170px;
     }
 
     .row-desc h4 {
@@ -283,7 +301,7 @@ $container-margin-lr: 8px;
     }
 
     .row-content {
-        margin-left: 200;
+        margin-left: 200px;
 
         textarea {
             width: 100%;
@@ -293,8 +311,8 @@ $container-margin-lr: 8px;
 
     .lang-select-icon {
         display: inline-block;
-        width: 130;
-        padding: 8 2;
+        width: 130px;
+        padding: 8px 2px;
         text-align: center;
         cursor: pointer;
         transition: all 0.5s ease-in-out;
@@ -334,8 +352,8 @@ $container-margin-lr: 8px;
     }
 
     .lang-select-icon svg {
-        width: 64;
-        height: 64;
+        width: 64px;
+        height: 64px;
     }
 }
 
