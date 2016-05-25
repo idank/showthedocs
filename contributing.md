@@ -88,23 +88,22 @@ we might see these annotations:
 
 The final piece is bringing the documentation of the target language into
 showthedocs. All we care about is HTML that has a bunch of tags with
-`data-showdocs` and some decorations applied to those. Getting that without
-manually editing potentially hundres of pages can be very
-easy to extremely hard.
+`data-showdocs` and some decorations applied to those.
 
-Usually documentation is written in a different format that is then used to
-generate HTML. A common one is DocBook. Ideally you can edit those sources in
-strategic places (such as a page that describes the SELECT statement for
-postgresql) to include
-`data-showdocs` with an appropriate group, and a decoration. Here's an [example
-of such
-a change](https://bitbucket.org/idank/nginx.org/commits/1f955652d11905b119de261e57a5798d533da52f#chg-xsls/directive.xsls)
-in nginx's documentation. Sometimes the documentation is using arcane tools
-from the early 90's (hello postgres) and trying to make them do as you please
-can be frustrating. In those cases, we resort to building the docs as is and
-annotating them by hand and with Javascript.
+[devdocs](http://devdocs.io) is a documentation aggregator to a vast array of
+languages. It scrapes the online copy and does a bunch of modifications to the
+downloaded HTML. The end result is ideal for our purposes.
 
-Once we've edited the doc sources, we add a script to build them and copy them
-to a directory under `external/`.  An annotator can then request to include a file from this directory by calling
-`self.add`, e.g. a file at `external/foo/bar.html` will show up in the result
-of a query if its annotator calls `self.add('foo/bar.html')`.
+A [repository](todo) is in charge of building documentation and running
+[filters](todo) to modify the output to include `data-showdocs` attributes.
+Since we're using devdocs (for now), building the docs is simply shelling out
+to devdocs.
+
+Filters should be written to add `data-showdocs` in strategic places of the
+built HTML. See the nginx [repo](todo) and [filters](todo) for examples.
+
+`getdocs.py` is used to build repositories, and puts the output files in
+a directory under `external/`.  An annotator can then request to include a file
+from this directory by calling `self.add`, e.g. a file at
+`external/foo/bar.html` will show up in the result of a query if its annotator
+calls `self.add('foo/bar.html')`.
