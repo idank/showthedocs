@@ -38,6 +38,8 @@ class NginxAnnotator(base.Annotator):
         elif node.kind == 'context':
             header = node.header
             headerkey = header.parts[0]
+            if headerkey.value in ('server', 'http'):
+                self.docs.add('nginx/http/ngx_http_core_module.html')
             self._append(node.pos[0], node.pos[1], headerkey.value,
                          [structs.decorate.BLOCK])
             for n in node.body:
