@@ -20,15 +20,17 @@ from docopt import docopt
 
 import showdocs
 from showdocs import config, repos, filters, errors
+from showdocs.repos import *
 
 import showdocs.repos.common
+import showdocs.repos.manager
 
 def build(args):
     reposcls = set(repos.common.registered.values())
     if args['--lang']:
         lang = args['--lang']
         try:
-            langrepo = repos.common.get(lang)
+            langrepo = repos.manager.get(lang)
             reposcls &= set([langrepo])
         except ValueError, e:
             print str(e)
@@ -39,7 +41,8 @@ def build(args):
     if not os.path.exists(config.EXTERNAL_DIR):
         os.mkdir(config.EXTERNAL_DIR)
 
-    manager = repos.common.RepositoryManager(reposcls, config.STAGING_DIR, config.EXTERNAL_DIR)
+    manager = repos.manager.RepositoryManager(reposcls, config.STAGING_DIR,
+                                              config.EXTERNAL_DIR)
     manager.generate()
 
 def main(args):
@@ -48,7 +51,7 @@ def main(args):
         imp.load_source('showdocs.testconfig', args['--config'])
 
     if args['list']:
-        for name in repos.common.listrepos():
+        for name in repos.manager.listrepos():
             print name
     elif args['build']:
         return build(args)

@@ -2,9 +2,9 @@
 
 import sys, argparse
 
-import showdocs.repos.common
-import showdocs.filters.common
 from showdocs import repos, filters
+import showdocs.repos.manager
+import showdocs.filters.common
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -12,7 +12,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     text = sys.stdin.read()
-    repocls = repos.common.get(args.lang)
+    repocls = repos.manager.get(args.lang)
     filterscls = repocls.filters()
 
     s = filters.common.pipeline(filterscls, text)

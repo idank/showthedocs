@@ -1,1 +1,1 @@
-import nginx
+__all__ = ['nginx']

@@ -2,9 +2,10 @@ import os, tempfile, shutil
 import unittest
 
 from showdocs import repos, filters
+from showdocs.repos import *
 
-import showdocs.repos.common
 import showdocs.filters.common
+import showdocs.repos.manager
 
 class testfilter(filters.common.Filter):
     def process(self):
@@ -47,7 +48,7 @@ class TestRepos(unittest.TestCase):
 
     def test_list(self):
         names = ['nginx']
-        self.assertEquals(repos.common.listrepos(), names)
+        self.assertEquals(repos.manager.listrepos(), names)
 
     def test_generate(self):
         tempdir = tempfile.mkdtemp(prefix='showdocs')
@@ -56,7 +57,7 @@ class TestRepos(unittest.TestCase):
         os.mkdir(stagingdir)
         os.mkdir(outdir)
 
-        manager = repos.common.RepositoryManager([testrepo], stagingdir, outdir)
+        manager = repos.manager.RepositoryManager([testrepo], stagingdir, outdir)
         manager.generate()
 
         for p in ('file.html', 'unicode.html', 'foo/bar.html'):

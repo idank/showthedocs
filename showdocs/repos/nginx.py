@@ -1,28 +1,17 @@
 import subprocess, os, logging
 
+from showdocs import filters, repos
+
 import showdocs.filters.nginx
-from showdocs import filters, errors, config
-from showdocs.repos import common
+
+import showdocs.repos.common
+import showdocs.repos.devdocs
 
 logger = logging.getLogger(__name__)
 
-@common.register
-class NginxRepository(common.Repository):
+@repos.common.register
+class NginxRepository(repos.devdocs.DevDocsRepository):
     name = 'nginx'
-
-    def __init__(self, stagingdir):
-        devdocs = os.path.join(config.STAGING_DIR, 'devdocs')
-        super(NginxRepository, self).__init__(devdocs)
-
-        try:
-            output = self.subprocess('thor docs:list')
-            if len(output.split()) < 5:
-                raise errors.RepoBuildError(
-                    "thor docs:list returned unexpected output: %r" % output)
-        except (OSError, subprocess.CalledProcessError), e:
-            raise errors.RepoBuildError(
-                "%s doesn't look like a clone of devdocs (looked for thor)" %
-                self.stagingdir)
 
     @classmethod
     def filters(cls):
@@ -30,14 +19,8 @@ class NginxRepository(common.Repository):
         return super(NginxRepository, cls).filters() + mine
 
     def build(self):
-        outputs = []
-        outputs.append(self.subprocess('thor docs:page nginx /ngx_core_module.html'))
-        outputs.append(self.subprocess(
-            'thor docs:page nginx /http/ngx_http_core_module.html'))
-
-        for output in outputs:
-            if 'failed' in output.lower():
-                raise RuntimeError
+        self._page('/ngx_core_module.html')
+        self._page('/http/ngx_http_core_module.html')
 
     def match(self):
         yield 'public/docs/nginx/*.html'

@@ -1,10 +1,17 @@
-import os, fnmatch, shutil, subprocess, logging
+import os, fnmatch, subprocess, logging
 
 from showdocs import filters, errors
 
 import showdocs.filters.common
 
 logger = logging.getLogger(__name__)
+
+registered = {}
+def register(cls):
+    if not getattr(cls, 'name'):
+        raise ValueError('%r missing name attribute' % cls)
+    registered[cls.name] = cls
+    return cls
 
 class Repository(object):
     '''A repository builds documentation for a language. Most often, this
@@ -80,59 +87,3 @@ class Repository(object):
     @classmethod
     def log(cls, level, message, *args):
         getattr(logger, level)('repo %s: ' + message, cls.name, *args)
-
-registered = {}
-def register(cls):
-    if not getattr(cls, 'name'):
-        raise ValueError('%r missing name attribute' % cls)
-    registered[cls.name] = cls
-    return cls
-
-def listrepos():
-    return registered.keys()
-
-def get(name):
-    if name not in registered:
-        raise ValueError('unknown lang %r, known languages: %s' %
-                         (name, ', '.join(registered.keys())))
-    return registered[name]
-
-class RepositoryManager(object):
-    '''Builds the given repositories, creating and cleaning directories for
-    each repo.'''
-    def __init__(self, repos, stagingdir, outdir):
-        self.repos = repos
-        self.stagingdir = stagingdir
-        self.outdir = outdir
-
-    def generate(self):
-        '''generates all repos. Each repository's output files end up under
-        self.outdir/repo.name. Overwrites existing files.'''
-        for repocls in self.repos:
-            repostagingdir = os.path.join(self.stagingdir, repocls.name)
-
-            if not os.path.exists(repostagingdir):
-                os.mkdir(repostagingdir)
-
-            repo = repocls(repostagingdir)
-            repo.build()
-            files = list(repo.files())
-            if not len(files):
-                raise errors.RepoBuildError('repo %r build returned no files' %
-                                            repocls.name)
-            repo.filter()
-            repo.clean()
-
-            repooutdir = os.path.join(self.outdir, repocls.name)
-            if not os.path.exists(repooutdir):
-                os.mkdir(repooutdir)
-
-            for f in files:
-                relpath = os.path.relpath(f, repo.stagingdir)
-                outpath = repo.outputpath(relpath)
-                destpath = os.path.join(self.outdir, repo.name, outpath)
-                logger.info('copying staging file %r -> %r', f, destpath)
-                dirname = os.path.dirname(destpath)
-                if not os.path.exists(dirname):
-                    os.makedirs(dirname)
-                shutil.copyfile(f, destpath)
