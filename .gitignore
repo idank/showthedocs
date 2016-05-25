@@ -5,4 +5,9 @@ env/
 .sass-cache/
 .vagrant/
 .webassets-cache/
-externaltmp/
+
+external/
+staging/
+
+.coverage
+cover/
