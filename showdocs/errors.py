@@ -13,3 +13,6 @@ class ParsingError(Exception):
 
         super(ParsingError, self).__init__('%s (position %d)' %
                                            (self.message, position))
+
+class RepoBuildError(Exception):
+    pass
