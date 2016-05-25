@@ -1,13 +1,9 @@
-import subprocess, os, logging
-
 from showdocs import filters, repos
 
 import showdocs.filters.nginx
 
 import showdocs.repos.common
 import showdocs.repos.devdocs
-
-logger = logging.getLogger(__name__)
 
 @repos.common.register
 class NginxRepository(repos.devdocs.DevDocsRepository):

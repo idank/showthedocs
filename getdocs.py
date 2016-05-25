@@ -4,13 +4,14 @@
 
 Usage:
   getdocs.py list
-  getdocs.py build [--lang=<lang>] [--config=<path>]
+  getdocs.py build [--log] [--lang=<lang>] [--config=<path>]
   getdocs.py (-h | --help)
   getdocs.py --version
 
 Options:
   -h --help         Show this screen.
   --version         Show version.
+  --log             Turn logging on.
   --lang=<lang>     Language to build [default: all].
   --config=<path>   Update default config with the given one.
 
@@ -49,6 +50,10 @@ def main(args):
     if args['--config']:
         import imp
         imp.load_source('showdocs.testconfig', args['--config'])
+    if args['--log']:
+        config.LOG = True
+        showdocs.setuplogging()
+
 
     if args['list']:
         for name in repos.manager.listrepos():
