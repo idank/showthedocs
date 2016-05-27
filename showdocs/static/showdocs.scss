@@ -159,6 +159,19 @@ $container-margin-lr: 8px;
     margin-right: 100px;
 }
 
+#query-label {
+    position: absolute;
+    left: $legendscroll-right;
+    font-family: $font;
+}
+
+#docs-label {
+    position: absolute;
+    left: $legendscroll-right;
+    top: $query-height - 20px;
+    font-family: $font;
+}
+
 ._attribution {
     clear: both;
     margin: 2rem 0 1.5rem;
