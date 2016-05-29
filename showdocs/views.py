@@ -21,13 +21,6 @@ def _safedocs(docs):
     for path, externaldoc in docs.withcontents():
         yield path, markupsafe.Markup(externaldoc.contents)
 
-def _csspaths(docs):
-    css = set()
-    for _, externaldoc in docs.withcontents():
-        for path in externaldoc.css:
-            css.add('/static/external/' + path)
-    return css
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -63,8 +56,7 @@ def query():
         return render_template('query.html',
                                lang=lang,
                                query=markupsafe.Markup(annotated),
-                               docs=_safedocs(docs),
-                               additionalcss=_csspaths(docs))
+                               docs=_safedocs(docs))
     except errors.NoAnnotatorFound, e:
         message = "lang '%s' isn't supported"
         return render_template('error.html',

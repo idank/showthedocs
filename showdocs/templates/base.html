@@ -7,9 +7,6 @@
         {% assets filters="scss", output="showdocs.css", "showdocs.scss" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}">
         {% endassets %}
-        {% for path in additionalcss %}
-        <link rel="stylesheet" href="{{ path }}">
-        {% endfor %}
         {% if config.TEST %}
         <script src="/static/jquery-2.2.0.min.js"></script>
         {% else %}

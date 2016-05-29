@@ -2,7 +2,7 @@ import collections, logging, os, codecs
 
 from showdocs import config
 
-ExternalDoc = collections.namedtuple('ExternalDoc', 'contents css'.split())
+ExternalDoc = collections.namedtuple('ExternalDoc', 'contents'.split())
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +18,6 @@ def loadall(root=''):
         raise RuntimeError("can't find directory 'external' under %r" % root)
 
     staticextdir = os.path.join(config.STATIC_DIR, 'external')
-    css = []
-    for root, _, files in os.walk(staticextdir):
-        for name in files:
-            if os.path.splitext(name)[1] != '.css':
-                continue
-            css.append(os.path.join(root, name)[len(staticextdir)+1:])
 
     d = {}
     for root, _, files in os.walk(extdir):
@@ -35,8 +29,7 @@ def loadall(root=''):
             contents = codecs.open(fullpath, encoding='utf-8').read()
             key = fullpath[len(extdir)+1:]
 
-            externalcss = [x for x in css if x.startswith(os.path.dirname(key))]
-            d[key] = ExternalDoc(contents, externalcss)
+            d[key] = ExternalDoc(contents)
 
     return d
 
@@ -45,8 +38,9 @@ def initfilecache(root=''):
     global _init
     if _init:
         return
-    # FIXME
-    # _init = True
+    # Don't cache anything in testing.
+    if not config.TEST:
+        _init = True
 
     logger.info('initializing docs filecache')
     _filecache = loadall(root)
@@ -70,6 +64,7 @@ class Collection(collections.MutableSet):
             raise ValueError('unknown doc %r' % path)
         if path in self._paths:
             return
+        logger.info('adding %r to doc collection', path)
         self._paths.append(path)
 
     def discard(self, path):

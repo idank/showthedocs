@@ -15,6 +15,7 @@
 // preprocess the html before the UI initializes.
 docsfunctions = [];
 </script>
+{% include 'docscss.html' %}
 {% endblock %}
 
 {% block body %}
@@ -22,12 +23,12 @@ docsfunctions = [];
 {% endblock %}
 
 {% block additionalnav %}
-{% if lang == "postgresql" %}
-<li class="lang"><i class="devicon-postgresql-plain"></i></li>
-{% elif lang == "mysql" %}
-<li class="lang"><i class="devicon-mysql-plain"></i></li>
-{% elif lang == "nginx" %}
-<li class="lang"><i class="devicon-nginx-original colored"></i></li>
+{% set devicon = {
+    'nginx': 'devicon-nginx-original colored',
+    'postgresql': 'devicon-postgresql-plain',
+    'mysql': 'devicon-mysql-plain'} %}
+{% if devicon.get(lang) -%}
+<li class="lang"><i class="{{ devicon[lang] }}"></i></li>
 {% endif %}
 <li class="lang"><span style="padding: 0 0; text-transform: none">{{ lang|e }}</span></li>
 {% endblock %}

@@ -1,13 +1,14 @@
 *.pyc
 *.err
-showdocs/static/showdocs.css
-env/
-.sass-cache/
-.vagrant/
+/showdocs/static/showdocs.css
+/showdocs/static/external/*.css
+/env/
+/.sass-cache/
+/.vagrant/
 .webassets-cache/
 
-external/
-staging/
+/external/
+/staging/
 
-.coverage
-cover/
+/.coverage
+/cover/

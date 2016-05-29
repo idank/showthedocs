@@ -1,0 +1,9 @@
+{% if lang == "nginx" %}
+{% assets "nginx_scss" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% elif lang == "postgresql" %}
+{% assets "postgresql_scss" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% endif %}

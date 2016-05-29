@@ -1,5 +1,9 @@
+import os, logging
+
+logger = logging.getLogger(__name__)
+
 from flask import Flask
-from flask.ext.assets import Environment
+from flask.ext.assets import Environment, Bundle
 
 app = Flask(__name__)
 assets = Environment(app)
@@ -34,3 +38,23 @@ def setuplogging():
     root.addHandler(sh)
 
 setuplogging()
+
+def configureassets():
+    staticextdir = os.path.join(config.STATIC_DIR, 'external')
+    scss = []
+    for root, _, files in os.walk(staticextdir):
+        for name in files:
+            path, ext = os.path.splitext(name)
+            if ext != '.scss':
+                continue
+            type_ = os.path.splitext(path)[0]
+            fullpath = os.path.join(root, name)
+            staticrelative = os.path.relpath(fullpath, config.STATIC_DIR)
+            output = os.path.join('external', path)
+            bundle = Bundle(staticrelative, filters='scss', output=output)
+            assetname = type_ + '_scss'
+            assets.register(assetname, bundle)
+            logger.info('bundled %s, output path %s, registered as %s',
+                        staticrelative, output, assetname)
+
+configureassets()

@@ -23,7 +23,6 @@ class TestDocs(unittest.TestCase):
         self.assertEquals(list(c), [path])
         gotpath, externaldoc = list(c.withcontents())[0]
         self.assertEquals(path, gotpath)
-        self.assertEquals(externaldoc.css, ['sql/pg/style.css'])
         self.assertTrue(externaldoc.contents > 0)
 
         c.add(path)
