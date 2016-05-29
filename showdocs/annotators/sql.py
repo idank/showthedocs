@@ -88,7 +88,7 @@ class SqlAnnotator(base.Annotator):
 
     def _visitselect(self, statement):
         if self.lang == 'postgresql':
-            self.docs.add('sql/pg/select.html')
+            self.docs.add('postgres/sql-select.html')
         elif self.lang == 'mysql':
             self.docs.add('sql/mysql/select.html')
 
@@ -124,6 +124,7 @@ class SqlAnnotator(base.Annotator):
             self._append(p[0], p[1], 'table_name', [structs.decorate.BACK])
 
     def _visitkeyword(self, flat, i, token):
+        # TODO: move this to the parser
         # We get two tokens for a GROUP BY, merge them to one annotation.
         groupby = flat[i:i+1]
         if token.value.lower() == 'group':
