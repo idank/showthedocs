@@ -4,7 +4,7 @@ When I don't know what a piece of code does, I will often hit Google to find
 the API docs, and then sift through those to find the part that concerns me.
 
 showthedocs is an attempt to improve that workflow by giving it the code, and
-having it annotate the docs **and** code. It comes with an interactive user
+having it annotate the docs *and* code. It comes with an interactive user
 interface that (hopefully) improves on a simple Ctrl-F. It is somewhat of an
 expansion of a former website I've built,
 [explainshell](http://explainshell.com).

@@ -9,6 +9,23 @@ check error handling:
   Traceback (most recent call last):
   ParsingError: parser gave no additional information (position 28)
 
+superfluous newline here (might want to fix it at some point):
+
+  $ annotator -f <<EOF
+  > server {
+  >     server {
+  >         server_name foo;
+  >     }
+  > }
+  > EOF
+  
+  server {
+  
+      server {
+          server_name foo;
+      }
+  }
+
   $ annotator -f <<EOF
   > user  www www; # comments are omitted from the output
   > worker_processes           5;

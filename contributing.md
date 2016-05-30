@@ -32,9 +32,10 @@ syntax highlighters do, but for the results to be more meaningful than "this is
 a keyword", or "that is a string", parsing needs to go deeper and provide
 things like "this is a SELECT statement, these are the table names", etc.
 
-SQL is parsed using an external library (sqlparse), and nginx is a modified
-version of nginxparser that produces an AST (that is richer than the original
-output of the parser).
+SQL is parsed using [sqlparse](https://github.com/andialbrecht/sqlparse), and
+nginx is a modified version of
+[nginxparser](https://github.com/fatiherikli/nginxparser) that produces an AST
+(that is richer than the original output of the parser).
 
 ### annotating code
 
