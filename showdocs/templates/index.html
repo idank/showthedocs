@@ -57,6 +57,8 @@ if (history.state != null && 'lang' in history.state) {
     });
 }
 
+{% include 'examples.html' %}
+
 $(".lang-select-icon").click(function() {
     var that = this;
     // Apply .highlight on the clicked element only.
@@ -67,6 +69,21 @@ $(".lang-select-icon").click(function() {
     var lang = $(this).find(".lang-select-name").text();
     $("#lang").val(lang);
     history.replaceState({lang: lang}, null);
+
+    var example = '';
+    if (lang in examples) {
+        example = examples[lang];
+    }
+    $('textarea').attr('placeholder', examples[lang]);
+});
+
+$('form').submit(function() {
+    if ($('textarea').val().trim().length == 0) {
+        var lang = $("#lang").val();
+        if (lang in examples) {
+            $('textarea').val(examples[lang]);
+        }
+    }
 });
 </script>
 {% endblock %}
