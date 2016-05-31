@@ -6,6 +6,7 @@
 /.sass-cache/
 /.vagrant/
 .webassets-cache/
+*buble.js
 
 /external/
 /staging/

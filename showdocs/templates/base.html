@@ -2,21 +2,21 @@
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
-        <script src="/static/d3.js"></script>
-        <script src="/static/underscore.js"></script>
         {% assets filters="scss", output="showdocs.css", "showdocs.scss" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}">
         {% endassets %}
+        {% assets filters="buble", output="showdocs.buble.js", "showdocs.js" %}
+        <script src="{{ ASSET_URL }}"></script>
+        {% endassets %}
         {% if config.TEST %}
+        <script src="/static/d3.js"></script>
         <script src="/static/jquery-2.2.0.min.js"></script>
-        {% else %}
-        <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
-        {% endif %}
-        <script src="/static/showdocs.js"></script>
-        <script src="/static/docutils.js"></script>
-        {% if config.TEST %}
+        <script src="/static/underscore.js"></script>
         <link rel="stylesheet" href="/static/devicon.min.css">
         {% else %}
+        <script src="https://d3js.org/d3.v3.min.js"></script>
+        <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/master/devicon.min.css">
         {% endif %}
         <title>showthedocs{%- if title %} - {{ title }}{%- endif -%}</title>

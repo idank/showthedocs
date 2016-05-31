@@ -1,6 +1,5 @@
 var examples = {};
 
-
 examples['nginx'] = `user       www www;  ## Default: nobody
 worker_processes  5;  ## Default: 1
 error_log  logs/error.log;

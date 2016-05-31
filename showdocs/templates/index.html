@@ -48,6 +48,9 @@
 </div>
 {% endblock %}
 {% block afterbody %}
+{% assets filters="buble", output="examples.buble.js", "examples.js" %}
+<script src="{{ ASSET_URL }}"></script>
+{% endassets %}
 <script>
 if (history.state != null && 'lang' in history.state) {
     $(".lang-select-icon div").each(function() {
@@ -56,8 +59,6 @@ if (history.state != null && 'lang' in history.state) {
         }
     });
 }
-
-{% include 'examples.html' %}
 
 $(".lang-select-icon").click(function() {
     var that = this;

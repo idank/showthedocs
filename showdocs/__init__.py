@@ -3,7 +3,9 @@ import os, logging
 logger = logging.getLogger(__name__)
 
 from flask import Flask
+
 from flask.ext.assets import Environment, Bundle
+import showdocs.bublefilter
 
 app = Flask(__name__)
 assets = Environment(app)

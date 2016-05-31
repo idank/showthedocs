@@ -5,8 +5,6 @@ import markupsafe, markdown
 from flask import render_template, request, redirect
 from showdocs import app, html, annotate, structs, docs, errors, config
 
-from showdocs.structs import Annotation
-
 logger = logging.getLogger(__name__)
 
 def _initplain():
