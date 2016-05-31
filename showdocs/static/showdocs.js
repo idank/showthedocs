@@ -450,10 +450,6 @@ function initialize() {
             allocatedsymbols += 1;
         });
 
-    docsfunctions.forEach(function(fn) {
-        fn();
-    });
-
     initlegend();
 
     // Key shapes by the group that created them so we can nest them all in the
