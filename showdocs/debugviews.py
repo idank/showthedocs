@@ -1,8 +1,8 @@
+import os, markupsafe
 import logging
-import markupsafe
 
 from flask import render_template
-from showdocs import app, html, annotate, structs, docs, views
+from showdocs import app, html, annotate, structs, docs, config
 
 from showdocs.structs import Annotation
 
@@ -49,9 +49,9 @@ this is a very very very very very very very very very very very very very very 
 
     query = html.wrap(query, a)
 
-    d = docs.Collection()
-    d.add('test/select.html')
+    testpage = docs.readone(os.path.join(config.ROOT, 'tests', 'testpage.html'))
 
-    return render_template('query.html',
-                           query=markupsafe.Markup(query),
-                           docs=views._safedocs(d))
+    return render_template(
+        'query.html',
+        query=markupsafe.Markup(query),
+        docs=[('testpage.html', markupsafe.Markup(testpage))])

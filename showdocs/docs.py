@@ -8,6 +8,9 @@ logger = logging.getLogger(__name__)
 
 _filecache = {}
 
+def readone(path):
+    return codecs.open(path, encoding='utf-8').read()
+
 def loadall(root=''):
     if not root:
         root = config.ROOT
@@ -26,7 +29,7 @@ def loadall(root=''):
                 continue
             fullpath = os.path.join(root, name)
             logger.info('adding %r to docs filecache', fullpath)
-            contents = codecs.open(fullpath, encoding='utf-8').read()
+            contents = readone(fullpath)
             key = fullpath[len(extdir)+1:]
 
             d[key] = ExternalDoc(contents)
