@@ -20,7 +20,16 @@ sudo apt-get upgrade -y
 
 sudo apt-get install -y git make python-pip
 sudo apt-get install -y nginx supervisor
-sudo apt-get install -y libxml2-dev libxslt1-dev python-dev
+sudo apt-get install -y libxml2-dev libxslt1-dev python-dev npm
+
+echo "showthedocs: setting up buble"
+sudo ln -s "$(which nodejs)" /usr/bin/node
+sudo npm install -g buble
+
+echo "showthedocs: setting up sass"
+sudo apt-get install -y ruby-sass
+
+echo "showthedocs: setting up showthedocs"
 
 sudo pip install --upgrade pip
 sudo pip install virtualenv
@@ -34,17 +43,19 @@ pip install uwsgi
 
 cd $CLONE
 pip install -r requirements.txt
+./getdocs.py clone
 
 sudo cp misc/supervisor.conf /etc/supervisor/conf.d/uwsgi.conf
 sudo cp misc/nginx.conf /etc/nginx/sites-available/showthedocs.conf
 cd /etc/nginx/sites-enabled/
-sudo rm default || true
 sudo ln -s /etc/nginx/sites-available/showthedocs.conf showthedocs
+sudo rm default ../sites-available/default || true
 
 cd
 mkdir logs
+sudo /etc/init.d/supervisor start
 sudo supervisorctl reload
 sudo supervisorctl restart uwsgi
 sudo /etc/init.d/nginx reload
 
-echo DONE
+echo "showthedocs: DONE"
