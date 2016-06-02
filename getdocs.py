@@ -5,6 +5,7 @@
 Usage:
   getdocs.py list
   getdocs.py build [--log] [--lang=<lang>] [--config=<path>]
+  getdocs.py clone
   getdocs.py (-h | --help)
   getdocs.py --version
 
@@ -16,7 +17,7 @@ Options:
   --config=<path>   Update default config with the given one.
 
 """
-import sys, os
+import sys, os, subprocess
 from docopt import docopt
 
 import showdocs
@@ -25,6 +26,14 @@ from showdocs.repos import *
 
 import showdocs.repos.common
 import showdocs.repos.manager
+
+def clone(args):
+    if os.path.exists(config.EXTERNAL_DIR):
+        print 'error: %r exists, cannot clone' % config.EXTERNAL_DIR
+        return 1
+
+    subprocess.check_call(['git', 'clone', config.ARCHIVE_REPO,
+                           config.EXTERNAL_DIR])
 
 def build(args):
     reposcls = set(repos.common.registered.values())
@@ -60,6 +69,8 @@ def main(args):
             print name
     elif args['build']:
         return build(args)
+    elif args['clone']:
+        return clone(args)
     else:
         docopt.usage()
         return 1

@@ -12,6 +12,8 @@ EXTERNAL_DIR = _np(os.path.join(ROOT, 'external'))
 TEST = True
 LOG = False
 
+ARCHIVE_REPO = 'https://github.com/idank/showthedocs-archives.git'
+
 def update(d):
     globals().update(d)
 
