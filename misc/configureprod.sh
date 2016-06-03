@@ -42,6 +42,12 @@ source env/bin/activate
 pip install uwsgi
 
 cd $CLONE
+cat <<EOF >> showdocs/config.prod
+
+TEST = False
+LOG = True
+EOF
+
 pip install -r requirements.txt
 ./getdocs.py clone
 
@@ -54,6 +60,7 @@ sudo rm default ../sites-available/default || true
 cd
 mkdir logs
 sudo /etc/init.d/supervisor start
+sleep 2
 sudo supervisorctl reload
 sudo supervisorctl restart uwsgi
 sudo /etc/init.d/nginx reload
