@@ -25,6 +25,7 @@ def index():
 
 @app.route('/about/')
 def about():
+    global _plain
     if config.TEST:
         _plain = _initplain()
     return render_template('plain.html',
@@ -34,6 +35,7 @@ def about():
 
 @app.route('/contribute/')
 def contribute():
+    global _plain
     if config.TEST:
         _plain = _initplain()
     return render_template('contribute.html', contents=_plain['contributing'])
