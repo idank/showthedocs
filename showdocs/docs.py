@@ -46,6 +46,7 @@ def initfilecache(root=''):
         _init = True
 
     logger.info('initializing docs filecache')
+    global _filecache
     _filecache = loadall(root)
     logger.info('done initializing docs filecache')
 
