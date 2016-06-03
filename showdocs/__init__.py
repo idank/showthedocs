@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 from flask import Flask
 
-from flask.ext.assets import Environment, Bundle
+from flask_assets import Environment, Bundle
 import showdocs.bublefilter
 
 app = Flask(__name__)
@@ -42,6 +42,9 @@ def setuplogging():
     h.setFormatter(formatter)
     root.setLevel(logging.INFO)
     root.addHandler(h)
+
+    app.logger.addHandler(h)
+    app.logger.setLevel(logging.ERROR)
 
 setuplogging()
 
