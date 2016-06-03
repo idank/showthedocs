@@ -69,9 +69,8 @@ def query():
     except:
         if config.TEST:
             raise
-        logger.error('uncaught exception: lang=%r formatquery=%r query=%r',
+        logger.error('uncaught exception: lang=%r query=%r',
                      lang,
-                     formatquery,
                      q,
                      exc_info=True)
         message = 'something went wrong... this was logged and will be checked'

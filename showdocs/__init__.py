@@ -33,11 +33,15 @@ def setuplogging():
     _addedhandlers = True
 
     formatter = logging.Formatter('%(asctime)s %(name)s[%(levelname)s] %(message)s')
-    sh = logging.StreamHandler(sys.stdout)
-    sh.setLevel(logging.INFO)
-    sh.setFormatter(formatter)
+    if config.TEST:
+        h = logging.StreamHandler(sys.stdout)
+    else:
+        h = logging.FileHandler(config.LOG_PATH)
+
+    h.setLevel(logging.INFO)
+    h.setFormatter(formatter)
     root.setLevel(logging.INFO)
-    root.addHandler(sh)
+    root.addHandler(h)
 
 setuplogging()
 

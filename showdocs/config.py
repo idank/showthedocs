@@ -11,6 +11,7 @@ EXTERNAL_DIR = _np(os.path.join(ROOT, 'external'))
 
 TEST = True
 LOG = False
+LOG_PATH = '/home/showthedocs/logs/app.log'
 
 ARCHIVE_REPO = 'https://github.com/idank/showthedocs-archives.git'
 
