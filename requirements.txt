@@ -1,6 +1,7 @@
 flask==0.10.1
 flask-assets==0.11
 markdown==2.6.6
+docopt
 
 sqlparse==0.1.18
 pyparsing==2.1.1

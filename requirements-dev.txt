@@ -4,6 +4,5 @@ cram
 nose
 lxml
 cssselect
-docopt
 
 yapf
