@@ -65,7 +65,7 @@ def main(args):
 
 
     if args['list']:
-        for name in repos.manager.listrepos():
+        for name in sorted(repos.manager.listrepos()):
             print name
     elif args['build']:
         return build(args)

@@ -1,5 +1,4 @@
 import logging
-from lxml.html import builder
 
 from showdocs import structs
 from showdocs.filters import common

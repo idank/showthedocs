@@ -1,4 +1,5 @@
 import lxml.html
+import lxml.html.builder
 
 class Filter(object):
     '''Filters are used during postprocessing of docs generation to modify the
@@ -10,7 +11,9 @@ class Filter(object):
         self.root = root
 
     def process(self):
-        '''process can alter the DOM by mutating self.root, an lxml.Element.'''
+        '''process can alter the DOM by mutating self.root, an lxml.Element.
+        Returning a value overrides self.root and passes that value to
+        subsequent filters.'''
         raise NotImplementedError
 
 def pipeline(filters, s):
@@ -26,8 +29,12 @@ def pipeline(filters, s):
     for fcls in filters:
         f = fcls(node)
         modified = f.process()
-        node = modified or node
+        if modified is not None:
+            dummy = lxml.html.builder.E('dummy')
+            dummy.append(modified)
+            node = dummy
 
     # Remove the dummy parent created before.
+    assert node.tag == 'dummy', 'expected element with tag dummy, got %s' % node.tag
     serialized = lxml.html.tostring(node, encoding='UTF-8')
     return serialized[len('<dummy>'):-len('</dummy>')]

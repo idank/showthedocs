@@ -1,6 +1,6 @@
 import unittest
 
-from lxml.html import builder as E
+from lxml.html import builder
 
 import showdocs.filters.common
 from showdocs import filters
@@ -20,6 +20,16 @@ class TestFilters(unittest.TestCase):
         filtered = filters.common.pipeline([noopfilter], TESTHTML)
         self.assertEquals(TESTHTML, filtered)
 
+    def test_new_root(self):
+        class replacesroot(filters.common.Filter):
+            def process(self):
+                elem = builder.E('hi')
+                elem.text = self.root.cssselect('div')[0].text
+                return elem
+
+        filtered = filters.common.pipeline([replacesroot], TESTHTML)
+        self.assertEquals('<hi>foo</hi>', filtered)
+
     def test_changes(self):
         class firstfilter(filters.common.Filter):
             def process(self):
@@ -38,7 +48,7 @@ class TestFilters(unittest.TestCase):
                 span = self.root.cssselect('span')[0]
                 text = span.text
                 span.text = ''
-                span.append(E.A(text))
+                span.append(builder.A(text))
 
         filtered = filters.common.pipeline(
             [firstfilter, secondfilter, thirdfilter], TESTHTML)
