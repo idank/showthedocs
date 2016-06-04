@@ -40,7 +40,7 @@ _init = False
 def initfilecache(root=''):
     global _init
     if _init:
-        return
+        return _filecache
     # Don't cache anything in testing.
     if not config.TEST:
         _init = True
