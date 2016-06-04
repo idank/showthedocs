@@ -5,13 +5,13 @@ from showdocs import docs
 class TestDocs(unittest.TestCase):
     def test_loadall(self):
         d = docs.loadall()
-        self.assertTrue('sql/pg/select.html' in d.keys())
+        self.assertTrue('postgres/sql-select.html' in d.keys())
 
     def test_badroot(self):
         self.assertRaises(RuntimeError, docs.loadall, os.path.dirname(__file__))
 
     def test_collection(self):
-        path = 'sql/pg/select.html'
+        path = 'postgres/sql-select.html'
 
         c = docs.Collection()
         self.assertEquals(len(c), 0)

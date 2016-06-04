@@ -18,9 +18,9 @@ def loadall(root=''):
     root = os.path.normpath(root)
     extdir = os.path.join(root, 'external')
     if not os.path.exists(extdir):
-        raise RuntimeError("can't find directory 'external' under %r" % root)
-
-    staticextdir = os.path.join(config.STATIC_DIR, 'external')
+        raise RuntimeError(
+            "can't find directory 'external' under %r (run getdocs clone?)" %
+            root)
 
     d = {}
     for root, _, files in os.walk(extdir):

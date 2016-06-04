@@ -10,14 +10,7 @@
   > EOF
   $ getdocs.py list
   nginx
+  postgres
   $ getdocs.py build --lang foo
-  unknown lang 'foo', known languages: nginx
+  unknown lang 'foo', known languages: nginx, postgres
   [1]
-
-  $ getdocs.py build --config $CONFIG --lang nginx
-  $ cd $TMPDIR/external && find .
-  .
-  ./nginx
-  ./nginx/ngx_core_module.html
-  ./nginx/http
-  ./nginx/http/ngx_http_core_module.html
