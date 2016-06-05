@@ -14,10 +14,6 @@ Adding a language requires the following:
 1. importing the documentation (usually a small subset of it) and annotating it
    as well
 
-[This commit](http://todo) that added the nginx parser, annotator and
-documentation could be used as a reference for the various sections of the code
-that need to be modified.
-
 ### writing a parser
 
 The parsing that showthedocs needs is generally a lot more shallow than the one
@@ -95,15 +91,15 @@ showthedocs. All we care about is HTML that has a bunch of tags with
 languages. It scrapes the online copy and does a bunch of modifications to the
 downloaded HTML. The end result is ideal for our purposes.
 
-A [repository](todo) is in charge of building documentation and running
-[filters](todo) to modify the output to include `data-showdocs` attributes.
+A [repository](https://github.com/idank/showthedocs/blob/master/showdocs/repos/common.py#L16) is in charge of building documentation and running
+[filters](https://github.com/idank/showthedocs/blob/master/showdocs/filters/common.py#L3) to modify the output to include `data-showdocs` attributes.
 Since we're using devdocs (for now), building the docs is simply shelling out
 to devdocs.
 
 Filters should be written to add `data-showdocs` in strategic places of the
-built HTML. See the nginx [repo](todo) and [filters](todo) for examples.
+built HTML. See the nginx [repo](https://github.com/idank/showthedocs/blob/master/showdocs/repos/nginx.py) and [filters](https://github.com/idank/showthedocs/blob/master/showdocs/filters/nginx.py) for examples.
 
-`getdocs.py` is used to build repositories, and puts the output files in
+[getdocs](https://github.com/idank/showthedocs/blob/master/getdocs) is used to build repositories, and puts the output files in
 a directory under `external/`.  An annotator can then request to include a file
 from this directory by calling `self.add`, e.g. a file at
 `external/foo/bar.html` will show up in the result of a query if its annotator
