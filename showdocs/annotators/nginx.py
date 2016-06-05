@@ -32,6 +32,9 @@ class NginxAnnotator(base.Annotator):
             key = node.parts[0]
             self._append(key.pos[0], key.pos[1], key.value,
                          [structs.decorate.BACK])
+            if key.value.lower() in ('log_format', 'access_log',
+                                     'open_log_file_cache'):
+                self.docs.add('nginx/http/ngx_http_log_module.html')
         elif node.kind == 'main':
             for n in node.parts:
                 self.visit(n)

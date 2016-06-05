@@ -17,6 +17,7 @@ class NginxRepository(repos.devdocs.DevDocsRepository):
     def build(self):
         self._page('/ngx_core_module.html')
         self._page('/http/ngx_http_core_module.html')
+        self._page('/http/ngx_http_log_module.html')
 
     def match(self):
         yield 'public/docs/nginx/*.html'
