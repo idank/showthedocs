@@ -25,3 +25,7 @@ class DirectiveFilter(common.Filter):
             del e.getparent()[eidx + 1:eidx + len(siblings)]
             for s in siblings:
                 e.append(s)
+
+        for e in self.root.cssselect('div[data-showdocs] code strong'):
+            e.set('data-showdocs', e.text)
+            e.set('class', structs.decorate.BACK)
