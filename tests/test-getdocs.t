@@ -8,9 +8,9 @@
   >     'LOG': False,
   >     })
   > EOF
-  $ getdocs.py list
+  $ getdocs list
   nginx
   postgres
-  $ getdocs.py build --lang foo
+  $ getdocs build --lang foo
   unknown lang 'foo', known languages: nginx, postgres
   [1]
