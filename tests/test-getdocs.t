@@ -9,8 +9,9 @@
   >     })
   > EOF
   $ getdocs list
+  mysql
   nginx
   postgres
   $ getdocs build --lang foo
-  unknown lang 'foo', known languages: nginx, postgres
+  unknown lang 'foo', known languages: nginx, postgres, mysql
   [1]

@@ -1,3 +1,5 @@
+import urlparse # for AbsoluteUrls
+
 import lxml.html
 import lxml.html.builder
 
@@ -39,3 +41,22 @@ def pipeline(context, filters, s):
     assert node.tag == 'dummy', 'expected element with tag dummy, got %s' % node.tag
     serialized = lxml.html.tostring(node, encoding='UTF-8')
     return serialized[len('<dummy>'):-len('</dummy>')]
+
+
+class AbsoluteUrls(Filter):
+    '''AbsoluteUrls traverses img and a elements and changes the url they point
+    to to be absolute to the url they were scraped from.'''
+    def process(self):
+        for e in self.root.cssselect('a,img'):
+            if e.tag == 'img':
+                attr = 'src'
+            elif e.tag == 'a':
+                attr = 'href'
+            else:
+                raise ValueError('expected <a> or <img>')
+
+            link = e.get(attr)
+            if link:
+                absoluteurl = urlparse.urljoin(self.context.current_url,
+                                               link)
+                e.set(attr, absoluteurl)

@@ -90,7 +90,7 @@ class SqlAnnotator(base.Annotator):
         if self.lang == 'postgresql':
             self.docs.add('postgres/sql-select.html')
         elif self.lang == 'mysql':
-            self.docs.add('sql/mysql/select.html')
+            self.docs.add('mysql/select.html')
 
         tokens = statement.tokens
 

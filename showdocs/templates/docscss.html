@@ -6,4 +6,8 @@
 {% assets "postgresql_scss" %}
 <link rel="stylesheet" href="{{ ASSET_URL }}">
 {% endassets %}
+{% elif lang == "mysql" %}
+{% assets "mysql_scss" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
 {% endif %}
