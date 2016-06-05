@@ -706,6 +706,12 @@ function initialize() {
         }
     });
 
+    d3.selectAll("#docs [data-showdocs]")
+    .filter(function() {
+        return !(this.getAttribute('data-showdocs') in groupstate);
+    })
+    .classed('showdocs-decorate-back', false);
+
     var dcanvas = d3.select("#docs-canvas")
         .append('g')
         .attr('transform', 'translate(' + [0, -$("#affixed").height()] + ')');
