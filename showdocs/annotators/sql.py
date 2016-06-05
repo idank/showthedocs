@@ -127,14 +127,15 @@ class SqlAnnotator(base.Annotator):
         # TODO: move this to the parser
         # We get two tokens for a GROUP BY, merge them to one annotation.
         groupby = flat[i:i+1]
-        if token.value.lower() == 'group':
+        if token.value.lower() in ('group', 'order'):
             j = i+1
             while j < len(flat) and flat[j].is_whitespace():
                 j += 1
             if j < len(flat) and flat[j].value.lower() == 'by':
                 p1 = self.pos[token]
                 p2 = self.pos[flat[j]]
-                self._append(p1[0], p2[1], 'group by', [structs.decorate.BACK])
+                self._append(p1[0], p2[1], '%s by' % token.value.lower(),
+                             [structs.decorate.BACK])
                 return
         elif token.value.lower() == 'by':
             return
