@@ -43,9 +43,6 @@ def setuplogging():
     root.setLevel(logging.INFO)
     root.addHandler(h)
 
-    app.logger.addHandler(h)
-    app.logger.setLevel(logging.ERROR)
-
 setuplogging()
 
 def configureassets():
