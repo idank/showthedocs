@@ -667,17 +667,25 @@ function initialize() {
                 else {
                     if (i == 0)
                         firstdelta = -15;
-                    let d = {
+
+                    // The first of these is used as kind of white stroke
+                    // around the smaller shape, so if its positioned on the
+                    // block decoration, it wpn't be hidden.
+                    strokedshapes.symbols.push({
+                        x: symbolstartx+(padx*blockindex),
+                        y: p.top+(i*docswindowheight)+firstdelta,
+                        fill: groupstate[g].symbol.fill,
+                        type: groupstate[g].symbol.type,
+                        radius: 10,
+                    });
+                    strokedshapes.symbols.push({
                         x: symbolstartx+(padx*blockindex),
                         y: p.top+(i*docswindowheight)+firstdelta,
                         fill: groupstate[g].symbol.fill,
                         stroke: groupstate[g].symbol.stroke,
                         type: groupstate[g].symbol.type,
                         radius: 10,
-                    };
-
-                    strokedshapes.symbols.push(d);
-                    strokedshapes.symbols.push(d);
+                    });
                 }
             }
             shapes.rects.push({
