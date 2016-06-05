@@ -1,4 +1,5 @@
 import os, fnmatch, subprocess, logging
+import requests  # for ScrapedRepository
 
 from showdocs import filters, errors
 
@@ -110,3 +111,14 @@ class Repository(object):
         self.context.current_url = None
         if path in self.context.path_to_url:
             self.context.current_url = self.context.path_to_url[path]
+
+
+class ScrapedRepository(Repository):
+    '''A base class for repositories that scrape online docs.'''
+    def httpget(self, url):
+        '''Calls requests.get on the given URL and returns the response bytes.'''
+        headers = {'user-agent': 'showthedocs'}
+
+        # Let requests find the encoding and return a Unicode string, then
+        # encode it as utf8.
+        return requests.get(url, headers=headers).text.encode('utf8')
