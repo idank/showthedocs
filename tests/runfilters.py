@@ -6,6 +6,11 @@ from showdocs import repos, filters
 import showdocs.repos.manager
 import showdocs.filters.common
 
+def testcontext():
+    context = repos.common.Context()
+    context.current_url = 'http://localhost/a/b/test.html'
+    return context
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--lang', required=True)
@@ -15,7 +20,7 @@ if __name__ == '__main__':
     repocls = repos.manager.get(args.lang)
     filterscls = repocls.filters()
 
-    s = filters.common.pipeline(filterscls, text)
+    s = filters.common.pipeline(testcontext(), filterscls, text)
     if not s.endswith('\n'):
         s += '\n'
     sys.stdout.write(s)

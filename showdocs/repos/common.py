@@ -13,6 +13,19 @@ def register(cls):
     registered[cls.name] = cls
     return cls
 
+class Context(object):
+    '''The context is used to pass around information during the doc generation
+    process. Parts of it are immutable during generation, others change
+    depending on the current stage and/or file being processed.'''
+    def __init__(self):
+        # The url of the current file being processed. It is used when making
+        # urls absolute after scraping a page.
+        self.current_url = None
+
+        # Whenever the scraper writes a file, it saves its original url in this
+        # map to update self.current_url when that file is later processed.
+        self.path_to_url = {}
+
 class Repository(object):
     '''A repository builds documentation for a language. Most often, this
     involves executing an external tool that generates HTML. The repository
@@ -20,6 +33,7 @@ class Repository(object):
     filters that postprocess the generated HTML, e.g. to remove/add elements,
     change link urls, etc.'''
     def __init__(self, stagingdir):
+        self.context = Context()
         self.stagingdir = stagingdir
 
     def build(self):
@@ -63,7 +77,10 @@ class Repository(object):
             absolute = os.path.join(self.stagingdir, f)
             with open(absolute) as ff:
                 contents = ff.read()
-            filteredcontents = filters.common.pipeline(self.filters(), contents)
+
+            self._updatecontext(absolute)
+            filteredcontents = filters.common.pipeline(
+                self.context, self.filters(), contents)
             if contents != filteredcontents:
                 self.log('info', 'file %r changed, overwriting', f)
                 with open(absolute, 'wb') as ff:
@@ -87,3 +104,9 @@ class Repository(object):
     @classmethod
     def log(cls, level, message, *args):
         getattr(logger, level)('repo %s: ' + message, cls.name, *args)
+
+    def _updatecontext(self, path):
+        '''Updates parts of the context as we're handling file path.'''
+        self.context.current_url = None
+        if path in self.context.path_to_url:
+            self.context.current_url = self.context.path_to_url[path]

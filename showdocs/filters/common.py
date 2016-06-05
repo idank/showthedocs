@@ -7,7 +7,8 @@ class Filter(object):
 
     They are constructed in a pipeline, where the output of one is fed as input
     to the next.'''
-    def __init__(self, root):
+    def __init__(self, context, root):
+        self.context = context
         self.root = root
 
     def process(self):
@@ -16,7 +17,7 @@ class Filter(object):
         subsequent filters.'''
         raise NotImplementedError
 
-def pipeline(filters, s):
+def pipeline(context, filters, s):
     # Assume all files are utf8 encoded.
     parser = lxml.html.HTMLParser(encoding='UTF-8')
 
@@ -27,7 +28,7 @@ def pipeline(filters, s):
     if not filters:
         return s
     for fcls in filters:
-        f = fcls(node)
+        f = fcls(context, node)
         modified = f.process()
         if modified is not None:
             dummy = lxml.html.builder.E('dummy')
