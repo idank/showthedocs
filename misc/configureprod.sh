@@ -42,7 +42,7 @@ source env/bin/activate
 pip install uwsgi
 
 cd $CLONE
-cat <<EOF >> showdocs/config.prod
+cat <<EOF >> showdocs/config.py
 
 TEST = False
 LOG = True
@@ -62,6 +62,7 @@ mkdir logs
 sudo /etc/init.d/supervisor start
 sleep 2
 sudo supervisorctl reload
+sleep 2
 sudo supervisorctl restart uwsgi
 sudo /etc/init.d/nginx reload
 
