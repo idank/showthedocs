@@ -49,7 +49,7 @@ LOG = True
 EOF
 
 pip install -r requirements.txt
-./getdocs.py clone
+./getdocs clone
 
 sudo cp misc/supervisor.conf /etc/supervisor/conf.d/uwsgi.conf
 sudo cp misc/nginx.conf /etc/nginx/sites-available/showthedocs.conf
