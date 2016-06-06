@@ -37,7 +37,7 @@ def clone(args):
 
 def build(args):
     reposcls = set(repos.common.registered.values())
-    if args['--lang']:
+    if args['--lang'] != 'all':
         lang = args['--lang']
         try:
             langrepo = repos.manager.get(lang)
