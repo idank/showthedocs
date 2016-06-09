@@ -1,6 +1,0 @@
-<span data-showdocs="select" class="showdocs-decorate-block">SELECT <span class="" data-showdocs="select-expr"><span class="word">p.Name</span> <span data-showdocs="as" class="word showdocs-decorate-inline">AS</span> <span data-showdocs="foo" class="word showdocs-decorate-symbol showdocs-decorate-basis">ProductName</span>
-        <span data-showdocs="foo" class="word showdocs-decorate-symbol showdocs-decorate-under">NonDiscountSales = <span data-showdocs="foo2" class="showdocs-decorate-under word">(OrderQty * UnitPrice)</span></span>,
-       <span data-showdocs="foo2" class="word showdocs-decorate-symbol">Discounts</span> <span class="word">= ((OrderQty * UnitPrice) *</span> <span class="word">UnitPriceDiscount)</span></span></span>
-<span data-showdocs="from" class="showdocs-decorate-block">FROM Production.Product AS p</span>
-<span data-showdocs="inner-join" class="showdocs-decorate-block">INNER JOIN Sales.SalesOrderDetail AS sod ON p.ProductID = sod.ProductID</span>
-<span data-showdocs="orderby" class="showdocs-decorate-block">ORDER BY ProductName DESC;</span>
