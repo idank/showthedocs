@@ -18,7 +18,7 @@ Adding a language requires the following:
 1. importing the documentation (usually a small subset of it) and annotating it
    as well
 
-[This commit](https://github.com/idank/showthedocs/commit/11218f51af8a9f34e725696056c71c7181c94c7d) that added support for gitconfig can be used for guidance on the
+[This commit](https://github.com/idank/showthedocs/commit/14bcc7219efb77ae9df2141d0986e8645a883453) that added support for gitconfig can be used for guidance on the
 various pieces of the code that need to be modified.
 
 ### writing a parser
