@@ -5,6 +5,10 @@ language and improving an existing parser/annotator. The UI itself doesn't work
 very well on small/touch screens, so if someone cares about that, feel free to
 send suggestions or pull requests.
 
+If you'd like to hack on the site but have a hard time navigating the code
+base, please don't hesitate to reach out to me either on github or privately
+and I'll answer any questions (and add missing documentation).
+
 ## supporting a new language
 
 Adding a language requires the following:
@@ -14,6 +18,9 @@ Adding a language requires the following:
 1. importing the documentation (usually a small subset of it) and annotating it
    as well
 
+[This commit](https://github.com/idank/showthedocs/commit/11218f51af8a9f34e725696056c71c7181c94c7d) that added support for gitconfig can be used for guidance on the
+various pieces of the code that need to be modified.
+
 ### writing a parser
 
 The parsing that showthedocs needs is generally a lot more shallow than the one
@@ -22,16 +29,14 @@ parsers, so check what's out there before starting one from scratch. If you do
 write one, prefer to write a lenient parser, since the purpose of showthedocs
 isn't to validate.
 
-The parser should produce some form of an AST that can be easily traversed by
+The parser should produce some form of an [AST](https://github.com/idank/showthedocs/blob/master/showdocs/parsers/ast.py) that can be easily traversed by
 the annotator (more on that next). In essence this is similar to what most
 syntax highlighters do, but for the results to be more meaningful than "this is
 a keyword", or "that is a string", parsing needs to go deeper and provide
 things like "this is a SELECT statement, these are the table names", etc.
 
-SQL is parsed using [sqlparse](https://github.com/andialbrecht/sqlparse), and
-nginx is a modified version of
-[nginxparser](https://github.com/fatiherikli/nginxparser) that produces an AST
-(that is richer than the original output of the parser).
+SQL is parsed using [sqlparse](https://github.com/andialbrecht/sqlparse). Nginx
+and gitconfigs are parsed with pyparsing (see `showdocs/parsers/`).
 
 ### annotating code
 
@@ -91,10 +96,13 @@ showthedocs. All we care about is HTML that has a bunch of tags with
 languages. It scrapes the online copy and does a bunch of modifications to the
 downloaded HTML. The end result is ideal for our purposes.
 
-A [repository](https://github.com/idank/showthedocs/blob/master/showdocs/repos/common.py#L16) is in charge of building documentation and running
-[filters](https://github.com/idank/showthedocs/blob/master/showdocs/filters/common.py#L3) to modify the output to include `data-showdocs` attributes.
-Since we're using devdocs (for now), building the docs is simply shelling out
-to devdocs.
+A [repository](https://github.com/idank/showthedocs/blob/master/showdocs/repos/common.py#L16)
+is in charge of building documentation and running
+[filters](https://github.com/idank/showthedocs/blob/master/showdocs/filters/common.py#L3)
+that among others modify the output to include `data-showdocs` attributes. There are currently
+two base repositories. `DevDocsRepository` is based on devdocs and simply
+shells out to its tools. The other one is `ScrapedRepository`, which has
+utility functions for downloading web pages.
 
 Filters should be written to add `data-showdocs` in strategic places of the
 built HTML. See the nginx [repo](https://github.com/idank/showthedocs/blob/master/showdocs/repos/nginx.py) and [filters](https://github.com/idank/showthedocs/blob/master/showdocs/filters/nginx.py) for examples.
