@@ -51,7 +51,7 @@
     </form>
 </div>
 {% endblock %}
-{% block afterbody %}
+{% block bodyend %}
 {% assets filters="buble", output="examples.buble.js", "examples.js" %}
 <script src="{{ ASSET_URL }}"></script>
 {% endassets %}
