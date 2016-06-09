@@ -11,5 +11,5 @@ expansion of a former website I've built,
 
 Please bare in mind that the site is currently in development, so not many
 languages are currently supported (and those that are could be improved
-further), and other things might not be fully tested. [Help](/contribute/) is
+further), and other things might not be fully tested. [Help](/contribute) is
 definitely welcome!

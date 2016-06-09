@@ -23,7 +23,7 @@ def _safedocs(docs):
 def index():
     return render_template('index.html')
 
-@app.route('/about/')
+@app.route('/about')
 def about():
     global _plain
     if config.TEST:
@@ -33,7 +33,7 @@ def about():
                            active_page='about',
                            contents=_plain['about'])
 
-@app.route('/contribute/')
+@app.route('/contribute')
 def contribute():
     global _plain
     if config.TEST:
