@@ -27,3 +27,23 @@ ORDER BY city;`;
 
 examples['postgresql'] = sql;
 examples['mysql'] = sql;
+
+examples['gitconfig'] = `; core variables
+[core]
+    ; Don't trust file modes
+    filemode = false
+; Our diff algorithm
+[diff]
+    external = /usr/local/bin/diff-wrapper
+    renames = true
+; Proxy settings
+[core]
+    gitproxy=proxy-command for kernel.org
+    gitproxy=default-proxy ; for all the rest
+; HTTP
+[http]
+    sslVerify
+[http "https://weak.example.com"]
+    sslVerify = false
+    cookieFile = /tmp/cookie.txt
+`;

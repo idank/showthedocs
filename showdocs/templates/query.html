@@ -21,9 +21,16 @@
 {% set devicon = {
     'nginx': 'devicon-nginx-original colored',
     'postgresql': 'devicon-postgresql-plain',
-    'mysql': 'devicon-mysql-plain'} %}
+    'mysql': 'devicon-mysql-plain',
+    'gitconfig': 'devicon-git-plain',
+}
+%}
 {% if devicon.get(lang) -%}
 <li class="lang"><i class="{{ devicon[lang] }}"></i></li>
+{% else %}
+<script>
+console.log('no devicon (top right corner) defined');
+</script>
 {% endif %}
 <li class="lang"><span style="padding: 0 0; text-transform: none">{{ lang|e }}</span></li>
 {% endblock %}

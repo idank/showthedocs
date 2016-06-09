@@ -1,1 +1,1 @@
-__all__ = ['nginx', 'sql']
+__all__ = ['nginx', 'sql', 'gitconfig']

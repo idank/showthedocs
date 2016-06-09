@@ -119,6 +119,7 @@ class ScrapedRepository(Repository):
         '''Calls requests.get on the given URL and returns the response bytes.'''
         headers = {'user-agent': 'showthedocs'}
 
+        self.log('info', 'http get: url=%s', url)
         # Let requests find the encoding and return a Unicode string, then
         # encode it as utf8.
         return requests.get(url, headers=headers).text.encode('utf8')
