@@ -1,4 +1,4 @@
-import sys, argparse, traceback
+import sys, argparse
 
 from showdocs import annotate, annotators, errors
 
@@ -30,8 +30,5 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--dump', action='store_true')
     args = parser.parse_args()
 
-    try:
-        rc = main(args)
-        sys.exit(rc or 0)
-    except errors.ParsingError:
-        traceback.print_exc(0)
+    rc = main(args)
+    sys.exit(rc or 0)

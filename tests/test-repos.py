@@ -47,8 +47,7 @@ class TestRepos(unittest.TestCase):
             shutil.rmtree(self.tempdir)
 
     def test_list(self):
-        names = ['nginx', 'postgres', 'mysql']
-        self.assertEquals(repos.manager.listrepos(), names)
+        self.assertTrue('nginx' in repos.manager.listrepos())
 
     def test_generate(self):
         tempdir = tempfile.mkdtemp(prefix='showdocs')

@@ -55,9 +55,8 @@
 
 parsing error:
 
-  $ annotator <<EOF
+  $ annotator <<EOF 2>&1 | tail -n 1
   > [mergetool
   > path = kdiff3
   > EOF
-  Traceback (most recent call last):
-  ParsingError: parser gave no additional information (position 11)
+  showdocs.errors.ParsingError: parser gave no additional information (position 11)

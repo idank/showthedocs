@@ -3,11 +3,10 @@
 
 check error handling:
 
-  $ annotator <<EOF
+  $ annotator <<EOF 2>&1 | tail -n 1
   > this is clearly not a query!
   > EOF
-  Traceback (most recent call last):
-  ParsingError: parser gave no additional information (position 28)
+  showdocs.errors.ParsingError: parser gave no additional information (position 28)
 
 superfluous newline here (might want to fix it at some point):
 
