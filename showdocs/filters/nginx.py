@@ -28,4 +28,4 @@ class DirectiveFilter(common.Filter):
 
         for e in self.root.cssselect('div[data-showdocs] code strong'):
             e.set('data-showdocs', e.text)
-            e.set('class', structs.decorate.BACK)
+            e.classes.add(structs.decorate.BACK)
