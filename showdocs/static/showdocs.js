@@ -28,7 +28,6 @@ var sizes = {
     },
 };
 
-
 function yforscroll(element) {
     var y = offset(element).top;
     y -= $("#affixed").height();
@@ -298,6 +297,7 @@ function initlegend() {
     var ordered = [];
     var seen = d3.set();
     d3.selectAll("#query [data-showdocs]")
+        .filter(boundgroup)
         .each(function() {
             var g = this.getAttribute("data-showdocs");
             if (seen.has(g))
@@ -329,6 +329,10 @@ function initlegend() {
         .classed("showdocs-legend clickable", true);
 
     ordered.forEach(function(group, i) {
+        // TODO: Come up with a better way to limit the legend.
+        if (i > 20)
+            return;
+
         var shapes = ShapesContainer();
 
         var x = Math.floor(i / m.itemspercolumn) * m.columnwidth;
@@ -406,49 +410,15 @@ function ShapesContainer() {
 }
 
 function initialize() {
-    var queryData = $("#query [data-showdocs]");
-
-    var groups = _.groupBy(queryData, function(e) {
-        return e.getAttribute("data-showdocs");
-    });
-
     pxBetweenLines = findPixelsBetweenLines();
 
     groupstate = {}; // global
-    var color = d3.scale.category20();
+    initgroupstate()
+    console.log(groupstate);
 
-    var i = 0;
-    for (var k in groups) {
-        groupstate[k] = {color: color(i)};
-        i++;
-    }
-
-    var i = 0;
-    var seen = d3.set();
-    d3.selectAll("#query .showdocs-decorate-block")
-        .each(function() {
-            var g = this.getAttribute("data-showdocs");
-            if (seen.has(g))
-                return;
-            groupstate[g].letter = String.fromCharCode("A".charCodeAt(0) + seen.size());
-            seen.add(g);
-        });
-    var allocatedsymbols = 0;
-    d3.selectAll("#query [data-showdocs]:not(.showdocs-decorate-block)")
-        .each(function() {
-            var g = this.getAttribute("data-showdocs");
-            if (seen.has(g))
-                return;
-            var fill = allocatedsymbols < d3.svg.symbolTypes.length;
-            groupstate[g].symbol = {
-                fill: fill,
-                stroke: !fill,
-                type: d3.svg.symbolTypes[allocatedsymbols % d3.svg.symbolTypes.length],
-            };
-
-            seen.add(g);
-            allocatedsymbols += 1;
-        });
+    let cleared = cleardecorations("#query [data-showdocs]");
+    cleared.values().forEach(v => console.log('cleared decorations for group', v));
+    cleardecorations("#docs [data-showdocs]");
 
     initlegend();
 
@@ -466,7 +436,7 @@ function initialize() {
     });
     var queryblockshapes = {};
 
-    for (var g in groups) {
+    for (var g in groupstate) {
         queryshapes[g] = ShapesContainer();
         queryblockshapes[g] = ShapesContainer();
     }
@@ -476,7 +446,9 @@ function initialize() {
             .map(function(v) { return {e: v, interval: {s: rnd(pos(v).top), e: rnd(pos(v).bottom)}}; }),
         function(d) { return d.interval; });
 
-    queryData.each(function() {
+    d3.selectAll("#query [data-showdocs]")
+    .filter(boundgroup)
+    .each(function() {
         var $this = $(this);
         var g = this.getAttribute("data-showdocs");
         var p = pos(this);
@@ -588,7 +560,7 @@ function initialize() {
         var shapes = pair[0];
         var selection = d3.select(pair[1]);
 
-        for (let g in groups) {
+        for (var g in groupstate) {
             if (shapes[g].empty())
                 continue;
 
@@ -611,12 +583,12 @@ function initialize() {
     var docsshapes = {};
     var docsblockindices = arrangeintervals(
         d3.selectAll("#docs .showdocs-decorate-block[data-showdocs]")
-            .filter(groupsinquery)[0]
+            .filter(boundgroup)[0]
             .map(function(v) { return {e: v, interval: {s: rnd(pos(v).top), e: rnd(pos(v).bottom)}}; }),
         function(d) { return d.interval; });
 
     d3.selectAll("#docs [data-showdocs]")
-    .filter(groupsinquery)
+    .filter(boundgroup)
     .call(function() {
         if (this.empty()) {
             console.log("#docs contains no tags with data-showdocs attribute!");
@@ -705,12 +677,6 @@ function initialize() {
             console.log('unknown or missing decoration for ', this);
         }
     });
-
-    d3.selectAll("#docs [data-showdocs]")
-    .filter(function() {
-        return !(this.getAttribute('data-showdocs') in groupstate);
-    })
-    .classed('showdocs-decorate-back', false);
 
     var dcanvas = d3.select("#docs-canvas")
         .append('g')
@@ -948,7 +914,7 @@ function appendshapes(selection, group, shapes) {
 
 function initscrollbar() {
     var selection = d3.selectAll("#docs [data-showdocs]")
-        .filter(groupsinquery);
+        .filter(boundgroup);
 
     const affixtop = rnd($("#affixed").height());
     var scrollyscale = d3.scale.linear()
@@ -1293,10 +1259,92 @@ function arrangeintervals(arr, intervalfn) {
     return arr;
 }
 
-function groupsinquery() {
+// findboundgroups returns the groups that are present in both #query and
+// #docs.
+function findboundgroups() {
+    function extractgroup(e) {
+        return e.getAttribute("data-showdocs");
+    }
+
+    let query = _.groupBy($("#query [data-showdocs]"), extractgroup);
+    let docs = _.groupBy($("#docs [data-showdocs]"), extractgroup);
+
+    let intersect = d3.set();
+    for (let k in query) {
+        if (k in docs) {
+            intersect.add(k);
+        }
+    }
+    return intersect;
+}
+
+function boundgroup() {
     return this.getAttribute('data-showdocs') in groupstate;
 }
 
 function selectorshowdocs(g) {
     return '[data-showdocs="' + g + '"]';
+}
+
+// Removes any showdocs-decorate-* classes on elements with an unbound group.
+function cleardecorations(selector) {
+    let seen = d3.set();
+
+    d3.selectAll(selector)
+        .filter(function() { return !boundgroup.bind(this)(); })
+        .each(function() {
+            let decorations = [];
+            this.classList.forEach(c => {
+                if (c.startsWith('showdocs-decorate')) {
+                    decorations.push(c);
+                }
+            });
+            decorations.forEach(c => {
+                this.classList.remove(c);
+            }, this);
+
+            seen.add(this.getAttribute('data-showdocs'));
+        });
+
+    return seen;
+}
+
+// Initiialize the global groupstate: sets a color and a letter/symbol for each
+// group.
+function initgroupstate() {
+    var color = d3.scale.category20();
+
+    var i = 0;
+    findboundgroups().forEach(function(k) {
+        groupstate[k] = {color: color(i)};
+        i++;
+    });
+
+    var seen = d3.set();
+    d3.selectAll("#query .showdocs-decorate-block")
+        .filter(boundgroup)
+        .each(function() {
+            var g = this.getAttribute("data-showdocs");
+            if (seen.has(g))
+                return;
+            groupstate[g].letter = String.fromCharCode("A".charCodeAt(0) + seen.size());
+            seen.add(g);
+        });
+    var allocatedsymbols = 0;
+    d3.selectAll("#query [data-showdocs]:not(.showdocs-decorate-block)")
+        .filter(boundgroup)
+        .each(function() {
+            var g = this.getAttribute("data-showdocs");
+            if (seen.has(g))
+                return;
+            var fill = allocatedsymbols < d3.svg.symbolTypes.length;
+            groupstate[g].symbol = {
+                fill: fill,
+                stroke: !fill,
+                type: d3.svg.symbolTypes[allocatedsymbols % d3.svg.symbolTypes.length],
+            };
+
+            seen.add(g);
+            allocatedsymbols += 1;
+        });
 }
