@@ -114,6 +114,33 @@ $query-width: 400px;
     margin: 0 auto;
 }
 
+
+#query-scroller::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+}
+
+#query-scroller::-webkit-scrollbar-button {
+    display: none
+}
+
+#query-scroller::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+#query-scroller::-webkit-scrollbar-thumb {
+    min-height: 2rem;
+    background: #d2d2d2;
+    background-clip: padding-box;
+    border: 3px solid #fff;
+}
+
+#query-scroller::-webkit-scrollbar-thumb:active {
+    background-color: #aaa;
+    border-width: 2px
+}
+
 #query {
     white-space: pre;
     line-height: 40px;
