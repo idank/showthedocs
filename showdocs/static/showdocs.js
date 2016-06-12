@@ -293,7 +293,7 @@ function addhoverlinks(e) {
                 highlightgroup(d3.select(e.__scrollbarg__));
             }
             else {
-                highlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
+                highlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(findparentgroup(e))));
             }
         })
         .on('mouseleave.links', function() {
@@ -406,7 +406,7 @@ function ShapesContainer() {
         links: [],
         text: [],
         empty: function() {
-          for (var k in this) {
+          for (let k in this) {
             if (Array.isArray(this[k]) && this[k].length > 0)
               return false;
           }
@@ -443,7 +443,7 @@ function initialize() {
     });
     var queryblockshapes = {};
 
-    for (var g in groupstate) {
+    for (let g in groupstate) {
         queryshapes[g] = ShapesContainer();
         queryblockshapes[g] = ShapesContainer();
     }
@@ -567,7 +567,7 @@ function initialize() {
         var shapes = pair[0];
         var selection = d3.select(pair[1]);
 
-        for (var g in groupstate) {
+        for (let g in groupstate) {
             if (shapes[g].empty())
                 continue;
 
@@ -688,7 +688,7 @@ function initialize() {
     var dcanvas = d3.select("#docs-canvas")
         .append('g')
         .attr('transform', 'translate(' + [0, -$("#affixed").height()] + ')');
-    for (var g in docsshapes) {
+    for (let g in docsshapes) {
         if (docsshapes[g].empty())
             continue;
 
@@ -914,7 +914,7 @@ function appendshapes(selection, group, shapes) {
         var gg = selection
             .append('g');
 
-        for (var k in g) {
+        for (let k in g) {
             if (k != 'shapes')
                 gg.attr(k, g[k]);
         }
