@@ -139,157 +139,165 @@ function findPixelsBetweenLines() {
     return px;
 }
 
+function drawlinks(e) {
+    var g = findparentgroup(e);
+    // Group elements by their top offset. Round to the nearest
+    // multiple of 5 so those that are roughly on the same end up in
+    // the same group.
+    var keyfromoffset = function(e) {
+        return (Math.floor(offset(e).top / 5) * 5).toString();
+    };
+    var bins = d3.nest()
+        .key(keyfromoffset)
+        .sortKeys(function(a, b) { return d3.ascending(parseInt(a), parseInt(b)); })
+        // Connect everything with data-showdocs that isn't a <g> and
+        // is on the screen.
+        .entries(d3.selectAll(selectorshowdocs(g) + ".showdocs-decorate-back:not(g)")
+            .filter(function() {
+                return inView(this) ? this : null;
+            })[0]);
+
+    var thiskey = keyfromoffset(e);
+    var thisindex = bins.findIndex(function(d) {
+        return d.key == thiskey;
+    });
+    var osource = offset(e);
+    // This guy is mouse hovered and has a box-shadow applied to it.
+    // Adjust its coordinates so the link doesn't go on top of it.
+    osource.left -= sizes.back.boxshadow;
+    osource.right += sizes.back.boxshadow;
+    osource.top -= sizes.back.boxshadow;
+    osource.bottom += sizes.back.boxshadow;
+
+    var computelinks = function(osource, range) {
+        var stages = [];
+        range.forEach(function(i) {
+            var links = [];
+            bins[i].values.forEach(function(current) {
+                var otarget = offset(current);
+                var link = {source: {}, target: {}};
+
+                // Determine at which points to start and end the links
+                // at the source and target.
+
+                // If source and target are sufficiently close on y,
+                // draw the links from the left and right of each box.
+                // Otherwise, do it top and bottom.
+                var closenessy = Math.min(
+                        Math.abs(osource.top - otarget.bottom),
+                        Math.abs(osource.bottom - otarget.top));
+
+                // But only if they're not too close on the x too.
+                var closenessx = Math.min(Math.abs(osource.left - otarget.left));
+
+                if (closenessy < sizes.links.thresholdy && closenessx > sizes.links.thresholdx) {
+                    link.source.y = osource.top + osource.height/2;
+                    link.target.y = otarget.top + otarget.height/2;
+
+                    // source is to the left of target
+                    if (osource.left > otarget.left) {
+                        link.source.x = osource.left - sizes.links.margin;
+                        link.target.x = otarget.right + sizes.links.margin;
+                    }
+                    else {
+                        link.source.x = osource.right + sizes.links.margin;
+                        link.target.x = otarget.left - sizes.links.margin;
+                    }
+                }
+                else {
+                    link.source.x = osource.left + osource.width/2;
+                    link.target.x = otarget.left + otarget.width/2;
+
+                    // source is below target
+                    if (osource.top > otarget.top) {
+                        link.source.y = osource.top - sizes.links.margin;
+                        link.target.y = otarget.bottom + sizes.links.margin;
+                    }
+                    else {
+                        link.source.y = osource.bottom + sizes.links.margin;
+                        link.target.y = otarget.top - sizes.links.margin;
+                    }
+                }
+
+                links.push(link);
+            });
+            stages.push(links);
+            osource = offset(bins[i].values[0]);
+        });
+        return stages;
+    };
+    var stagesup = computelinks(osource, d3.range(thisindex-1, -1, -1));
+    var stagesdown = computelinks(osource, d3.range(thisindex+1, bins.length));
+    var diagonal = d3.svg.diagonal();
+    function _drawlinks(duration, links, i) {
+        function transitionpath(which) {
+            d3.select("#main-canvas")
+                .append("g")
+                .selectAll(which)
+                .data(links)
+                .enter()
+                .append("path")
+                .classed(which, true)
+                .attr("d", diagonal)
+                .each(function() {
+                    var totalLength = d3.select(this).node().getTotalLength();
+
+                    d3.select(this)
+                      .attr("stroke-dasharray", totalLength + " " + totalLength)
+                      .attr("stroke-dashoffset", totalLength)
+                      .transition()
+                        .duration(duration)
+                        .delay(duration*i)
+                        .ease("linear")
+                        .attr("stroke-dashoffset", 0);
+                });
+        }
+        transitionpath('showdocs-link-back');
+        transitionpath('showdocs-link');
+    };
+    const totalduration = 750;
+    stagesup.forEach(_drawlinks.bind(undefined, totalduration / stagesup.length));
+    stagesdown.forEach(_drawlinks.bind(undefined, totalduration / stagesdown.length));
+}
+
+function clearlinks(e) {
+    // Clear the links.
+    d3.selectAll("#main-canvas *")
+        .transition()
+        .style('opacity', 0)
+        .remove();
+
+    unhighlightgroup(d3.select(e));
+    if ('__scrollbarg__' in e) {
+        unhighlightgroup(d3.select(e.__scrollbarg__));
+    }
+    else {
+        var g = findparentgroup(e);
+        unhighlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
+    }
+}
+
 function addhoverlinks(e) {
     d3.select(e)
         .on('click.links', function() {
             clickgroup(this);
         })
         .on('mouseenter.links', function() {
-            var g = findparentgroup(this);
-            // Group elements by their top offset. Round to the nearest
-            // multiple of 5 so those that are roughly on the same end up in
-            // the same group.
-            var keyfromoffset = function(e) {
-                return (Math.floor(offset(e).top / 5) * 5).toString();
-            };
-            var bins = d3.nest()
-                .key(keyfromoffset)
-                .sortKeys(function(a, b) { return d3.ascending(parseInt(a), parseInt(b)); })
-                // Connect everything with data-showdocs that isn't a <g> and
-                // is on the screen.
-                .entries(d3.selectAll(selectorshowdocs(g) + ".showdocs-decorate-back:not(g)")
-                    .filter(function() {
-                        return inView(this) ? this : null;
-                    })[0]);
+            drawlinks(e);
 
-            var thiskey = keyfromoffset(this);
-            var thisindex = bins.findIndex(function(d) {
-                return d.key == thiskey;
-            });
-            var osource = offset(this);
-            // This guy is mouse hovered and has a box-shadow applied to it.
-            // Adjust its coordinates so the link doesn't go on top of it.
-            osource.left -= sizes.back.boxshadow;
-            osource.right += sizes.back.boxshadow;
-            osource.top -= sizes.back.boxshadow;
-            osource.bottom += sizes.back.boxshadow;
-
-            var computelinks = function(osource, range) {
-                var stages = [];
-                range.forEach(function(i) {
-                    var links = [];
-                    bins[i].values.forEach(function(current) {
-                        var otarget = offset(current);
-                        var link = {source: {}, target: {}};
-
-                        // Determine at which points to start and end the links
-                        // at the source and target.
-
-                        // If source and target are sufficiently close on y,
-                        // draw the links from the left and right of each box.
-                        // Otherwise, do it top and bottom.
-                        var closenessy = Math.min(
-                                Math.abs(osource.top - otarget.bottom),
-                                Math.abs(osource.bottom - otarget.top));
-
-                        // But only if they're not too close on the x too.
-                        var closenessx = Math.min(Math.abs(osource.left - otarget.left));
-
-                        if (closenessy < sizes.links.thresholdy && closenessx > sizes.links.thresholdx) {
-                            link.source.y = osource.top + osource.height/2;
-                            link.target.y = otarget.top + otarget.height/2;
-
-                            // source is to the left of target
-                            if (osource.left > otarget.left) {
-                                link.source.x = osource.left - sizes.links.margin;
-                                link.target.x = otarget.right + sizes.links.margin;
-                            }
-                            else {
-                                link.source.x = osource.right + sizes.links.margin;
-                                link.target.x = otarget.left - sizes.links.margin;
-                            }
-                        }
-                        else {
-                            link.source.x = osource.left + osource.width/2;
-                            link.target.x = otarget.left + otarget.width/2;
-
-                            // source is below target
-                            if (osource.top > otarget.top) {
-                                link.source.y = osource.top - sizes.links.margin;
-                                link.target.y = otarget.bottom + sizes.links.margin;
-                            }
-                            else {
-                                link.source.y = osource.bottom + sizes.links.margin;
-                                link.target.y = otarget.top - sizes.links.margin;
-                            }
-                        }
-
-                        links.push(link);
-                    });
-                    stages.push(links);
-                    osource = offset(bins[i].values[0]);
-                });
-                return stages;
-            };
-            var stagesup = computelinks(osource, d3.range(thisindex-1, -1, -1));
-            var stagesdown = computelinks(osource, d3.range(thisindex+1, bins.length));
-            var diagonal = d3.svg.diagonal();
-            function drawlinks(duration, links, i) {
-                function transitionpath(which) {
-                    d3.select("#main-canvas")
-                        .append("g")
-                        .selectAll(which)
-                        .data(links)
-                        .enter()
-                        .append("path")
-                        .classed(which, true)
-                        .attr("d", diagonal)
-                        .each(function() {
-                            var totalLength = d3.select(this).node().getTotalLength();
-
-                            d3.select(this)
-                              .attr("stroke-dasharray", totalLength + " " + totalLength)
-                              .attr("stroke-dashoffset", totalLength)
-                              .transition()
-                                .duration(duration)
-                                .delay(duration*i)
-                                .ease("linear")
-                                .attr("stroke-dashoffset", 0);
-                        });
-                }
-                transitionpath('showdocs-link-back');
-                transitionpath('showdocs-link');
-            };
-            const totalduration = 750;
-            stagesup.forEach(drawlinks.bind(undefined, totalduration / stagesup.length));
-            stagesdown.forEach(drawlinks.bind(undefined, totalduration / stagesdown.length));
-
-            highlightgroup(d3.select(this));
+            highlightgroup(d3.select(e));
             // Check if we have anything for 'this' in the scrollbar. If so,
             // highlight it too. Otherwise, highlight everything with the same
             // group.
-            if ('__scrollbarg__' in this) {
-                highlightgroup(d3.select(this.__scrollbarg__));
+            if ('__scrollbarg__' in e) {
+                highlightgroup(d3.select(e.__scrollbarg__));
             }
             else {
                 highlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
             }
         })
         .on('mouseleave.links', function() {
-            // Clear the links.
-            d3.selectAll("#main-canvas *")
-                .transition()
-                .style('opacity', 0)
-                .remove();
-
-            unhighlightgroup(d3.select(this));
-            if ('__scrollbarg__' in this) {
-                unhighlightgroup(d3.select(this.__scrollbarg__));
-            }
-            else {
-                var g = findparentgroup(this);
-                unhighlightgroup(d3.selectAll("#docs-scrollbar-canvas " + selectorshowdocs(g)));
-            }
+            clearlinks(e);
         });
 }
 
@@ -414,7 +422,6 @@ function initialize() {
 
     groupstate = {}; // global
     initgroupstate()
-    console.log(groupstate);
 
     let cleared = cleardecorations("#query [data-showdocs]");
     cleared.values().forEach(v => console.log('cleared decorations for group', v));
@@ -744,6 +751,10 @@ function clickgroup(e) {
     // Clear the links.
     d3.selectAll("#main-canvas *")
         .remove();
+
+    if (e.classList.contains('showdocs-decorate-back')) {
+        drawlinks(e);
+    }
 }
 
 function highlightgroup(selection) {
