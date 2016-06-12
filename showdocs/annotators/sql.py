@@ -163,13 +163,3 @@ class SqlAnnotator(base.Annotator):
                 self._visitselect(parsed)
 
         return self.annotations
-
-
-        #stream = self.lexer.get_tokens_unprocessed(text)
-
-        #for pos, tokentype, value in stream:
-        #    if tokentype == Keyword and value.lower() in self.knownkeywords:
-        #        annotations.append(structs.Annotation(pos, pos + len(
-        #            value), value.lower(), [structs.decorate.BLOCK]))
-
-        #return annotations

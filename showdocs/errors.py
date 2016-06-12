@@ -16,3 +16,6 @@ class ParsingError(Exception):
 
 class RepoBuildError(Exception):
     pass
+
+class NoDocsError(Exception):
+    pass

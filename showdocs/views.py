@@ -62,12 +62,21 @@ def query():
         return render_template('error.html',
                                title='oops',
                                message=message % e.args[0])
+    except errors.NoDocsError:
+        message = ('No docs added for this query. Consider '
+                '<a href="/contribute">improving</a> the situation! :)')
+        return render_template('queryerror.html',
+                               renderlegend=False,
+                               lang=lang,
+                               query=q,
+                               message=markupsafe.Markup(message))
     except errors.ParsingError, e:
-        formattederror = html.formaterror(q, e)
+        wrappedquery, wrappedmessage = html.formaterror(q, e)
+        wrappedmessage = '<span>parsing error</span> ' + wrappedmessage
         return render_template('queryerror.html',
                                lang=lang,
-                               query=markupsafe.Markup(formattederror[0]),
-                               message=markupsafe.Markup(formattederror[1]))
+                               query=markupsafe.Markup(wrappedquery),
+                               message=markupsafe.Markup(wrappedmessage))
     except:
         if config.TEST:
             raise

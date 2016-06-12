@@ -37,7 +37,8 @@ def annotate(query, lang, formatquery):
 
     annotations = ann.annotate(query)
     # TODO: verify annotations start/end are inside query
-    if False and not ann.docs:
-        raise ValueError('no docs added for query')
+
+    if not ann.docs:
+        raise errors.NoDocsError()
 
     return html.wrap(query, annotations), ann.docs
