@@ -80,7 +80,7 @@ class NginxParser(object):
                    right_bracket).setParseAction(_nodeifycontext)
 
     script = OneOrMore(directive | block).ignore(
-        pythonStyleComment).setParseAction(_nodeifymain)
+        pythonStyleComment).setParseAction(_nodeifymain).parseWithTabs()
 
     def __init__(self, source):
         self.source = source

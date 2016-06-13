@@ -50,7 +50,7 @@ section.setParseAction(_nodeifysection)
 parser = OneOrMore(section)
 parser.ignore(comment)
 parser.setParseAction(_nodeifyall)
-
+parser.parseWithTabs()
 
 def loads(s):
     return parser.parseString(s).asList()[0]

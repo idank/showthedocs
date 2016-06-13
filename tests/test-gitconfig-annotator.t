@@ -60,3 +60,12 @@ parsing error:
   > path = kdiff3
   > EOF
   showdocs.errors.ParsingError: parser gave no additional information (position 11)
+
+check tabs:
+
+  $ annotator <<EOF
+  > [core]
+  >     foo = bar
+  > EOF
+  Annotation(0, 20, 'section.core', ['showdocs-decorate-block'], 0) '[core'..'= bar'
+  Annotation(11, 14, 'core.foo', ['showdocs-decorate-back'], 0) 'foo'
