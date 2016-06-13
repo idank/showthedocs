@@ -10,6 +10,6 @@ expansion of a former website I've built,
 [explainshell](http://explainshell.com).
 
 Please bare in mind that the site is currently in development, so not many
-languages are currently supported (and those that are could be improved
-further), and other things might not be fully tested. [Help](/contribute) is
+languages are currently supported (and those that are could be further
+improved), and other things might not be fully tested. [Help](/contribute) is
 definitely welcome!
