@@ -6,8 +6,6 @@
   Annotation(9, 13, u'from', ['showdocs-decorate-back'], 0) u'from'
   Annotation(16, 18, u'as', ['showdocs-decorate-back'], 0) u'as'
   Annotation(21, 29, u'group by', ['showdocs-decorate-back'], 0) u'group by'
-  Annotation(0, 8, 'select', ['showdocs-decorate-block'], 0) u'select *'
-  Annotation(9, 13, 'from', ['showdocs-decorate-block'], 0) u'from'
   Annotation(14, 20, 'table_name', ['showdocs-decorate-back'], 0) u'a as b'
 
   $ annotator <<EOF
@@ -16,9 +14,6 @@
   Annotation(0, 6, u'select', ['showdocs-decorate-back'], 0) u'select'
   Annotation(9, 13, u'from', ['showdocs-decorate-back'], 0) u'from'
   Annotation(16, 21, u'where', ['showdocs-decorate-back'], 0) u'where'
-  Annotation(0, 8, 'select', ['showdocs-decorate-block'], 0) u'select *'
-  Annotation(9, 13, 'from', ['showdocs-decorate-block'], 0) u'from'
-  Annotation(16, 27, 'where', ['showdocs-decorate-block'], 0) u'where'..u'b = c'
   Annotation(14, 15, 'table_name', ['showdocs-decorate-back'], 0) u'a'
 
   $ annotator <<EOF

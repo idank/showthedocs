@@ -93,31 +93,6 @@ class SqlAnnotator(base.Annotator):
             self.docs.add('mysql/select.html')
 
         tokens = statement.tokens
-
-        inprogressend = self.pos[tokens[-1]][1]
-        inprogress = [self.pos[tokens[0]][0], self.groups.select, [structs.decorate.BLOCK]]
-
-        frompart = statement.token_next_match(0, Keyword, 'FROM')
-        if frompart:
-            inprogressend = self.pos[frompart][0]
-            prev = statement.token_prev(statement.token_index(frompart))
-            if prev:
-                inprogressend = self.pos[prev][1]
-
-            inprogress.insert(1, inprogressend)
-            self._append(*inprogress)
-
-            inprogress = [self.pos[frompart][0], self.groups['from'], [structs.decorate.BLOCK]]
-            inprogressend = self.pos[frompart][1]
-
-        inprogress.insert(1, inprogressend)
-        self._append(*inprogress)
-
-        wherepart = statement.token_next_by_instance(0, Where)
-        if wherepart:
-            self._append(self.pos[wherepart][0], self.pos[wherepart][1], 'where', [structs.decorate.BLOCK])
-
-
         frompart = list(_extractfrompart(statement))
         for tablename in _extracttableidentifiers(frompart):
             p = self.pos[tablename]
