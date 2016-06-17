@@ -1359,3 +1359,39 @@ function initgroupstate() {
             allocatedsymbols += 1;
         });
 }
+
+const tourstoragekey = 'notour';
+
+function tourvisible() {
+    let tourshown = d3.select('.tour').style('display') != 'none';
+    return tourshown;
+}
+
+function cleartour() {
+    localStorage.removeItem(tourstoragekey);
+}
+
+function toggletour(checkstorage) {
+    let e = d3.selectAll('.tour');
+    if (!e.empty()) {
+        if (tourvisible()) {
+            e.style({
+                display: 'none',
+                opacity: 0});
+
+            // Once the tour is closed for the first time, don't show it
+            // anymore.
+            localStorage.setItem(tourstoragekey, true);
+        }
+        else if (checkstorage && localStorage.getItem(tourstoragekey)) {
+        }
+        else {
+            e.style('display', 'block')
+                .style('opacity', 0)
+                .transition()
+                .style('opacity', 1);
+        }
+    }
+
+    d3.select('.navitem-tour span').classed('highlighted', tourvisible());
+}

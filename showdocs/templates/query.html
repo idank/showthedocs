@@ -37,13 +37,19 @@ console.log('no devicon (top right corner) defined');
 
 {% block afternav %}
                 <div id="query-container">
-                    <div id="query-label">query</div>
+                    <div id="query-label">
+                        <span>query</span>
+                        <div class="tour query"><span class="tour-close"></span>Highlighted items are attached to their respective documentation below by having the same color and symbol. Clicking on a highlighted item jumps between its references in the docs.</div></div>
                     <svg id="query-canvas" class="canvas"><g id="translate-on-scroll"></g></svg>
                     <div id="query-scroller">
                         <svg id="query-canvas-inner" class="canvas"></svg>
                         <div id="query">{{ query }}</div>
                     </div>
-                    <div id="query-legend"><div>legend</div><svg id="legend-canvas"></svg></div>
+                    <div id="query-legend">
+                        <div class="tour legend"><span class="tour-close"></span>The legend can be used to jump to places in the docs that reference the clicked group.</div>
+                        <div class="label">legend</div>
+                        <svg id="legend-canvas"></svg>
+                    </div>
                     <div id="docs-label">docs</div>
                 </div>
 {% endblock %}
@@ -55,6 +61,7 @@ console.log('no devicon (top right corner) defined');
                     {% endfor %}
                 </div>
                 <div id="docs-scrollbar">
+                    <div class="tour index"><span class="tour-close"></span>These are clickable too.</div>
                     <svg id="docs-scrollbar-canvas" class="canvas"></svg>
                 </div>
 {% endblock %}
@@ -70,7 +77,13 @@ $(document).ready(function() {
 
     initialize();
     scrolltohash();
-});
 
+    d3.selectAll('.tour-close')
+        .on('click', function() {
+            toggletour(true);
+        });
+
+    toggletour(true);
+});
 </script>
 {% endblock %}

@@ -18,7 +18,7 @@ a:visited {
     color: $palette3;
 }
 
-.topnav, .container-center, #docs-scrollbar, #query-legend,.submit, #docs.error {
+.topnav, .container-center, #docs-scrollbar, #query-legend,.submit, #docs.error, .tour {
     font-family: $font;
 }
 
@@ -81,6 +81,11 @@ ul.topnav {
     }
 
     li.navitem a:not(.highlighted):hover {
+        background-color: $palette4;
+    }
+
+    .navitem-tour span:not(.highlighted):hover {
+        cursor: pointer;
         background-color: $palette4;
     }
 
@@ -163,7 +168,7 @@ $legend-width: 400px;
     height: $query-height - 45px;
 }
 
-#query-legend div {
+#query-legend .label {
     text-align: right;
 }
 
@@ -473,4 +478,58 @@ $container-margin-lr: 8px;
         transform: scale(3);
         opacity: 0;
     }
+}
+
+.tour {
+    display: none;
+    background: rgba(51, 51, 51, .9);
+    border-radius: .3rem;
+    color: #fff;
+    font-size: .7rem;
+    line-height: 1.6rem;
+    overflow: hidden;
+    padding: .6rem 1rem;
+    position: fixed;
+    transition: all .216s ease;
+    z-index: 99;
+    opacity: 0;
+
+    max-width: 300px;
+}
+
+.tour-close::before {
+    float: right;
+    content: "\00d7";
+    margin-left: .3rem;
+    opacity: .7;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1.3em;
+
+    transition: all .216s ease;
+}
+
+.tour-close:hover::before {
+    opacity: 1;
+}
+
+.tour.query {
+    position: absolute;
+    top: 100%;
+    left: calc(100% + 20px);
+    width: 400px;
+}
+
+.tour.legend {
+    position: absolute;
+    top: 10%;
+    right: 130px;
+    width: 150px;
+}
+
+.tour.index {
+    position: absolute;
+    top: 0;
+    right: 110%;
+    width: 150px;
 }
