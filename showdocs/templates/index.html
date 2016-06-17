@@ -8,7 +8,7 @@
 {% endblock %}
 {% block container %}
 <div class="container-center index">
-    <p><strong>showthedocs</strong> is a documentation browser that finds the relevant docs for your code. It works by parsing the code and connecting parts of it to their explanation in the docs. Read more <a href="/about">here</a>.</p>
+    <p><strong>{{ sitename }}</strong> is a documentation browser that finds the relevant docs for your code. It works by parsing the code and connecting parts of it to their explanation in the docs. Read more <a href="/about">here</a>.</p>
     <p>Tip: Choosing a language and leaving the query empty will show you an example.</p>
     <form action="/query" method="get">
         <input type="hidden" name="lang" id="lang">
@@ -56,14 +56,6 @@
 <script src="{{ ASSET_URL }}"></script>
 {% endassets %}
 <script>
-if (history.state != null && 'lang' in history.state) {
-    $(".lang-select-icon div").each(function() {
-        if ($(this).text() == history.state.lang) {
-            $(this).parent().toggleClass('highlight');
-        }
-    });
-}
-
 $(".lang-select-icon").click(function() {
     var that = this;
     // Apply .highlight on the clicked element only.
@@ -90,5 +82,16 @@ $('form').submit(function() {
         }
     }
 });
+
+if (location.host.indexOf('explainsql') != -1) {
+    $('.devicon-postgresql-plain').parent().click();
+}
+else if (history.state != null && 'lang' in history.state) {
+    $(".lang-select-icon div").each(function() {
+        if ($(this).text() == history.state.lang) {
+            $(this).parent().toggleClass('highlight');
+        }
+    });
+}
 </script>
 {% endblock %}

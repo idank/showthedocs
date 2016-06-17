@@ -7,6 +7,14 @@ from showdocs import app, html, annotate, structs, docs, errors, config
 
 logger = logging.getLogger(__name__)
 
+@app.context_processor
+def sitename():
+    '''Return the site name depending on the host.'''
+    s = 'showthedocs'
+    if 'explainsql' in request.host:
+        s = 'explainsql'
+    return {'sitename': s}
+
 def _initplain():
     d = {}
     for name in ['about', 'contributing']:

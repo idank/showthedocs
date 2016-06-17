@@ -19,7 +19,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/master/devicon.min.css">
         {% endif %}
-        <title>showthedocs{%- if title %} - {{ title }}{%- endif -%}</title>
+        <title>{{ sitename }}{%- if title %} - {{ title }}{%- endif -%}</title>
         {% block head %}{% endblock %}
     </head>
     <body>
@@ -32,7 +32,7 @@
                 {% set active_page = active_page|default('index') -%}
                 {% set tour_url = "/query?lang=postgresql&q=SELECT+DISTINCT+city%0D%0AFROM+weather%0D%0AORDER+BY+city" -%}
                 <ul class="topnav">
-                  <li><a class="logo" href="/">showthedocs.com</a></li>
+                    <li><a class="logo" href="/">{{ sitename }}</a></li>
                   {{ navitem('/', 'query') }}
                   {% if active_page == "query" %}
                       <li class="navitem navitem-tour"><span onclick="toggletour(false)">tour</span></li>
