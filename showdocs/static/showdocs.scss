@@ -8,6 +8,7 @@ $font: 'Libre Baskerville', Garamond, serif;
 
 body {
     margin: 0;
+    font-family: $font;
 }
 
 a {
@@ -16,10 +17,6 @@ a {
 
 a:visited {
     color: $palette3;
-}
-
-.topnav, .container-center, #docs-scrollbar, #query-legend,.submit, #docs.error, .tour {
-    font-family: $font;
 }
 
 #main {
